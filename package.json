@@ -5,12 +5,12 @@
   "main": "server/server.js",
   "scripts": {
     "prebuild": "npm run config",
-    "build": "rollup -c",
+    "build": "rollup -c --environment SOURCEMAP:false",
     "prewatch": "npm run config",
     "watch": "rollup -c -w",
     "predev": "npm run config",
-    "dev": "rollup -c --environment BUILD:dev",
-    "engine": "rollup -c -i './src/engine/engine.js' -o './dist/cs1-engine.min.js' ; refresh",
+    "dev": "rollup -c --environment BUILD:dev,SOURCEMAP:true",
+    "engine": "rollup -c -i './src/engine/engine.js' -o './dist/cs1-engine.min.js' --environment SOURCEMAP:false ; refresh",
     "start": "node server/server.js",
     "config": "if [ -f './src/core/config/client-config.json' ]; then cp ./src/core/config/client-config.json .data/; fi;"
   },

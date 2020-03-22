@@ -7,13 +7,14 @@ import { string } from "rollup-plugin-string";
 // `npm run build` -> `production` is true
 // `npm run dev` -> `production` is false
 const production = process.env.BUILD!='dev'?true:false;
+const includeMap = process.env.SOURCEMAP=='true'?true:false;
 
 export default {
 	input: 'src/game/main.js',
 	output: {
 		file: 'public/bundle.js',
 		format: 'iife', // immediately-invoked function expression — suitable for <script> tags
-		sourcemap: true,
+		sourcemap: includeMap,
 	},
 	plugins: [
     json(),
