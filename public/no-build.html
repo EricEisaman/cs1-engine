@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <script 
+src="https://raw.githack.com/EricEisaman/cs1-engine/master/dist/latest/cs1-engine.min.js"></script>
+  </head>
+  <body>
+    <script>
+      document.body.addEventListener("cs1-ready", e => {
+        const box = document.createElement("a-box");
+        box.setAttribute("color", "blue");
+        box.object3D.position.set(0, 2, -4);
+        CS1.scene.appendChild(box);
+      });
+    </script>
+  </body>
+</html>

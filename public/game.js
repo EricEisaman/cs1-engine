@@ -1,1 +1,1 @@
-!function(){"use strict";const n=`My game is running on ${window.CS1.version}!`;document.write(n),console.log(n)}();
+!function(){"use strict";document.body.addEventListener("cs1-ready",e=>{const t=document.createElement("a-box");t.setAttribute("color","blue"),t.object3D.position.set(0,2,-4),CS1.scene.appendChild(t)})}();

@@ -1,11 +1,20 @@
-import {data} from './data.js'
+const CS1 = window.CS1 = {}
 
-window.CS1 = {
-  version:`CS1 v0.0.03`
-}
+import {version} from './modules/version'
+CS1.version = version
 
-const CS1 = window.CS1
+//import aframe from './modules/vendor/aframe'
 
-CS1.data = data
+import utils from './modules/utils'
+window.addEventListener('DOMContentLoaded', e => {
+  utils.loadScriptPromise('https://aframe.io/releases/1.0.4/aframe.min.js')
+  .then(script=>{
+     CS1.scene = document.createElement('a-scene')
+     document.body.appendChild(CS1.scene)
+     document.body.dispatchEvent(new Event('cs1-ready'))
+  })
+});
 
-console.log(CS1.version)
+
+
+
