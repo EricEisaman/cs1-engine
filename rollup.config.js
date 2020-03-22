@@ -9,7 +9,7 @@ import { string } from "rollup-plugin-string";
 const production = process.env.BUILD!='dev'?true:false;
 
 export default {
-	input: 'src/main.js',
+	input: 'src/game/main.js',
 	output: {
 		file: 'public/bundle.js',
 		format: 'iife', // immediately-invoked function expression — suitable for <script> tags
