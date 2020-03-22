@@ -9,13 +9,17 @@ import { string } from "rollup-plugin-string";
 const production = process.env.BUILD!='dev'?true:false;
 const includeMap = process.env.SOURCEMAP=='true'?true:false;
 const engine = process.env.ENGINE=='true'?true:false;
+const updateLatest = process.env.UPDATELATEST=='true'?true:false;
 let input,output
 if(engine){
   input='src/engine/engine.js'
-  output=`dist/${process.env.VERSION}/cs1-engine.min.js`
+  if(updateLatest)
+    output=`dist/${process.env.VERSION}/cs1-engine.min.js`
+  else 
+    output=`dist/latest/cs1-engine.min.js`
 }else{
   input='src/game/main.js'
-  output='public/bundle.js'
+  output='public/game.js'
 }
 
 export default {
