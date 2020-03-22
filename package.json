@@ -1,5 +1,5 @@
 {
-  "name": "CS1 Engine",
+  "name": "CS1_Engine",
   "version": "0.0.01",
   "description": "Game Engine for making 3D multiplayer games in JavaScript.",
   "main": "server/server.js",
@@ -10,7 +10,7 @@
     "watch": "rollup -c -w",
     "predev": "npm run config",
     "dev": "rollup -c --environment BUILD:dev",
-    "engine": "rollup -c --input './src/engine/engine.js' ",
+    "engine": "rollup -c -i './src/engine/engine.js' -o './dist/cs1-engine.min.js' ; refresh",
     "start": "node server/server.js",
     "config": "if [ -f './src/core/config/client-config.json' ]; then cp ./src/core/config/client-config.json .data/; fi;"
   },
@@ -44,3 +44,4 @@
     "cs1 engine"
   ]
 }
+ 
