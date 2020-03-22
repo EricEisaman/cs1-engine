@@ -10,7 +10,7 @@
     "watch": "rollup -c -w",
     "predev": "npm run config",
     "dev": "rollup -c --environment BUILD:dev,SOURCEMAP:true",
-    "engine": "rollup -c -i './src/engine/engine.js' -o './dist/cs1-engine.min.js' --environment SOURCEMAP:false ; refresh",
+    "engine": "rollup -c --environment SOURCEMAP:false,ENGINE:true ; refresh",
     "start": "node server/server.js",
     "config": "if [ -f './src/core/config/client-config.json' ]; then cp ./src/core/config/client-config.json .data/; fi;"
   },
