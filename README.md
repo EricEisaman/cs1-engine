@@ -1,9 +1,7 @@
 # CS1 Engine
 ___
 
-## Initial Project Goals Checklist
+## About
 ___
-✅ rollup build client cs1 engine to dist as separate script in package.json
 
-🟥  host cs1-engine on cdn
-
+This is a complete rewrite of the CS1 Game Engine.
