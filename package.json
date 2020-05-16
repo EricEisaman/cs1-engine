@@ -1,39 +1,43 @@
 {
   "name": "CS1_Engine",
-  "version": "0.0.03",
+  "version": "0.0.06",
   "description": "Game Engine for making 3D multiplayer games in JavaScript.",
   "main": "server/server.js",
   "scripts": {
-    "prebuild": "npm run config",
-    "build": "rollup -c --environment SOURCEMAP:false; refresh",
-    "prewatch": "npm run config",
-    "watch": "rollup -c -w",
-    "predev": "npm run config",
-    "dev": "rollup -c --environment BUILD:dev,SOURCEMAP:true; refresh",
-    "engine": "rollup -c --environment SOURCEMAP:false,ENGINE:true; npm run engineupdate",
-    "enginedev": "rollup -c --environment SOURCEMAP:true,ENGINE:true ; ; npm run engineupdate",
-    "engineupdate": "rollup -c --environment SOURCEMAP:false,ENGINE:true,UPDATELATEST:true;cp ./dist/latest/cs1-engine.min.js public/; refresh",
     "start": "node server/server.js",
-    "config": "if [ -f './src/core/config/client-config.json' ]; then cp ./src/core/config/client-config.json .data/; fi;"
+    "engine_prod": "rollup -c --environment PROD:true,BUILD_TYPE:engine;npm-run-all upe1 upe2 upem1 upem2;refresh",
+    "game_prod": "rollup -c --environment PROD:true,BUILD_TYPE:game;npm-run-all upg1 upg2 upgm1 upgm2;refresh",
+    "socket_prod": "rollup -c --environment PROD:true,BUILD_TYPE:socket;npm-run-all ups1 ups2 upsm1 upsm2;refresh",
+    "engine": "rollup -c --environment PROD:false,BUILD_TYPE:engine; refresh",
+    "game": "rollup -c --environment PROD:false,BUILD_TYPE:game; refresh",
+    "socket": "rollup -c --environment PROD:false,BUILD_TYPE:socket; refresh",
+    "upg1": "cp -v ./dist/$VERSION/cs1-game.min.js public/",
+    "upg2":"cp -v ./dist/$VERSION/cs1-game.min.js dist/latest/",
+    "upgm1": "cp -v ./dist/$VERSION/cs1-game.min.js.map public/",
+    "upgm2":"cp -v ./dist/$VERSION/cs1-game.min.js.map dist/latest/",
+    "upe1": "cp -v ./dist/$VERSION/cs1-game-engine.min.js public/",
+    "upe2":"cp -v ./dist/$VERSION/cs1-game-engine.min.js dist/latest/",
+    "upem1": "cp -v ./dist/$VERSION/cs1-game-engine.min.js.map public/",
+    "upem2":"cp -v ./dist/$VERSION/cs1-game-engine.min.js.map dist/latest/",
+    "ups1": "cp -v ./dist/$VERSION/cs1-game-socket.min.js public/",
+    "ups2":"cp -v ./dist/$VERSION/cs1-game-socket.min.js dist/latest/",
+    "upsm1": "cp -v ./dist/$VERSION/cs1-game-socket.min.js.map public/",
+    "upsm2":"cp -v ./dist/$VERSION/cs1-game-socket.min.js.map dist/latest/"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.3",
-    "rollup": "^2.1.0",
-    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup": "^2.x",
     "rollup-plugin-css-only": "^1.0.0",
     "rollup-plugin-cleanup": "^3.1.1",
     "rollup-plugin-terser": "^5.1.2",
     "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-string":"^3.0.0" 
+    "rollup-plugin-string": "^3.0.0"
   },
   "dependencies": {
-    "express": "^4.16.3",
-    "socket.io": "^2.2.0",
-    "uuid": "^3.3.2",
-    "lowdb": "^1.x"
+    "cs1-game-server": "^0.0.33"
   },
   "engines": {
-    "node": "10.x"
+    "node": "^12.x"
   },
   "repository": {
     "url": "https://glitch.com/edit/#!/cs1-engine"
@@ -46,4 +50,3 @@
     "cs1 engine"
   ]
 }
- 

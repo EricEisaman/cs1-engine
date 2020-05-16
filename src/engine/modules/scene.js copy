@@ -1,0 +1,21 @@
+import {player} from './components/player';
+import {follow} from './components/follow';
+
+export const scene = CS1 => {
+CS1.scene = document.createElement('a-scene');
+CS1.scene.clock.autoStart = false
+CS1.myPlayer = document.createElement('a-player');
+CS1.scene.appendChild(CS1.myPlayer);
+CS1.cam = document.createElement('a-entity');
+CS1.cam.setAttribute('camera','active:true');
+CS1.cam.object3D.position.y = 3;
+//CS1.cam.setAttribute('wasd-controls','enabled: false;');
+CS1.cam.setAttribute('follow','target: #cam-target;');
+CS1.cam.setAttribute('look-controls','pointerLockEnabled:true;');
+CS1.scene.appendChild(CS1.cam);
+window.addEventListener('DOMContentLoaded', e => {
+  document.body.appendChild(CS1.scene);
+});
+}
+
+

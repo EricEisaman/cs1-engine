@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <script src="cs1-game-engine.js"></script>
+    <script src="https://unpkg.com/aframe-spe-particles-component@^1.0.4/dist/aframe-spe-particles-component.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-entity id="parts" particles="texture: https://cdn.glitch.com/ea426344-f1a7-4a2b-8557-b641408c03a1%2Fparticle.png?v=1588729109583; color: blue; velocity: 0 10 0; velocity-spread: 2 0 2; acceleration: 0 -10 0"></a-entity>
+    </a-scene>
+    <script>
+      const instances = document.createElement('gltf-instances');
+      CS1.scene.appendChild(instances);
+      CS1.myPlayer.setAttribute('jump','speed:25');
+      CS1.game.addEnvironment();
+      CS1.game.start();
+    </script>
+  </body>
+</html>

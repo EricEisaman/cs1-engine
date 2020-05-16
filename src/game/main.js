@@ -1,8 +1,8 @@
-document.body.addEventListener('cs1-ready', e=>{
- 
-  const box = document.createElement('a-box')
-  box.setAttribute('color','blue')
-  box.object3D.position.set(0,2,-4)
-  CS1.scene.appendChild(box)
-  
-})
+//Set up your scene
+const instances = document.createElement('gltf-instances');
+CS1.scene.appendChild(instances);
+CS1.myPlayer.setAttribute('jump','speed:25');
+// DEFAULT IS  SINGLE_PLAYER, other options are MULTIPLAYER and SINGLE_PLAYER_SERVER
+CS1.game.addEnvironment();
+//CS1.game.addParticles();
+CS1.game.start();

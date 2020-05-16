@@ -1,1 +1,1 @@
-!function(){"use strict";document.body.addEventListener("cs1-ready",e=>{const t=document.createElement("a-box");t.setAttribute("color","blue"),t.object3D.position.set(0,2,-4),CS1.scene.appendChild(t)})}();
+!function(){"use strict";const e=document.createElement("gltf-instances");CS1.scene.appendChild(e),CS1.myPlayer.setAttribute("jump","speed:25"),CS1.game.addEnvironment(),CS1.game.start()}();
