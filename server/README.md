@@ -13,7 +13,8 @@ If you wish to create your own modified version of the CS1 Game Server:
 ```
 - Configure the **package.json** in this directory according to your details
 - Make sure to set a unique version before publishing package to npm.
-- In the Terminal run ```npm publish```
+- Open a **Terminal** and run ```cd src/server```
+- In the **Terminal** run ```npm publish```
 
 
 
