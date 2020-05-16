@@ -1,35 +1,51 @@
-import css from 'rollup-plugin-css-only';
+import css from "rollup-plugin-css-only";
 //import cleanup from 'rollup-plugin-cleanup';
-import {terser} from 'rollup-plugin-terser';
-import json from 'rollup-plugin-json';
+import { terser } from "rollup-plugin-terser";
+import json from "rollup-plugin-json";
 import { string } from "rollup-plugin-string";
 
-// `npm run build` -> `production` is true
-// `npm run dev` -> `production` is false
-const production = process.env.BUILD!='dev'?true:false;
-const includeMap = process.env.SOURCEMAP=='true'?true:false;
-const engine = process.env.ENGINE=='true'?true:false;
-const updateLatest = process.env.UPDATELATEST=='true'?true:false;
-let input,output
-if(engine){
-  input='src/engine/engine.js'
-  if(updateLatest)
-    output=`dist/${process.env.VERSION}/cs1-engine.min.js`
-  else 
-    output=`dist/latest/cs1-engine.min.js`
-}else{
-  input='src/game/main.js'
-  output='public/game.js'
+
+const prod = process.env.PROD;
+const buildType = process.env.BUILD_TYPE;
+const version = process.env.VERSION;
+let i, o;
+
+switch (buildType) {
+  case "engine":
+    i = "src/engine/engine.js";
+    o = prod
+      ? `dist/${process.env.VERSION}/cs1-game-engine.min.js`
+      : `public/staging/cs1-game-engine.js`;
+    break;
+  case "game":
+    i = "src/game/main.js";
+    o = prod
+      ? `dist/${process.env.VERSION}/cs1-game.min.js`
+      : `public/staging/cs1-game.js`;
+    break;
+  case "socket":
+    i = "src/engine/modules/socket.js";
+    o = prod
+      ? `dist/${process.env.VERSION}/cs1-game-socket.min.js`
+      : `public/staging/cs1-game-socket.min.js`;
+    break;
 }
 
+console.log("prod: ", prod);
+console.log("buildType: ", buildType);
+console.log("version: ", version);
+console.log("i: ", i);
+console.log("o: ", o);
+
 export default {
-	input: input,
-	output: {
-		file: output,
-		format: 'iife', // immediately-invoked function expression — suitable for <script> tags
-		sourcemap: includeMap,
-	},
-	plugins: [
+  input: i,
+  output: {
+    file: o,
+    format: "iife", // immediately-invoked function expression — suitable for <script> tags
+    sourcemap: (buildType=='game') || !prod,
+    name: "CS1"
+  },
+  plugins: [
     json(),
     string({
       // Required to be specified
@@ -38,9 +54,9 @@ export default {
       // Undefined by default
       exclude: ["**/index.html"]
     }),
-    css({ output: 'public/bundle.css' }),
-		//resolve(), // tells Rollup how to find date-fns in node_modules
+    css({ output: "public/bundle.css" }),
+    //resolve(), // tells Rollup how to find date-fns in node_modules
     //cleanup({comments: 'none'}),
-		production && terser(), // minify, but only in production
-	]
+    prod && terser() // minify, but only in production
+  ]
 };

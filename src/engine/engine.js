@@ -1,20 +1,28 @@
+import links from './modules/links'
+import aframe from './modules/vendor/aframe_1.0.4'
+
 const CS1 = window.CS1 = {}
 
 import {version} from './modules/version'
 CS1.version = version
+console.log(`CS1 ${CS1.version}`)
 
-//import aframe from './modules/vendor/aframe'
-
-import utils from './modules/utils'
-window.addEventListener('DOMContentLoaded', e => {
-  utils.loadScriptPromise('https://aframe.io/releases/1.0.4/aframe.min.js')
-  .then(script=>{
-     CS1.scene = document.createElement('a-scene')
-     document.body.appendChild(CS1.scene)
-     document.body.dispatchEvent(new Event('cs1-ready'))
-  })
-});
+import {scene} from './modules/scene'
+scene(CS1)
 
 
+import {utils} from './modules/utils'
+CS1.utils = utils
+
+import {game} from './modules/components/game'
+game(CS1)
+
+//import {socket} from './modules/socket'
+//socket(CS1)
+
+import {follow} from './modules/components/follow'
+
+import {gltfInstances} from './modules/components/gltf-instances'
 
 
+import jump from './modules/components/jump'
