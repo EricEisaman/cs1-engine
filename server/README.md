@@ -1,29 +1,28 @@
-# cs1-game-server 
+# cs1-game-server
 ___
 
-## Publishing a Custom Version of the CS1 Game Server
+## Description
 
-If you wish to create your own modified version of the CS1 Game Server:
-- Create an <a href="https://www.npmjs.com/" rel="noopener noreferrer ">**npm account**</a>
-- Create an <a href="https://docs.npmjs.com/creating-and-viewing-authentication-tokens" rel="noopener noreferrer ">**npm token**</a>
-- Record your **npm token** in **.env**.
-- Create a **.npmrc** file in this directory with the following line:
+NodeJS 3D Multiplayer Server Module for use with the **CS1 Game Engine**.
+
+## Usage
+
+
+
+In **Terminal** 
 ```
-//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+npm install --save cs1-game-server
+
 ```
-- Configure the **package.json** in this directory according to your details
-- Make sure to set a unique version before publishing package to npm.
-- Open a **Terminal** and run ```cd src/server```
-- In the **Terminal** run ```npm publish```
 
+or **package.json**
+```
+"dependencies": {
+    "cs1-game-server": "^0.x"
+  }
+```
 
-
-
-*IoT API appears in server.js currently because it requires express to conduct IoT device http polling.*
-
-
-
-
-
-
-
+In **server.js**
+```
+require('cs1-game-server').start();
+```

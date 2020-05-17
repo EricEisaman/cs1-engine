@@ -1,6 +1,6 @@
 {
   "name": "cs1-game-server",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "Server designed to accompany the CS1 Game Engine for 3D multiplayer VR-ready progressive web applications.",
   "keywords": ["cs1", "cs1 game engine", "A-Frame", "Three.js", "socket.io", "VR", "game", "multiplayer"],
   "author": "SirFizX",

@@ -1,6 +1,10 @@
 # cs1-game-server
 ___
 
+## Description
+
+NodeJS 3D Multiplayer Server Module for use with the **CS1 Game Engine**.
+
 ## Usage
 
 

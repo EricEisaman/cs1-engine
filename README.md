@@ -17,3 +17,34 @@ ___
 <a href="https://cs1-engine.glitch.me/staging" rel="noopener noreferrer">Staging/Development Example with Minified Game Build</a>
 
 <a href="https://cs1-engine.glitch.me/staging/no-build.html" rel="noopener noreferrer">Staging/Development No-Build Example</a>
+
+
+<a href="https://cs1-engine.glitch.me/staging/min.html" rel="noopener noreferrer">Staging/Development Minimal HTML Example</a>
+
+___
+
+## Publishing to NPM
+
+#### Use the following pattern to publish any npm package from Glitch
+
+
+If you wish to create your own modified version of the CS1 Game Server:
+- Create an <a href="https://www.npmjs.com/" rel="noopener noreferrer ">**npm account**</a>
+- Create an <a href="https://docs.npmjs.com/creating-and-viewing-authentication-tokens" rel="noopener noreferrer ">**npm token**</a>
+- Record your **npm token** in **.env**.
+- Create a **.npmrc** file in the **src/server** directory with the following line:
+```
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+```
+- Configure the **package.json** in this directory according to your details
+- Make sure to set a unique version before publishing package to npm.
+- Open a **Terminal** and run ```cd src/server```
+- In the **Terminal** run ```npm publish```
+
+
+
+
+
+
+
+
