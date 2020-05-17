@@ -5,7 +5,7 @@ ___
 ## About
 ___
 
-The CS1 Game Engine is undergoing a complete rewrite.  Please take part in our community!  Your ideas and feedback are important! If you wish, you can remix this project to develop and build your own versions of the CS1 Game Engine, CS1 Game Server, CS1 Game Socket, and Custom CS1 Game Example.
+The <a href="https://cs1.netlify.app/cs1-game-engine/" rel="noopener noreferrer">CS1 Game Engine</a> is undergoing a complete rewrite.  Please take part in our community!  Your ideas and feedback are important! If you wish, you can remix this project to develop and build your own versions of the CS1 Game Engine, CS1 Game Server, CS1 Game Socket, and Custom CS1 Game Example.
 
 ## Examples
 ___
