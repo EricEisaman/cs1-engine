@@ -1,22 +1,15 @@
 <html>
   <head>
     <title>CS1</title>
-    <script src="cs1-engine.min.js"></script>
-    <script src="https://unpkg.com/aframe-spe-particles-component@^1.0.4/dist/aframe-spe-particles-component.js"></script>
+    <script src="cs1-game-engine.min.js"></script>
   </head>
   <body>
-    <a-scene>
-      <a-entity id="parts" particles="texture: https://cdn.glitch.com/ea426344-f1a7-4a2b-8557-b641408c03a1%2Fparticle.png?v=1588729109583; color: blue; velocity: 0 10 0; velocity-spread: 2 0 2; acceleration: 0 -10 0"></a-entity>
-    </a-scene>
     <script>
-      //Set up your scene
       const instances = document.createElement('gltf-instances');
       CS1.scene.appendChild(instances);
       CS1.myPlayer.setAttribute('jump','speed:25');
-      // Start the game:
-      // DEFAULT IS  SINGLE_PLAYER, other options are MULTIPLAYER and SINGLE_PLAYER_SERVER
       CS1.game.addEnvironment();
-      CS1.game.start();
+      CS1.game.start(); 
     </script>
   </body>
 </html>

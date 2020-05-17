@@ -24,7 +24,7 @@ app.get("/admin", function (request, response) {
 app.set('port', (process.env.PORT || 5000));
 
 const default_config = {
-  test: "testing"
+  test: "config testing"
 }
 
 const CS1Server = {
