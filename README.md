@@ -36,7 +36,7 @@ If you wish to create your own modified version of the CS1 Game Server:
 ```
 //registry.npmjs.org/:_authToken=${NPM_TOKEN}
 ```
-- Configure the **package.json** in this directory according to your details
+- Configure the **package.json** in the **src/server** directory according to your details
 - Make sure to set a unique version before publishing package to npm.
 - Open a **Terminal** and run ```cd src/server```
 - In the **Terminal** run ```npm publish```
