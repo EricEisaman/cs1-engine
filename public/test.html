@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <title>CS1</title>
+    <script src="cs1-game-engine.min.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      //FOR DESIGNING AND TESTING NEW APIs
+      const thing = await CS1.create('a-thing');
+      await CS1.addComp(thing,'glow');
+      CS1.myPlayer.setAttribute('jump','speed:25');
+      CS1.game.addEnvironment();
+      CS1.game.start(); 
+    </script>
+  </body>
+</html>
