@@ -4,7 +4,7 @@
   "description": "Server designed to accompany the CS1 Game Engine for 3D multiplayer VR-ready progressive web applications.",
   "keywords": ["cs1", "cs1 game engine", "A-Frame", "Three.js", "socket.io", "VR", "game", "multiplayer"],
   "author": "SirFizX",
-  "homepage": "https://cs1.netlify.app/",
+  "homepage": "https://cs1.netlify.app/cs1-game-engine/",
     "repository": {
     "url": "https://github.com/EricEisaman/cs1-engine"
   },

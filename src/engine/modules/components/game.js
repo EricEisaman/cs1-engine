@@ -1,6 +1,8 @@
+import aframe from '../vendor/aframe_1.0.4'
 import {utils} from '../utils';
+import {cs1scene} from './cs1scene';
 
-export const game = CS1=>{
+export const game = ( ()=>{
 
 AFRAME.registerComponent('game', {
   
@@ -68,7 +70,9 @@ AFRAME.registerComponent('game', {
   
 });
   
+
+const CS1 = window.CS1;
 CS1.scene.setAttribute('game','');
-CS1.game = CS1.scene.components.game;
+CS1.game = CS1.scene.components.game;  
   
-}
+})()

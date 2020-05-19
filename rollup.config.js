@@ -42,7 +42,7 @@ export default {
   output: {
     file: o,
     format: "iife", // immediately-invoked function expression — suitable for <script> tags
-    sourcemap: (buildType=='game') || !prod,
+    sourcemap: true,//(buildType=='game') || !prod,
     name: "CS1"
   },
   plugins: [

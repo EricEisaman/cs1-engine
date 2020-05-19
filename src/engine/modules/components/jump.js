@@ -1,4 +1,4 @@
-export default(()=>{
+export const jump = (()=>{
   
 
 AFRAME.registerComponent('jump', {
