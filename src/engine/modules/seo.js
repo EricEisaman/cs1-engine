@@ -1,5 +1,3 @@
-import seo from './seo.js';
-
 export default(()=>{
   
 function addLink(rel,href){
