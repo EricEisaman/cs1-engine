@@ -1,1 +1,1 @@
-require('../dist/latest/cs1-game-server.min.js').start();
+require('/app/src/server/server.js').start();

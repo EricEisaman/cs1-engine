@@ -4,7 +4,7 @@
   "description": "Game Engine for making 3D multiplayer games in JavaScript.",
   "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js",
+    "start": "node server/dev-server.js",
     "engine_prod": "rollup -c --environment PROD:true,BUILD_TYPE:engine;npm-run-all upe1 upe2 upem1 upem2;refresh",
     "game_prod": "rollup -c --environment PROD:true,BUILD_TYPE:game;npm-run-all upg1 upg2 upgm1 upgm2;refresh",
     "socket_prod": "rollup -c --environment PROD:true,BUILD_TYPE:socket;npm-run-all ups1 ups2 upsm1 upsm2;refresh",
