@@ -1,6 +1,6 @@
 export default (()=>{
   
-AFRAME.registerComponent('cs1-jukebox', {
+AFRAME.registerComponent('cs1jukebox', {
   schema: {
 	
   },
@@ -31,6 +31,29 @@ AFRAME.registerComponent('cs1-jukebox', {
           break;
       }
     });
+  }
+});  
+  
+AFRAME.registerPrimitive('cs1-jukebox', {
+  defaultComponents: {
+    jukebox:{},
+    cs1jukebox:{},
+    position:{}
+  },
+  mappings: {
+    names: 'jukebox.names',
+    src: 'jukebox.src',
+    logo: 'jukebox.logo',
+    color: 'jukebox.color',
+    highlight:'jukebox.highlight',
+    current: 'jukebox.current',
+    heading: 'jukebox.heading',
+    border: 'jukebox.border',
+    scaletext: 'jukebox.scaletext',
+    playthrough: 'jukebox.playthrough',
+    initialdelay: 'jukebox.initialdelay',
+    autoplay: 'jukebox.autoplay',
+    volume: 'jukebox.volume'
   }
 });  
 
