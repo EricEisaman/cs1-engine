@@ -1,6 +1,6 @@
-import seo from './seo.js';
+import {seo} from './seo.js';
 
-export default(()=>{
+export const links = (()=>{
   
 function addLink(rel,href){
 const link = document.createElement('link');

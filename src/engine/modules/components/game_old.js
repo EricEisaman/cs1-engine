@@ -19,33 +19,7 @@ export default CS1 => {
       document.querySelector("#scene-container").style.display = "block";
       document.querySelector("#loading-screen").style.display = "none";
 
-      CS1.voices = window.speechSynthesis.getVoices();
-
-      CS1.say = function(msg, name = "none given") {
-        var msg = new SpeechSynthesisUtterance(msg);
-        if (name == "none given")
-          msg.voice = speechSynthesis.getVoices().filter(function(voice) {
-            return voice.name == config.voice.name;
-          })[0];
-        else
-          msg.voice = speechSynthesis.getVoices().filter(function(voice) {
-            return voice.name == name;
-          })[0];
-        msg.pitch = config.voice.pitch;
-        msg.rate = config.voice.rate;
-        msg.volume = config.voice.volume;
-        speechSynthesis.speak(msg);
-      };
-
-      CS1.sayall = function(msg, name) {
-        CS1.socket.emit("sayall", { msg: msg, name: name });
-      };
-
-      CS1.printVoices = () => {
-        speechSynthesis.getVoices().forEach(v => {
-          console.log(v.name, v.lang);
-        });
-      };
+      
 
       CS1.sounds = {};
 
