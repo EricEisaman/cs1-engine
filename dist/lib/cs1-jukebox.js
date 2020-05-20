@@ -1,4 +1,4 @@
-export default (()=>{
+(()=>{
   
 AFRAME.registerComponent('cs1jukebox', {
   schema: {
