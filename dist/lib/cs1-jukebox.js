@@ -38,7 +38,7 @@ AFRAME.registerPrimitive('cs1-jukebox', {
   defaultComponents: {
     jukebox:{},
     cs1jukebox:{},
-    position:{}
+    position:{x:0,y:3,z:-8}
   },
   mappings: {
     names: 'jukebox.names',
