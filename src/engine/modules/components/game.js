@@ -1,6 +1,12 @@
 import aframe from '../vendor/aframe_1.0.4'
-import {utils} from '../utils';
 import {cs1scene} from './cs1scene';
+import {utils} from '../utils';
+import {flags} from '../flags';
+import {links} from '../links';
+import {log} from './log';
+import {adapt} from '../device';
+import {voices} from '../voices';
+import {create} from '../create';
 
 export const game = ( ()=>{
 
@@ -8,10 +14,17 @@ AFRAME.registerComponent('game', {
   
   init: function(){
     CS1.utils = utils;
+    this.flags = flags;
   },
   
   setType: function(type){
     this.gameType = type;
+  },
+  
+  setFlags: function(flags){
+    flags.forEach(flag=>{
+      this.flags[flag]=true;
+    });
   },
   
   start: function(){
