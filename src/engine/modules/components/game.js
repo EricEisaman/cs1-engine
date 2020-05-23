@@ -1,6 +1,7 @@
 import aframe from '../vendor/aframe_1.0.4'
 import {cs1scene} from './cs1scene';
 import {utils} from '../utils';
+CS1.utils = utils;
 import {flags} from '../flags';
 import {links} from '../links';
 import {log} from './log';
@@ -13,7 +14,6 @@ export const game = ( ()=>{
 AFRAME.registerComponent('game', {
   
   init: function(){
-    CS1.utils = utils;
     this.flags = flags;
   },
   
@@ -50,6 +50,8 @@ AFRAME.registerComponent('game', {
         CS1.scene.clock.start();
         break;
     }
+
+    this.el.dispatchEvent(new Event('game-start'));
     
   },
   
