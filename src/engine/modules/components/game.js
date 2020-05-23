@@ -8,6 +8,7 @@ import {log} from './log';
 import {adapt} from '../device';
 import {voices} from '../voices';
 import {create} from '../create';
+import {register} from '../register';
 
 export const game = ( ()=>{
 
