@@ -1,4 +1,4 @@
-export default (()=>{
+(()=>{
   
 AFRAME.registerSystem('trail',{schema:{},init:function(){},trails:{haveTrails:[],},createTrail:function createTrail(object,length,width,resolution,color,offset){if(resolution>length){resolution=length}
 if(!object.userData.trails)object.userData.trails=[];const trail={length:Math.round(length),width:width,resolution:Math.round(resolution),trailHistory:[],trailVertices:[],worldDirection:new THREE.Vector3(),}
