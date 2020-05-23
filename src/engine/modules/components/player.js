@@ -1,3 +1,5 @@
+import {simpleavatar} from './simple-avatar';
+
 export const player = (()=>{
 
 AFRAME.registerComponent('player', {
@@ -18,17 +20,16 @@ AFRAME.registerComponent('player', {
   },
   
   addAvatar: function(){
-    const avatar = document.createElement('a-box');
-    avatar.setAttribute('color','red');
-    avatar.setAttribute('id','my-avatar');
-    avatar.object3D.position.y = 0.5;
+    const avatar = document.createElement('simple-avatar');
+    avatar.setAttribute('laserOffset','0 0 -.5');
+    if(this.data.me) avatar.setAttribute('id','my-avatar');
     this.el.appendChild(avatar);
     this.el.avatar = avatar;
   },
   
   addCamTarget: function(){
     const camTarget = document.createElement('a-entity');
-    camTarget.object3D.position.set(0,3,4);
+    camTarget.object3D.position.set(0,2,3);
     camTarget.setAttribute('id','cam-target');
     camTarget.togglePos = this.togglePos;
     this.el.appendChild(camTarget);
@@ -36,11 +37,11 @@ AFRAME.registerComponent('player', {
   },
   
   togglePos: function(){
-    if(CS1.myPlayer.camTarget.object3D.position.y==3){
+    if(CS1.myPlayer.camTarget.object3D.position.y==2){
       CS1.myPlayer.camTarget.object3D.position.set(0,0.5,1);
       CS1.myPlayer.avatar.setAttribute('material', 'transparent: true; opacity: 0.2')
     }else{
-      CS1.myPlayer.camTarget.object3D.position.set(0,3,4);
+      CS1.myPlayer.camTarget.object3D.position.set(0,2,3);
       CS1.myPlayer.avatar.setAttribute('material', 'transparent: false; opacity: 1.0')
     }
   },

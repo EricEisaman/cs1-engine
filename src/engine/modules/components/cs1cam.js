@@ -9,6 +9,10 @@ AFRAME.registerComponent('cs1cam', {
 
   },
   
+  tick: function(){
+    
+  }
+  
 });
   
   

@@ -29,9 +29,9 @@ AFRAME.registerComponent("gltf-instances", {
     var colorArray = new Float32Array(count * 3);
 
     for (var i = 0; i < count; i++) {
-      translateArray[i * 3 + 0] = (Math.random() - 0.5) * 100.0;
-      translateArray[i * 3 + 1] = (Math.random() - 0.5) * 100.0;
-      translateArray[i * 3 + 2] = (Math.random() - 0.5) * 100.0;
+      translateArray[i * 3 + 0] = (Math.random() - 0.35) * 100.0;
+      translateArray[i * 3 + 1] = (Math.random() - 0.35) * 100.0;
+      translateArray[i * 3 + 2] = (Math.random() - 0.35) * 100.0;
     }
 
     for (var i = 0; i < count; i++) {
