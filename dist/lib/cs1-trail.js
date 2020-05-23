@@ -1,5 +1,3 @@
-(()=>{
-  
 AFRAME.registerSystem("trail", {
   schema: {},
   init: function() {},
@@ -112,7 +110,6 @@ AFRAME.registerComponent("trail", {
   },
   multiple: !0,
   init: function() {
-    console.log('Creating a trail.  The value of this is: ', this)
     this.system.createTrail(
       this.el.object3D,
       this.data.length,
@@ -126,7 +123,3 @@ AFRAME.registerComponent("trail", {
     this.system.reset(this.el.object3D);
   }
 });
-
-
-
-})()
