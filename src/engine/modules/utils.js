@@ -1,3 +1,5 @@
+import {libmap} from './libmap';
+
 export const utils = {
   
   loadScript: function (url){
@@ -12,7 +14,9 @@ export const utils = {
 		script.src = url
 		head.appendChild(script)
 	})
-}
+},
+  
+  libmap: libmap
   
   
 }

@@ -3,15 +3,16 @@ export const log = (()=>{
 
 	AFRAME.registerPrimitive('a-log', {
 	  defaultComponents: {
-	    geometry: {primitive: 'plane', height: 5, width: 5},
+	    geometry: {primitive: 'plane', height:5, width: 5},
 	    log: {},
 	    material: {color: '#111', shader: 'flat', side: 'double'},
-	    text: {color: 'lightgreen', baseline: 'top', align: 'center', height: 15},
+	    text: {color: 'lightgreen', baseline: 'center', align: 'center', height: 50, zOffset:0.04},
       position: {x:0 , y:2.5 , z:-4} 
 	  },
 
 	  mappings: {
-	    channel: 'log.channel'
+	    channel: 'log.channel',
+      max: 'log.max'
 	  }
 	});
 
@@ -110,7 +111,7 @@ export const log = (()=>{
 	  }
 	});
   
-  window.addEventListener('load', (event) => {
+  window.addEventListener('DOMContentLoaded', (event) => {
     CS1.log = AFRAME.log;
   });
 

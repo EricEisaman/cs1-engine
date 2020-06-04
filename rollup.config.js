@@ -5,28 +5,28 @@ import json from "rollup-plugin-json";
 import { string } from "rollup-plugin-string";
 
 
-const prod = process.env.PROD;
+const prod = (process.env.PROD==true);
 const buildType = process.env.BUILD_TYPE;
-const version = process.env.VERSION;
+const version = process.env.npm_package_version;
 let i, o;
 
 switch (buildType) {
   case "engine":
     i = "src/engine/engine.js";
-    o = prod
-      ? `dist/${process.env.VERSION}/cs1-game-engine.min.js`
+    o = prod 
+      ? `dist/${version}/cs1-game-engine.min.js`
       : `public/staging/cs1-game-engine.js`;
     break;
   case "game":
     i = "src/game/main.js";
     o = prod
-      ? `dist/${process.env.VERSION}/cs1-game.min.js`
+      ? `dist/${version}/cs1-game.min.js`
       : `public/staging/cs1-game.js`;
     break;
   case "socket":
     i = "src/engine/modules/socket.js";
     o = prod
-      ? `dist/${process.env.VERSION}/cs1-game-socket.min.js`
+      ? `dist/${version}/cs1-game-socket.min.js`
       : `public/staging/cs1-game-socket.min.js`;
     break;
 }

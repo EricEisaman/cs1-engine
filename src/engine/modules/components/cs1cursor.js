@@ -25,7 +25,7 @@ AFRAME.registerPrimitive('cs1-cursor', {
   },
 
   mappings: {
-    
+    fuse: 'cursor.fuse'
   }
 });
   

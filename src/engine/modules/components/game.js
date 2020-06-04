@@ -1,36 +1,48 @@
-import aframe from '../vendor/aframe_1.0.4'
+import aframe from '../vendor/aframe-custom-6.01.20.js'
 import {cs1scene} from './cs1scene';
 import {utils} from '../utils';
 CS1.utils = utils;
 import {flags} from '../flags';
 import {links} from '../links';
 import {log} from './log';
-import {adapt} from '../device';
+import {device} from '../device';
+import {view} from '../view';
 import {voices} from '../voices';
 import {create} from '../create';
+import {add} from '../add';
 import {register} from '../register';
+import {version} from '../version';
+CS1.version = version.version;
 
 export const game = ( ()=>{
 
 AFRAME.registerComponent('game', {
   
+  schema:{
+    type: {default:'SINGLE_PLAYER'},
+    view: {default:'THIRD_PERSON'}, //FIRST_PERSON, OMNICIENT
+    flags: {default: flags}
+  },
+  
   init: function(){
-    this.flags = flags;
+    console.log(`CS1 Game Engine Version: ${CS1.version}`);
+    this.flags = this.data.flags;
+    this.view = view.set(this.data.view);
+    device.adapt();
   },
   
   setType: function(type){
-    this.gameType = type;
+    this.data.type = type;
   },
   
   setFlags: function(flags){
-    flags.forEach(flag=>{
-      this.flags[flag]=true;
+    Object.keys(flags).forEach(flag=>{
+      this.data.flags[flag]=flags[flag];
     });
   },
   
   start: function(){
-    
-    switch(this.gameType){
+    switch(this.data.type){
       case 'MULTIPLAYER':
         let sio = (typeof io !== 'undefined')
         //display login - don't call CS1.scene.clock.start() until successful user login
@@ -52,7 +64,11 @@ AFRAME.registerComponent('game', {
         break;
     }
 
-    this.el.dispatchEvent(new Event('game-start'));
+    
+    
+  },
+  
+  update: function(){
     
   },
   
