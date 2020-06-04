@@ -3,62 +3,23 @@ export const gltfInstances = (()=>{
 
 AFRAME.registerComponent("gltf-instances", {
   schema: {
-    count: { type: "int", default: 10000 }
+    count: { type: "int", default: 100 },
+    src: { default: 'https://cdn.glitch.com/162b879e-fd42-40d9-8519-671d783b8c70%2Fclock.glb?v=1538858467717' },
   },
 
   init: function() {
     this.count = this.data.count;
     this.model = null;
-  },
-
-  update: function() {
-    if (this.model !== null) {
-      return;
-    }
-
+    
+    const self = this;
     var data = this.data;
     var el = this.el;
-
+    
+    
     var count = this.count;
 
     var geometry = new THREE.InstancedBufferGeometry();
-    geometry.copy(new THREE.TetrahedronBufferGeometry(1.0));
-
-    var translateArray = new Float32Array(count * 3);
-    var vectorArray = new Float32Array(count * 3);
-    var colorArray = new Float32Array(count * 3);
-
-    for (var i = 0; i < count; i++) {
-      translateArray[i * 3 + 0] = (Math.random() - 0.35) * 100.0;
-      translateArray[i * 3 + 1] = (Math.random() - 0.35) * 100.0;
-      translateArray[i * 3 + 2] = (Math.random() - 0.35) * 100.0;
-    }
-
-    for (var i = 0; i < count; i++) {
-      vectorArray[i * 3 + 0] = (Math.random() - 0.5) * 10.0;
-      vectorArray[i * 3 + 1] = (Math.random() + 1.5) * 10.0;
-      vectorArray[i * 3 + 2] = (Math.random() - 0.5) * 10.0;
-    }
-
-    for (var i = 0; i < count; i++) {
-      colorArray[i * 3 + 0] = Math.random();
-      colorArray[i * 3 + 1] = Math.random();
-      colorArray[i * 3 + 2] = Math.random();
-    }
-
-    geometry.setAttribute(
-      "translate",
-      new THREE.InstancedBufferAttribute(translateArray, 3, true)
-    );
-    geometry.setAttribute(
-      "vector",
-      new THREE.InstancedBufferAttribute(vectorArray, 3, true)
-    );
-    geometry.setAttribute(
-      "color",
-      new THREE.InstancedBufferAttribute(colorArray, 3, true)
-    );
-
+    
     var material = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 }
@@ -87,12 +48,95 @@ AFRAME.registerComponent("gltf-instances", {
         }
        `   
     });
+    
+    
+
+    
+        
+    this.el.setAttribute('gltf-model',`src:url(${this.data.src})`);
+    
+    this.el.addEventListener('model-loaded', e=>{
+      console.log('MODEL LOADED');
+      const gltf = e.detail.model;
+      window.gltf = gltf;
+   
+      gltf.traverse( function ( child ) {
+
+          if ( child.isMesh ) {
+
+              child.material.diffuse = material;
+              //Setting the instanced buffer geometry
+              geometry.copy(child.geometry);
+              return;
+
+          }
+
+      } );
+      
+      
+      
+
+    var translateArray = new Float32Array(count * 3);
+    var vectorArray = new Float32Array(count * 3);
+    var colorArray = new Float32Array(count * 3);
+
+    for (var i = 0; i < count; i++) {
+      translateArray[i * 3 + 0] = (Math.random() - 0.35) * 100.0;
+      translateArray[i * 3 + 1] = (Math.random() - 0.35) * 100.0;
+      translateArray[i * 3 + 2] = (Math.random() - 0.55) * 100.0;
+    }
+
+    for (var i = 0; i < count; i++) {
+      vectorArray[i * 3 + 0] = (Math.random() - 0.5) * 10.0;
+      vectorArray[i * 3 + 1] = (Math.random() + 1.5) * 10.0;
+      vectorArray[i * 3 + 2] = (Math.random() - 0.5) * 10.0;
+    }
+
+    for (var i = 0; i < count; i++) {
+      colorArray[i * 3 + 0] = Math.random();
+      colorArray[i * 3 + 1] = Math.random();
+      colorArray[i * 3 + 2] = Math.random();
+    }
+
+    geometry.setAttribute(
+      "translate",
+      new THREE.InstancedBufferAttribute(translateArray, 3, true)
+    );
+    geometry.setAttribute(
+      "vector",
+      new THREE.InstancedBufferAttribute(vectorArray, 3, true)
+    );
+    geometry.setAttribute(
+      "color",
+      new THREE.InstancedBufferAttribute(colorArray, 3, true)
+    );
+
 
     var mesh = new THREE.Mesh(geometry, material);
     mesh.frustumCulled = false;
-    this.model = mesh;
+    self.model = mesh;
     el.setObject3D("mesh", mesh);
-    el.emit("model-loaded", { format: "mesh", model: mesh });
+    //el.emit("model-loaded", { format: "mesh", model: mesh });
+      
+      
+      
+      
+    });
+    
+    
+    
+    
+    
+    
+  },
+
+  update: function() {
+    
+
+   
+    
+    
+    
   },
 
   tick: function(time, delta) {

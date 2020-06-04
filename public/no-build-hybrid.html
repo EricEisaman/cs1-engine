@@ -8,8 +8,7 @@
       <a-cylinder position="0 4 -10" color="lime" scale="8 8 8"></a-cylinder>
     </a-scene>
     <script>
-      const instances = document.createElement('gltf-instances');
-      CS1.add(instances);
+      CS1.add('gltf-instances');
       CS1.myPlayer.setAttribute('jump','speed:25');
       CS1.game.addEnvironment();
       CS1.game.start(); 
