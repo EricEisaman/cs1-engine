@@ -1,0 +1,41 @@
+<script src="cs1-game-engine.js"></script>
+<a-scene>
+<a-box position="2 2 -5" color="yellow"></a-box>
+</a-scene>
+<cs1-script>
+  
+  
+console.log('Inline hello.')
+  
+  
+CS1.scene.set('environment',{preset:'starry',lightPosition:'0 0.1 50'})
+
+await CS1.scene.set('render-order','background foreground')
+  
+  
+  
+const juke = await CS1.add('a-jukebox',{position:'0 2 -1.5', scale:'2 2 2'})    
+juke.set('render-order','background');
+  
+CS1.myPlayer.setAttribute('render-order','foreground')
+  
+CS1.add('a-circle',{position:"0 1.5 -2",
+  material:"side: double; color: blue; transparent: true; opacity: 0.5", 
+  geometry:"primitive:circle;radius:0.5" , 
+  radius:"0.5"})
+CS1.add('gltf-instances', {count:1000});
+  
+  
+CS1.myPlayer.setAttribute('jump','speed:25');
+
+   
+const fw = await CS1.add('cs1-particles',{position:'0 8 -6'})  
+
+CS1.game.start();
+  
+
+</cs1-script>
+
+
+  
+  

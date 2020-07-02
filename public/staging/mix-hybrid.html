@@ -1,0 +1,15 @@
+<head>
+  <script src="cs1-game-engine.js"></script>
+</head>
+<body>
+  <a-scene>
+   <a-sphere position="0 2 -5"></a-sphere>
+  </a-scene>
+  <cs1-script src="cs1-forest-demo.js"></cs1-script>
+  <cs1-script>
+    console.log('extending the forest demo ...');
+    const blueBox = CS1.game.templates.BlueBox.cloneNode();
+    blueBox.setAttribute('position','0 3 -4');
+    CS1.scene.appendChild(blueBox);
+  </cs1-script>
+</body>
