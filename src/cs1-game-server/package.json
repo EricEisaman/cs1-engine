@@ -1,0 +1,31 @@
+{
+  "name": "cs1-game-server",
+  "author": "SirFizX",
+  "version": "0.0.17",
+  "description": "The CS1 Game Server provides multiplayer functionality and data persistence on top of the CS1 Game Engine.",
+  "homepage": "https://cs1.netlify.app/",
+  "repository": {
+    "url": "https://github.com/EricEisaman/cs1-engine/src/cs1-game-server"
+  },
+  "license": "MIT",
+  "keywords": [
+    "awesome",
+    "maintainer",
+    "10x engineer"
+  ],
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "socket.io": "^2.3.0",
+    "lowdb": "^1.0.0",
+    "uuidv4": "^6.1.0",
+    "bufferutil": "^4.0.1",
+    "utf-8-validate": "^5.0.2"
+  },
+  "engines": {
+    "node": "12.x"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "cs1-neon-demo",
+  "author": "SirFizX",
+  "version": "0.0.10",
+  "description": "Package description.",
+  "homepage": "https://cs1.netlify.app/",
+  "repository": {
+    "url": "https://github.com/EricEisaman/maintainer"
+  },
+  "license": "MIT",
+  "keywords": [
+    "awesome",
+    "maintainer",
+    "10x engineer"
+  ]
+}
