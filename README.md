@@ -12,3 +12,12 @@ ____
 
 <a href="https://cs1.netlify.app/" target="_blank" rel="noopener noreferrer">🗒️</a>
 
+____
+
+**CS1 Demos**
+
+<a href="https://cs1-dev.glitch.me" target="_blank" rel="noopener noreferrer">🎮</a>
+
+____
+
+
