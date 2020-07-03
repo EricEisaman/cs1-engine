@@ -17,7 +17,8 @@ log.setAttribute('position','-5  3 -12')
 CS1.scene.appendChild(log)
 
 
-CS1.myPlayer.setAvatar({color:"blue"})
+CS1.myPlayer.setAvatar({color:"#220907",
+                       head:"https://cdn.glitch.com/aa685e59-3fcd-4b08-befb-d37b89a08db9%2Fdemon_head.glb?v=1593789346807"})
 
 CS1.myPlayer.setAttribute('jump','speed:25')
   

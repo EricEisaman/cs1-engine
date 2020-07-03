@@ -42,15 +42,15 @@ AFRAME.registerComponent('follow', {
       const rx = CS1.cam.object3D.rotation.x
       p.y = targetPos.y - this.data.yFactor*Math.sin(rx) 
     }else{ //Third Person VR
-      this.cto.position.copy( CS1.cam.parentEl.object3D.position) 
-      this.cto.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y)
-      this.cto.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y)
-      CS1.myPlayer.lhc.object3D.position.copy( CS1.cam.parentEl.object3D.position) 
-      CS1.myPlayer.rhc.object3D.position.copy( CS1.cam.parentEl.object3D.position) 
-      CS1.myPlayer.lhc.object3D.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y)
-      CS1.myPlayer.lhc.object3D.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y)
-      CS1.myPlayer.rhc.object3D.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y)
-      CS1.myPlayer.rhc.object3D.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y)
+      // this.cto.position.copy( CS1.cam.parentEl.object3D.position) 
+      // this.cto.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y)
+      // this.cto.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y)
+      // CS1.myPlayer.lhc.object3D.position.copy( CS1.cam.parentEl.object3D.position) 
+      // CS1.myPlayer.rhc.object3D.position.copy( CS1.cam.parentEl.object3D.position) 
+      // CS1.myPlayer.lhc.object3D.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y)
+      // CS1.myPlayer.lhc.object3D.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y)
+      // CS1.myPlayer.rhc.object3D.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y)
+      // CS1.myPlayer.rhc.object3D.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y)
     }
     
 		targetPos.sub(usPos).multiplyScalar(s).add(p);

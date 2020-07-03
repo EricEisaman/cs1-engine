@@ -87718,48 +87718,53 @@ AFRAME.registerComponent('oculus', {
     
     CS1.log('CS1.game.view.type : ', CS1.game.view.type);
       
-    CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{ 
     
-      CS1.game.view.toggle();
-    
-    });  
-      
+    CS1.myPlayer.avatar.appendChild(CS1.myPlayer.lh );
+    CS1.myPlayer.avatar.appendChild(CS1.myPlayer.rh ); 
       
       
       
       
     
-    if(CS1.game.view.type!='THIRD_PERSON'){
-      console.log('Customizing Oculus Cam!');
+    if(CS1.game.view.type=='THIRD_PERSON'){
       
-      const ops = [0,0.05,0.08,0.11,0.14,0.2,0.3,1.0];
-      let count = 0;
-      CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{
-      count++;  
-      CS1.myPlayer.avatar.object3D.traverse(o=>{
-              if(o.type=='Mesh'){
-               o.material.transparent = true;
-               o.material.opacity = ops[count%ops.length];
-              }
-            });
-      });
+      console.log('Customizing Oculus Touch Controls for THIRD PERSON!');
       
-      const zf = [0,1,2,3,4,5];
-      let zcount = 0;
-      CS1.myPlayer.lh.addEventListener('ybuttondown',e=>{
-        zcount++;  
-        CS1.myPlayer.components.follow.data.zFactor = zf[zcount%zf.length];
-      });
+//       const ops = [0,0.05,0.08,0.11,0.14,0.2,0.3,1.0]
+//       let count = 0;
+//       CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{
+//       count++;  
+//       CS1.myPlayer.avatar.object3D.traverse(o=>{
+//               if(o.type=='Mesh'){
+//                o.material.transparent = true
+//                o.material.opacity = ops[count%ops.length]
+//               }
+//             })
+//       })
       
+//       const zf = [0,1,2,3,4,5]
+//       let zcount = 0;
+//       CS1.myPlayer.lh.addEventListener('ybuttondown',e=>{
+//         zcount++;  
+//         CS1.myPlayer.components.follow.data.zFactor = zf[zcount%zf.length]
+//       })
       
+      CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{ 
+    
+        CS1.game.view.toggle();
+
+      });  
+      
+      CS1.myPlayer.lh.addEventListener('ybuttondown',e=>{ 
+        CS1.cam.matrixSweep();
+      });  
       
     
       
-    }else{
-      CS1.myPlayer.avatar.appendChild(CS1.myPlayer.lh );
-      CS1.myPlayer.avatar.appendChild(CS1.myPlayer.rh );
-    
     }
+      
+      
+      
     
     });
     
@@ -88003,16 +88008,6 @@ AFRAME.registerComponent('follow', {
     if(this.data.yFactor){
       const rx = CS1.cam.object3D.rotation.x;
       p.y = targetPos.y - this.data.yFactor*Math.sin(rx); 
-    }else{ //Third Person VR
-      this.cto.position.copy( CS1.cam.parentEl.object3D.position); 
-      this.cto.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y);
-      this.cto.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y);
-      CS1.myPlayer.lhc.object3D.position.copy( CS1.cam.parentEl.object3D.position); 
-      CS1.myPlayer.rhc.object3D.position.copy( CS1.cam.parentEl.object3D.position); 
-      CS1.myPlayer.lhc.object3D.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y);
-      CS1.myPlayer.lhc.object3D.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y);
-      CS1.myPlayer.rhc.object3D.position.z -= this.data.zFactor* Math.cos(CS1.cam.object3D.rotation.y);
-      CS1.myPlayer.rhc.object3D.position.x -= this.data.zFactor* Math.sin(CS1.cam.object3D.rotation.y);
     }
     
 		targetPos.sub(usPos).multiplyScalar(s).add(p);
@@ -88047,22 +88042,55 @@ const thirdPerson = {
     CS1.myPlayer.rigTarget = rigTarget;
     //CS1.myPlayer.cam = document.querySelector('[camera]');
     CS1.rig.setAttribute("follow", "target: #rig-target;");
+    
+    
+    //AFRAME.components["look-controls"].Component.prototype.remove = function(){ }
     CS1.cam.setAttribute("look-controls", "pointerLockEnabled:true;");
+    
+    
+    
+    CS1.cam.matrixSweep = function(speed=1){
+      if(CS1.flags.isSweeping)return;
+      CS1.flags.isSweeping = true;
+      CS1.cam.components["look-controls"].data.enabled = false;
+      const yFactor = CS1.rig.components.follow.data.yFactor; 
+      CS1.rig.components.follow.data.yFactor = 0;
+      CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3());
+      let count = 0;
+      const sweep = setInterval(e=>{
+      CS1.rig.components.follow.data.strength=1;
+      CS1.myPlayer.rigTargetSwivel.object3D.rotateY(0.005);
+      CS1.rig.object3D.rotateY(0.005);
+      if(count++ >1256){
+        clearInterval(sweep);
+        CS1.rig.components.follow.data.strength = 0.05;
+        CS1.myPlayer.rigTargetSwivel.setAttribute('rotation','0 0 0');
+        CS1.rig.setAttribute('rotation','0 0 0');
+        CS1.cam.components["look-controls"].data.enabled = true;
+        CS1.rig.components.follow.data.yFactor = yFactor;
+        CS1.flags.isSweeping = false;
+      }
+      },0);
+    };
     
     
     if(CS1.device=='Standard' || CS1.device=='Mobile') 
       CS1.myPlayer.components.player.tick = function(t,dt){
         CS1.myPlayer.object3D.rotation.y = CS1.cam.object3D.rotation.y;
       };
-    if(CS1.device=='Oculus' && CS1.myPlayer.avatar && CS1.myPlayer.avatar.head) 
-      CS1.myPlayer.components.player.tick = function(t,dt){
-        CS1.myPlayer.avatar.head.object3D.rotation.y = CS1.cam.object3D.rotation.y;
-      };
+//     if(CS1.device=='Oculus' && CS1.myPlayer.avatar && CS1.myPlayer.avatar.head){
+      
+//       CS1.myPlayer.components.player.tick = function(t,dt){
+//           CS1.myPlayer.avatar.head.object3D.rotation.y = CS1.cam.object3D.rotation.y;
+//         }  
+        
+//     } 
+      
 
     console.log('view-ready');
     document.body.dispatchEvent( new Event('view-ready'));
     
-  
+    
     if(CS1.device=='Standard'){
       document.body.addEventListener('keyup', e=>{
         switch(e.code){
@@ -88070,6 +88098,7 @@ const thirdPerson = {
             CS1.game.view.toggle();
             break;
           case 'Digit2':
+            CS1.cam.matrixSweep();
             break
         }
       });
@@ -88428,6 +88457,7 @@ AFRAME.registerSystem('cs1avatar', {
         head.setAttribute('color',data.color);
         head.setAttribute('scale','0.33 0.5 0.35');
         head.setAttribute('position','0 1.75 0');
+        head.rxFactor = 1;
         return head;
         break;
       default:
@@ -88435,6 +88465,8 @@ AFRAME.registerSystem('cs1avatar', {
           const head = document.createElement('a-gltf-model');
           head.setAttribute('src',data.head);
           head.setAttribute('position','0 1.75 0');
+          head.setAttribute('rotation','0 180 0');
+          head.rxFactor = -1;
           return head;
         }else{
           console.error('Avatar head data must be either box or a valid model URL.');
@@ -88464,6 +88496,7 @@ AFRAME.registerSystem('cs1avatar', {
   },
   
   addOutline: function (avatar) {
+    if(avatar.el.head.rxFactor == -1)return
     avatar.el.head.set('outline',
         `color:${avatar.data.outline}`,
         'https://raw.githack.com/EricEisaman/aframe-outline/master/dist/aframe-outline.min.js')
@@ -88474,6 +88507,8 @@ AFRAME.registerSystem('cs1avatar', {
   
   addCursor: function (avatar) {
     const cursor = document.createElement(avatar.data.cursortype);
+    cursor.setAttribute('position',`0 0 ${-.5*avatar.el.head.rxFactor}`);
+    if(avatar.el.head.rxFactor == -1)cursor.setAttribute('rotation','0 180 0');
     avatar.el.head.appendChild(cursor);
   }
   
@@ -88503,8 +88538,8 @@ AFRAME.registerComponent('cs1avatar', {
           this.el.appendChild(this.el.head);
           this.el.body = this.system.createBody(this.data);
           this.el.appendChild(this.el.body);
-          this.system.addOutline(this);
           this.system.addCursor(this);
+          this.system.addOutline(this);
           break;
         
       }
@@ -88512,7 +88547,7 @@ AFRAME.registerComponent('cs1avatar', {
   },
 
 	tick: function () {
-		this.el.head.object3D.rotation.x = CS1.cam.object3D.rotation.x;
+		this.el.head.object3D.rotation.x = this.el.head.rxFactor * CS1.cam.object3D.rotation.x;
 	}
   
 });
@@ -88871,12 +88906,11 @@ AFRAME.registerComponent('jump', {
     this.jumpDirection = new THREE.Vector3();
     
     
-    if(CS1.flags.isReady){
+    if(CS1.scene && CS1.scene.clock && CS1.scene.clock.running){
       this.setup();
     }else{
-      document.body.addEventListener('cs1-ready',e=>{ this.setup(); });
+     document.body.addEventListener('game-start',e=>{ this.setup(); });   
     }
-    
     
     
   },
@@ -88888,19 +88922,11 @@ AFRAME.registerComponent('jump', {
     
     switch(CS1.device){
       case 'Oculus':
-        //CS1.log('Returning before Oculus jump setup.')
-        //return
-        //const rh = CS1.myPlayer.components.player.rh.components["oculus-touch-controls"];
-        this.el = CS1.rig;
         if(AFRAME.utils.device.checkHeadsetConnected()){
           CS1.myPlayer.rh.addEventListener('abuttondown',e=>{
             CS1.log('abuttondown');
             this.jump();
           });
-          // rh.el.addEventListener('xbuttondown',e=>{
-          //    CS1.log('xbuttondown')
-          //    this.jump();
-          // });
         }
         break;
       case 'Mobile':

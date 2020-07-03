@@ -1,0 +1,51 @@
+---
+  0 debug pnpm:scope: 
+    selected: 1
+    workspacePrefix: null
+  1 debug pnpm:package-json: 
+    initial: 
+      name: "cs1-game-server"
+      author: 
+        name: "SirFizX"
+      version: "0.0.11"
+      description: "The CS1 Game Server provides multiplayer functionality and data persistence on top of the CS1 Game Engine."
+      homepage: "https://cs1.netlify.app/"
+      repository: 
+        url: "https://github.com/EricEisaman/cs1-engine/src/cs1-game-server"
+      license: "MIT"
+      keywords: 
+        - "awesome"
+        - "maintainer"
+        - "10x engineer"
+      main: "main.js"
+      scripts: 
+        start: "node main.js"
+      dependencies: 
+        express: "^4.16.2"
+        socket.io: "^2.3.0"
+        lowdb: "^1.0.0"
+        uuid/v4: "^8.1.0"
+      engines: 
+        node: "12.x"
+      readme: "# CS1 Game Server\n___"
+      readmeFilename: "README.md"
+      _id: "cs1-game-server@0.0.11"
+    prefix: "/app/src/cs1-game-server"
+  2 debug pnpm:stage: 
+    prefix: "/app/src/cs1-game-server"
+    stage: "resolution_started"
+  3 error pnpm: 
+    message: 
+      code: 128
+      stdout: ""
+      stderr: "Permission denied (publickey).\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n"
+      failed: true
+      signal: null
+      cmd: "git ls-remote --refs git+ssh://git@github.com/uuid/v4.git master"
+      timedOut: false
+      killed: false
+    err: 
+      name: "Error"
+      message: "Command failed: git ls-remote --refs git+ssh://git@github.com/uuid/v4.git master\nPermission denied (publickey).\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n\n"
+      code: 128
+      stack: "Error: Command failed: git ls-remote --refs git+ssh://git@github.com/uuid/v4.git master\nPermission denied (publickey).\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n\n\n    at makeError (/opt/nvm/versions/node/v10.15.3/lib/node_modules/pnpm/lib/node_modules/execa/index.js:174:9)\n    at /opt/nvm/versions/node/v10.15.3/lib/node_modules/pnpm/lib/node_modules/execa/index.js:278:16\n    at processTicksAndRejections (internal/process/task_queues.js:88:5)"

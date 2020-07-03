@@ -77,48 +77,53 @@ AFRAME.registerComponent('oculus', {
     
     CS1.log('CS1.game.view.type : ', CS1.game.view.type)
       
-    CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{ 
     
-      CS1.game.view.toggle();
-    
-    })  
-      
+    CS1.myPlayer.avatar.appendChild(CS1.myPlayer.lh );
+    CS1.myPlayer.avatar.appendChild(CS1.myPlayer.rh ); 
       
       
       
       
     
-    if(CS1.game.view.type!='THIRD_PERSON'){
-      console.log('Customizing Oculus Cam!');
+    if(CS1.game.view.type=='THIRD_PERSON'){
       
-      const ops = [0,0.05,0.08,0.11,0.14,0.2,0.3,1.0]
-      let count = 0;
-      CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{
-      count++;  
-      CS1.myPlayer.avatar.object3D.traverse(o=>{
-              if(o.type=='Mesh'){
-               o.material.transparent = true
-               o.material.opacity = ops[count%ops.length]
-              }
-            })
-      })
+      console.log('Customizing Oculus Touch Controls for THIRD PERSON!');
       
-      const zf = [0,1,2,3,4,5]
-      let zcount = 0;
-      CS1.myPlayer.lh.addEventListener('ybuttondown',e=>{
-        zcount++;  
-        CS1.myPlayer.components.follow.data.zFactor = zf[zcount%zf.length]
-      })
+//       const ops = [0,0.05,0.08,0.11,0.14,0.2,0.3,1.0]
+//       let count = 0;
+//       CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{
+//       count++;  
+//       CS1.myPlayer.avatar.object3D.traverse(o=>{
+//               if(o.type=='Mesh'){
+//                o.material.transparent = true
+//                o.material.opacity = ops[count%ops.length]
+//               }
+//             })
+//       })
       
+//       const zf = [0,1,2,3,4,5]
+//       let zcount = 0;
+//       CS1.myPlayer.lh.addEventListener('ybuttondown',e=>{
+//         zcount++;  
+//         CS1.myPlayer.components.follow.data.zFactor = zf[zcount%zf.length]
+//       })
       
+      CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{ 
+    
+        CS1.game.view.toggle();
+
+      })  
+      
+      CS1.myPlayer.lh.addEventListener('ybuttondown',e=>{ 
+        CS1.cam.matrixSweep();
+      })  
       
     
       
-    }else{
-      CS1.myPlayer.avatar.appendChild(CS1.myPlayer.lh );
-      CS1.myPlayer.avatar.appendChild(CS1.myPlayer.rh );
-    
     }
+      
+      
+      
     
     })
     

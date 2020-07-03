@@ -16,12 +16,11 @@ AFRAME.registerComponent('jump', {
     this.jumpDirection = new THREE.Vector3();
     
     
-    if(CS1.flags.isReady){
-      this.setup()
+    if(CS1.scene && CS1.scene.clock && CS1.scene.clock.running){
+      this.setup();
     }else{
-      document.body.addEventListener('cs1-ready',e=>{ this.setup() })
+     document.body.addEventListener('game-start',e=>{ this.setup(); });   
     }
-    
     
     
   },
@@ -33,19 +32,11 @@ AFRAME.registerComponent('jump', {
     
     switch(CS1.device){
       case 'Oculus':
-        //CS1.log('Returning before Oculus jump setup.')
-        //return
-        //const rh = CS1.myPlayer.components.player.rh.components["oculus-touch-controls"];
-        this.el = CS1.rig;
         if(AFRAME.utils.device.checkHeadsetConnected()){
           CS1.myPlayer.rh.addEventListener('abuttondown',e=>{
             CS1.log('abuttondown')
             this.jump();
           })
-          // rh.el.addEventListener('xbuttondown',e=>{
-          //    CS1.log('xbuttondown')
-          //    this.jump();
-          // });
         }
         break;
       case 'Mobile':

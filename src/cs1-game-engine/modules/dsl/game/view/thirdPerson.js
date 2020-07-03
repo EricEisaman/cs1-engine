@@ -23,22 +23,57 @@ export const thirdPerson = {
     CS1.myPlayer.rigTarget = rigTarget;
     //CS1.myPlayer.cam = document.querySelector('[camera]');
     CS1.rig.setAttribute("follow", "target: #rig-target;");
+    
+    
+    //AFRAME.components["look-controls"].Component.prototype.remove = function(){ }
     CS1.cam.setAttribute("look-controls", "pointerLockEnabled:true;");
+    
+    
+    
+    CS1.cam.matrixSweep = function(speed=1){
+      if(CS1.flags.isSweeping)return;
+      CS1.flags.isSweeping = true;
+      //CS1.cam.components["look-controls"].saveCameraPose();
+      CS1.cam.components["look-controls"].data.enabled = false;
+      const yFactor = CS1.rig.components.follow.data.yFactor; 
+      CS1.rig.components.follow.data.yFactor = 0
+      //CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3())
+      let count = 0
+      const sweep = setInterval(e=>{
+      CS1.rig.components.follow.data.strength=1
+      CS1.myPlayer.rigTargetSwivel.object3D.rotateY(0.005)
+      CS1.rig.object3D.rotateY(0.005)
+      if(count++ >1256){
+        clearInterval(sweep)
+        CS1.rig.components.follow.data.strength = 0.05
+        CS1.myPlayer.rigTargetSwivel.setAttribute('rotation','0 0 0')
+        //CS1.rig.setAttribute('rotation','0 0 0')
+        CS1.cam.components["look-controls"].data.enabled = true;
+        CS1.rig.components.follow.data.yFactor = yFactor;
+        //CS1.cam.components["look-controls"].restoreCameraPose()
+        CS1.flags.isSweeping = false;
+      }
+      },0)
+    }
     
     
     if(CS1.device=='Standard' || CS1.device=='Mobile') 
       CS1.myPlayer.components.player.tick = function(t,dt){
         CS1.myPlayer.object3D.rotation.y = CS1.cam.object3D.rotation.y;
       }
-    if(CS1.device=='Oculus' && CS1.myPlayer.avatar && CS1.myPlayer.avatar.head) 
-      CS1.myPlayer.components.player.tick = function(t,dt){
-        CS1.myPlayer.avatar.head.object3D.rotation.y = CS1.cam.object3D.rotation.y;
-      }
+//     if(CS1.device=='Oculus' && CS1.myPlayer.avatar && CS1.myPlayer.avatar.head){
+      
+//       CS1.myPlayer.components.player.tick = function(t,dt){
+//           CS1.myPlayer.avatar.head.object3D.rotation.y = CS1.cam.object3D.rotation.y;
+//         }  
+        
+//     } 
+      
 
     console.log('view-ready')
     document.body.dispatchEvent( new Event('view-ready'))
     
-  
+    
     if(CS1.device=='Standard'){
       document.body.addEventListener('keyup', e=>{
         switch(e.code){
@@ -46,6 +81,7 @@ export const thirdPerson = {
             CS1.game.view.toggle();
             break;
           case 'Digit2':
+            CS1.cam.matrixSweep();
             break
         }
       })
