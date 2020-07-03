@@ -88052,10 +88052,11 @@ const thirdPerson = {
     CS1.cam.matrixSweep = function(speed=1){
       if(CS1.flags.isSweeping)return;
       CS1.flags.isSweeping = true;
+      //CS1.cam.components["look-controls"].saveCameraPose();
       CS1.cam.components["look-controls"].data.enabled = false;
       const yFactor = CS1.rig.components.follow.data.yFactor; 
       CS1.rig.components.follow.data.yFactor = 0;
-      CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3());
+      //CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3())
       let count = 0;
       const sweep = setInterval(e=>{
       CS1.rig.components.follow.data.strength=1;
@@ -88065,9 +88066,10 @@ const thirdPerson = {
         clearInterval(sweep);
         CS1.rig.components.follow.data.strength = 0.05;
         CS1.myPlayer.rigTargetSwivel.setAttribute('rotation','0 0 0');
-        CS1.rig.setAttribute('rotation','0 0 0');
+        //CS1.rig.setAttribute('rotation','0 0 0')
         CS1.cam.components["look-controls"].data.enabled = true;
         CS1.rig.components.follow.data.yFactor = yFactor;
+        //CS1.cam.components["look-controls"].restoreCameraPose()
         CS1.flags.isSweeping = false;
       }
       },0);
