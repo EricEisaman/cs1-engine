@@ -29,6 +29,7 @@ AFRAME.registerSystem('cs1avatar', {
         head.setAttribute('color',data.color);
         head.setAttribute('scale','0.33 0.5 0.35');
         head.setAttribute('position','0 1.75 0');
+        head.rxFactor = 1;
         return head;
         break;
       default:
@@ -36,6 +37,8 @@ AFRAME.registerSystem('cs1avatar', {
           const head = document.createElement('a-gltf-model');
           head.setAttribute('src',data.head)
           head.setAttribute('position','0 1.75 0');
+          head.setAttribute('rotation','0 180 0');
+          head.rxFactor = -1;
           return head;
         }else{
           console.error('Avatar head data must be either box or a valid model URL.')
@@ -65,6 +68,7 @@ AFRAME.registerSystem('cs1avatar', {
   },
   
   addOutline: function (avatar) {
+    if(avatar.el.head.rxFactor == -1)return
     avatar.el.head.set('outline',
         `color:${avatar.data.outline}`,
         'https://raw.githack.com/EricEisaman/aframe-outline/master/dist/aframe-outline.min.js')
@@ -75,6 +79,8 @@ AFRAME.registerSystem('cs1avatar', {
   
   addCursor: function (avatar) {
     const cursor = document.createElement(avatar.data.cursortype);
+    cursor.setAttribute('position',`0 0 ${-.5*avatar.el.head.rxFactor}`);
+    if(avatar.el.head.rxFactor == -1)cursor.setAttribute('rotation','0 180 0');
     avatar.el.head.appendChild(cursor);
   }
   
@@ -104,8 +110,8 @@ AFRAME.registerComponent('cs1avatar', {
           this.el.appendChild(this.el.head);
           this.el.body = this.system.createBody(this.data);
           this.el.appendChild(this.el.body);
+          this.system.addCursor(this);
           this.system.addOutline(this);
-          this.system.addCursor(this)
           break;
         
       }
@@ -113,7 +119,7 @@ AFRAME.registerComponent('cs1avatar', {
   },
 
 	tick: function () {
-		this.el.head.object3D.rotation.x = CS1.cam.object3D.rotation.x;
+		this.el.head.object3D.rotation.x = this.el.head.rxFactor * CS1.cam.object3D.rotation.x;
 	}
   
 });
