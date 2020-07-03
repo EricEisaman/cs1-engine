@@ -16,7 +16,7 @@ ____
 
 **CS1 Demos**
 
-<a href="https://cs1-dev.glitch.me" target="_blank" rel="noopener noreferrer">🎮</a>
+<a href="https://cs1-demos.glitch.me" target="_blank" rel="noopener noreferrer">🎮</a>
 
 ____
 
