@@ -88049,7 +88049,7 @@ const thirdPerson = {
     
     
     
-    CS1.cam.matrixSweep = function(speed=1){
+    CS1.cam.matrixSweep = function(pausePlayer=true){
       if(CS1.flags.isSweeping)return;
       CS1.flags.isSweeping = true;
       //CS1.cam.components["look-controls"].saveCameraPose();
@@ -88058,6 +88058,7 @@ const thirdPerson = {
       CS1.rig.components.follow.data.yFactor = 0;
       const v3 = CS1.cam.object3D.rotation.toVector3();
       CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
+      if(pausePlayer)CS1.myPlayer.pause();
       let count = 0;
       const sweep = setInterval(e=>{
       CS1.rig.components.follow.data.strength=1;
@@ -88073,6 +88074,7 @@ const thirdPerson = {
         //CS1.cam.components["look-controls"].restoreCameraPose()
         CS1.flags.isSweeping = false;
         CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
+        if(pausePlayer)CS1.myPlayer.play();
       }
       },0);
     };
@@ -88928,13 +88930,14 @@ AFRAME.registerComponent('jump', {
       case 'Oculus':
         if(AFRAME.utils.device.checkHeadsetConnected()){
           CS1.myPlayer.rh.addEventListener('abuttondown',e=>{
-            CS1.log('abuttondown');
+            if(!this.el.isPlaying)return;
             this.jump();
           });
         }
         break;
       case 'Mobile':
         document.body.addEventListener("touchstart", e => {
+              if(!this.el.isPlaying)return;
               let now = new Date().getTime();
               let timesince = now - this.lastJumpTap;
 
@@ -88950,6 +88953,7 @@ AFRAME.registerComponent('jump', {
         break;
         default:
         document.addEventListener('keydown', e=>{
+          if(!this.el.isPlaying)return;
           if(e.code=='Space' && !this.el.isJumping){
             this.jump();
           }
