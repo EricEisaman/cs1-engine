@@ -88056,7 +88056,8 @@ const thirdPerson = {
       CS1.cam.components["look-controls"].data.enabled = false;
       const yFactor = CS1.rig.components.follow.data.yFactor; 
       CS1.rig.components.follow.data.yFactor = 0;
-      //CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3())
+      const v3 = CS1.cam.object3D.rotation.toVector3();
+      CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
       let count = 0;
       const sweep = setInterval(e=>{
       CS1.rig.components.follow.data.strength=1;
@@ -88071,6 +88072,7 @@ const thirdPerson = {
         CS1.rig.components.follow.data.yFactor = yFactor;
         //CS1.cam.components["look-controls"].restoreCameraPose()
         CS1.flags.isSweeping = false;
+        CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
       }
       },0);
     };
