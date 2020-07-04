@@ -34,13 +34,14 @@ AFRAME.registerComponent('jump', {
       case 'Oculus':
         if(AFRAME.utils.device.checkHeadsetConnected()){
           CS1.myPlayer.rh.addEventListener('abuttondown',e=>{
-            CS1.log('abuttondown')
+            if(!this.el.isPlaying)return;
             this.jump();
           })
         }
         break;
       case 'Mobile':
         document.body.addEventListener("touchstart", e => {
+              if(!this.el.isPlaying)return;
               let now = new Date().getTime();
               let timesince = now - this.lastJumpTap;
 
@@ -58,6 +59,7 @@ AFRAME.registerComponent('jump', {
         break;
         default:
         document.addEventListener('keydown', e=>{
+          if(!this.el.isPlaying)return;
           if(e.code=='Space' && !this.el.isJumping){
             this.jump();
           }

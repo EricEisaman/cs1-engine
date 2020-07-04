@@ -30,7 +30,7 @@ export const thirdPerson = {
     
     
     
-    CS1.cam.matrixSweep = function(speed=1){
+    CS1.cam.matrixSweep = function(pausePlayer=true){
       if(CS1.flags.isSweeping)return;
       CS1.flags.isSweeping = true;
       //CS1.cam.components["look-controls"].saveCameraPose();
@@ -39,6 +39,7 @@ export const thirdPerson = {
       CS1.rig.components.follow.data.yFactor = 0
       const v3 = CS1.cam.object3D.rotation.toVector3()
       CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0))
+      if(pausePlayer)CS1.myPlayer.pause();
       let count = 0
       const sweep = setInterval(e=>{
       CS1.rig.components.follow.data.strength=1
@@ -54,6 +55,7 @@ export const thirdPerson = {
         //CS1.cam.components["look-controls"].restoreCameraPose()
         CS1.flags.isSweeping = false;
         CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0))
+        if(pausePlayer)CS1.myPlayer.play();
       }
       },0)
     }
