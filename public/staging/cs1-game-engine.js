@@ -87649,9 +87649,9 @@ AFRAME.registerComponent('oculus', {
 	},
   
    init: function(){
-    console.log('Initializing Oculus device.');
+    CS1.log('Initializing Oculus device.');
     CS1.device = 'Oculus';
-    console.log('device-declared');
+    CS1.log('device-declared');
     document.body.dispatchEvent( new Event('device-declared'));
     //const c = document.querySelector("[cursor]")
     //c.setAttribute("visible", false);
@@ -87666,6 +87666,7 @@ AFRAME.registerComponent('oculus', {
       
     CS1.myPlayer.lh = document.createElement('a-entity');
     CS1.myPlayer.lh.setAttribute('laser-controls','hand:left');
+    CS1.myPlayer.lh.setAttribute('raycaster','objects: .jukebox , .clickable; far: 5');
       
       
     //ATTEMPT THUMBSTICK CONTROLLER  
@@ -87708,27 +87709,24 @@ AFRAME.registerComponent('oculus', {
       
     //self.lh.setAttribute('position','-1 0 0');
     //self.lh.setAttribute('oculus-touch-controls','hand:left');
-    CS1.myPlayer.lh.setAttribute('raycaster',`objects:.rayobject;far:4.0;useWorldCoordinates:false`);
+    //CS1.myPlayer.lh.setAttribute('raycaster',`objects:.rayobject;far:4.0;useWorldCoordinates:false`);
       
     CS1.myPlayer.rh = document.createElement('a-entity');
     CS1.myPlayer.rh.setAttribute('laser-controls','hand:right');
     //self.rh.setAttribute('position','1 0 0');
     //self.rh.setAttribute('oculus-touch-controls','hand:right');
-    CS1.myPlayer.rh.setAttribute('raycaster',`objects:.rayobject;far:4.0;useWorldCoordinates:false`);
+    //CS1.myPlayer.rh.setAttribute('raycaster',`objects:.rayobject;far:4.0;useWorldCoordinates:false`);
+    CS1.myPlayer.rh.setAttribute('raycaster','objects: .jukebox , .clickable; far: 5');
     
-    CS1.log('CS1.game.view.type : ', CS1.game.view.type);
-      
     
     CS1.myPlayer.avatar.appendChild(CS1.myPlayer.lh );
     CS1.myPlayer.avatar.appendChild(CS1.myPlayer.rh ); 
       
-      
-      
-      
+    
     
     if(CS1.game.view.type=='THIRD_PERSON'){
       
-      console.log('Customizing Oculus Touch Controls for THIRD PERSON!');
+      CS1.log('Customizing Oculus Touch Controls for THIRD PERSON!');
       
 //       const ops = [0,0.05,0.08,0.11,0.14,0.2,0.3,1.0]
 //       let count = 0;
@@ -87767,6 +87765,13 @@ AFRAME.registerComponent('oculus', {
       
     
     });
+     
+     
+    // document.body.addEventListener('my-avatar-ready',e=>{
+    //   const cs1cursor = document.querySelector('cs1-cursor');
+    //   if(cs1cursor)  cs1cursor.parentEl.removeChild(cs1cursor);
+    //   CS1.log('Removing cs1cursor.');
+    // })
     
     
   },
@@ -88208,13 +88213,16 @@ const game = (()=>{
   
   start: function(config={}){
     Object.assign(this.settings,config);
-    console.log('starting game ...');
+    
     
     document.body.addEventListener('my-avatar-ready', e=>{
       CS1.game.view = CS1.game.view.set(this.settings.view);
     });
     
+    
+    CS1.log('game-start');
     document.body.dispatchEvent( new Event('game-start'));
+    
     
     switch(this.settings.type){
       case 'SINGLE_PLAYER':
@@ -88360,7 +88368,12 @@ AFRAME.registerComponent('cs1cursor', {
 	},
   
   init: function(){
-    this.el.setAttribute('raycaster','showLine:true');
+    this.el.setAttribute('raycaster','showLine:true ; objects: .jukebox,.clickable');
+  },
+  
+  remove: function(){
+    if(this.el.hasAttribute('cursor'))
+      this.el.removeAttribute('cursor');
   },
 
 	tick: function () {
@@ -88451,7 +88464,7 @@ AFRAME.registerSystem('cs1avatar', {
       CS1.myPlayer.avatar.setAttribute('color', s.color);
       CS1.myPlayer.avatar.setAttribute('outline', s.outline);
       CS1.myPlayer.appendChild(CS1.myPlayer.avatar);
-      console.log('my-avatar-ready');
+      CS1.log('my-avatar-ready');
       document.body.dispatchEvent( new Event('my-avatar-ready'));
     });
   },
@@ -88561,7 +88574,7 @@ AFRAME.registerComponent('cs1avatar', {
           this.el.appendChild(this.el.head);
           this.el.body = this.system.createBody(this.data);
           this.el.appendChild(this.el.body);
-          this.system.addCursor(this);
+          if(CS1.device != 'Oculus') this.system.addCursor(this);
           this.system.addOutline(this);
           break;
         

@@ -8,7 +8,12 @@ AFRAME.registerComponent('cs1cursor', {
 	},
   
   init: function(){
-    this.el.setAttribute('raycaster','showLine:true');
+    this.el.setAttribute('raycaster','showLine:true ; objects: .jukebox,.clickable');
+  },
+  
+  remove: function(){
+    if(this.el.hasAttribute('cursor'))
+      this.el.removeAttribute('cursor');
   },
 
 	tick: function () {

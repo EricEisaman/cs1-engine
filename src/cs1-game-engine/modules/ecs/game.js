@@ -23,13 +23,16 @@ export const game = (()=>{
   
   start: function(config={}){
     Object.assign(this.settings,config)
-    console.log('starting game ...');
+    
     
     document.body.addEventListener('my-avatar-ready', e=>{
       CS1.game.view = CS1.game.view.set(this.settings.view);
     })
     
+    
+    CS1.log('game-start');
     document.body.dispatchEvent( new Event('game-start'))
+    
     
     switch(this.settings.type){
       case 'SINGLE_PLAYER':
