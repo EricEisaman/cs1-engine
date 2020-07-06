@@ -17,7 +17,7 @@ log.setAttribute('position','-5  3 -12')
 CS1.scene.appendChild(log)
 
 
-CS1.myPlayer.setAvatar({color:"orange"})
+CS1.myPlayer.setAvatar({color:"orange",head:"oval",body:"box"})
 
 CS1.myPlayer.setAttribute('jump','speed:25')
   
