@@ -3,7 +3,7 @@ const {exec} = require('child_process');
 const packageToRemove = process.argv[2];
 const versionToRemove = process.argv[3];
 
-const settings = require( process.cwd() + '/' + packageToRemove + '.json');
+const settings = require( process.cwd() + '/system/projects/' + packageToRemove + '/' + packageToRemove + '.json');
 
 console.log('running script:');
 console.log(`pnpm run npmrc && cd /app/dist/${settings.name} && npm unpublish ${settings.name}@${versionToRemove}`);

@@ -10,7 +10,7 @@ console.log('process.argv', process.argv)
 
 let name = process.argv[2]
 
-const settings = require( process.cwd() + '/' + name + '.json');
+const settings = require( process.cwd() + '/system/projects/' + name + '/' + name + '.json');
 
 let s,d1,d2;
 
