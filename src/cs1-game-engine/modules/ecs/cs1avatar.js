@@ -17,7 +17,7 @@ AFRAME.registerSystem('cs1avatar', {
       CS1.myPlayer.avatar.setAttribute('color', s.color)
       CS1.myPlayer.avatar.setAttribute('outline', s.outline)
       CS1.myPlayer.appendChild(CS1.myPlayer.avatar)
-      console.log('my-avatar-ready')
+      CS1.log('my-avatar-ready')
       document.body.dispatchEvent( new Event('my-avatar-ready'))
     })
   },
@@ -127,7 +127,7 @@ AFRAME.registerComponent('cs1avatar', {
           this.el.appendChild(this.el.head);
           this.el.body = this.system.createBody(this.data);
           this.el.appendChild(this.el.body);
-          this.system.addCursor(this);
+          if(CS1.device != 'Oculus') this.system.addCursor(this);
           this.system.addOutline(this);
           break;
         
