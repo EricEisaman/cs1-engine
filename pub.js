@@ -49,23 +49,8 @@ if (name == "server") {
   
   
 } else {
-  let path;
-
-  switch (name) {
-    case "engine":
-      path = "/package.json";
-      break;
-    case "socket":
-      path = "/socket.json";
-      break;
-    case "forest":
-      path = "/forest.json";
-      break;
-  }
-
-  const settings = require(process.cwd() + path);
-
-  console.log("path", path);
+ 
+  const settings = require( process.cwd() + '/system/projects/' + name + '/' + name + '.json');
 
   const pj = {
     name: settings.name,
