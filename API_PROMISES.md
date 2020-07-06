@@ -41,13 +41,14 @@ These promises define the minimum developer contract which will be fullfilled by
   
 - Customized AFRAME
   - All entities have an asynchronous **.set** method which returns a promise and resolves with the modified entity. ✅
+    - the **.set** method will fetch any applied component, listed in the **CS1.utils.libMap**, if not already available.✅
   - entity.set(componentName, configObject, url) ✅
     - first check for componentName in **AFRAME.components** ✅
     - then check for componentName in **CS1.utils.libMap** ✅
     - then try to fetch the component from **url** ✅
   
-- Empowering CS1 global object. 
-  - CS1.myPlayer
+- Empowering DSL API via CS1 global object. 
+  - CS1.myPlayer✅
   - CS1.game ✅
   - CS1.add ✅
   - CS1.scene ✅
