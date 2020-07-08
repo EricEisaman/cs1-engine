@@ -22,7 +22,7 @@ AFRAME.registerSystem('cs1rigcam', {
       const rig = document.createElement('a-entity');
       rig.setAttribute('id','cs1-rig')
       rig.appendChild(CS1.cam);
-      rig.set('movement-controls','');
+      rig.set('movement-controls',`speed:${CS1.myPlayer.components.player.data.speed}`);
       CS1.scene.appendChild(rig);
       CS1.rig = rig;
       CS1.rig.rotateInSteps = false;

@@ -34,14 +34,14 @@ AFRAME.registerComponent('jump', {
       case 'Oculus':
         if(AFRAME.utils.device.checkHeadsetConnected()){
           CS1.myPlayer.rh.addEventListener('abuttondown',e=>{
-            if(!this.el.isPlaying)return;
+            if(!this.el.isPlaying || CS1.flags.isSweeping)return;
             this.jump();
           })
         }
         break;
       case 'Mobile':
         document.body.addEventListener("touchstart", e => {
-              if(!this.el.isPlaying)return;
+              if(!this.el.isPlaying || CS1.flags.isSweeping)return;
               let now = new Date().getTime();
               let timesince = now - this.lastJumpTap;
 
@@ -59,7 +59,7 @@ AFRAME.registerComponent('jump', {
         break;
         default:
         document.addEventListener('keydown', e=>{
-          if(!this.el.isPlaying)return;
+          if(!this.el.isPlaying || CS1.flags.isSweeping)return;
           if(e.code=='Space' && !this.el.isJumping){
             this.jump();
           }
@@ -71,7 +71,7 @@ AFRAME.registerComponent('jump', {
   },
   
   tick: function(t,dt){
-    if(this.el.isJumping){
+    if(this.el.isJumping && !CS1.flags.isSweeping){
       this.verticalVelocity+=this.data.g*dt/1000;
       this.el.object3D.position.addScaledVector(this.jumpDirection,this.forwardVelocity*dt/1500);
       this.el.object3D.translateY(this.verticalVelocity*dt/1000);

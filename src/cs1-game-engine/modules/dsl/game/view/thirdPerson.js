@@ -30,7 +30,7 @@ export const thirdPerson = {
     
     
     
-    CS1.cam.matrixSweep = function(pausePlayer=true){
+    CS1.cam.matrixSweep = function(){
       if(CS1.flags.isSweeping)return;
       CS1.flags.isSweeping = true;
       //CS1.cam.components["look-controls"].saveCameraPose();
@@ -39,7 +39,8 @@ export const thirdPerson = {
       CS1.rig.components.follow.data.yFactor = 0
       const v3 = CS1.cam.object3D.rotation.toVector3()
       CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0))
-      if(pausePlayer)CS1.myPlayer.pause();
+      const cachedSpeed = CS1.myPlayer.getSpeed();
+      CS1.myPlayer.setSpeed(0);
       let count = 0
       const sweep = setInterval(e=>{
       CS1.rig.components.follow.data.strength=1
@@ -55,7 +56,7 @@ export const thirdPerson = {
         //CS1.cam.components["look-controls"].restoreCameraPose()
         CS1.flags.isSweeping = false;
         CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0))
-        if(pausePlayer)CS1.myPlayer.play();
+        CS1.myPlayer.setSpeed(cachedSpeed);
       }
       },0)
     }
@@ -63,6 +64,7 @@ export const thirdPerson = {
     
     if(CS1.device=='Standard' || CS1.device=='Mobile') 
       CS1.myPlayer.components.player.tick = function(t,dt){
+        if(CS1.flags.isSweeping)return;
         CS1.myPlayer.object3D.rotation.y = CS1.cam.object3D.rotation.y;
       }
 //     if(CS1.device=='Oculus' && CS1.myPlayer.avatar && CS1.myPlayer.avatar.head){
@@ -82,6 +84,7 @@ export const thirdPerson = {
       document.body.addEventListener('keyup', e=>{
         switch(e.code){
           case 'Digit1':
+            if(CS1.flags.isSweeping)return;
             CS1.game.view.toggle();
             break;
           case 'Digit2':
@@ -104,7 +107,7 @@ export const thirdPerson = {
       CS1.rig.components.follow.data.yFactor = 1;
       CS1.rig.components.follow.data.strength = 0.1;
       CS1.myPlayer.avatar.object3D.traverse(o=>{
-        if(o.type=='Mesh'){
+        if(o.type=='Mesh' || o.type=='SkinnedMesh'){
          o.material.transparent = true
          o.material.opacity = 0.05
         }
@@ -114,7 +117,7 @@ export const thirdPerson = {
       CS1.rig.components.follow.data.yFactor = 2;
       CS1.rig.components.follow.data.strength = 0.05;
       CS1.myPlayer.avatar.object3D.traverse(o=>{
-        if(o.type=='Mesh'){
+        if(o.type=='Mesh' || o.type=='SkinnedMesh'){
          o.material.transparent = false
          o.material.opacity = 1.0
         }

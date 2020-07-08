@@ -47,7 +47,7 @@ AFRAME.registerComponent('player', {
 	schema: {
 		avatar: {default: {type:'simple',head:'box',body:'box',color:'red',outline:'yellow',cursortype:'cs1-cursor'}},
     me: {default: false},
-    speed: {default: 0.15},
+    speed: {default: 0.3},
     rotSpeed: {default: 0.02}
 	},
   
@@ -61,6 +61,21 @@ AFRAME.registerComponent('player', {
     
     if(this.data.me){
        this.el.setAttribute('id','my-player');
+       if(CS1.device=='Oculus'){
+           CS1.myPlayer.setSpeed = speed =>{
+              CS1.rig.set('movement-controls',`speed:${speed}`)
+            }
+           CS1.myPlayer.getSpeed = () =>{
+              return CS1.rig.components['movement-controls'].data.speed;
+            }
+         }else{
+           CS1.myPlayer.setSpeed = speed =>{
+              CS1.myPlayer.set('wasd-controls',`acceleration:${speed*100}`)
+            }
+           CS1.myPlayer.getSpeed = () =>{
+              return CS1.myPlayer.components['wasd-controls'].data.acceleration/100;
+            }
+         }
      }else{
 
      }

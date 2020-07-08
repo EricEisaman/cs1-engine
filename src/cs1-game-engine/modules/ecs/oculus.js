@@ -31,6 +31,8 @@ AFRAME.registerComponent('oculus', {
     //ATTEMPT THUMBSTICK CONTROLLER  
     CS1.myPlayer.lh.addEventListener('axismove',e=>{
       
+      if(CS1.flags.isSweeping)return;
+      
       if(CS1.rig && CS1.rig.rotateInSteps){
         
         if(  (e.detail.axis[2]>.5) && !CS1.rig.isRotating ){
@@ -107,7 +109,7 @@ AFRAME.registerComponent('oculus', {
 //       })
       
       CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{ 
-    
+        if(CS1.flags.isSweeping)return;
         CS1.game.view.toggle();
 
       })  
