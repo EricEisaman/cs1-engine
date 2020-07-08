@@ -88475,15 +88475,15 @@ AFRAME.registerSystem('cs1avatar', {
       case 'box':
         head = document.createElement('a-box');
         head.setAttribute('color',data.color);
-        head.setAttribute('scale','0.28 0.35 0.3');
+        head.setAttribute('scale','0.35 0.6 0.37');
         head.setAttribute('position','0 1.75 0');
         head.rxFactor = 1;
-        return head;
+        return head;  
         break;
       case 'oval':
         head = document.createElement('a-sphere');
         head.setAttribute('color',data.color);
-        head.setAttribute('scale','0.33 0.5 0.35');
+        head.setAttribute('scale','0.28 0.4 0.3');
         head.setAttribute('position','0 1.75 0');
         head.rxFactor = 1;
         return head;
