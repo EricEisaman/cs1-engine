@@ -95,11 +95,43 @@ AFRAME.registerSystem('cs1avatar', {
   },
   
   addCursor: function (avatar) {
-    const cursor = document.createElement(avatar.data.cursortype);
-    cursor.setAttribute('position',`0 0 ${-.5*avatar.el.head.rxFactor}`);
-    if(avatar.el.head.rxFactor == -1)cursor.setAttribute('rotation','0 180 0');
-    avatar.el.head.appendChild(cursor);
+    
+    let cursor;
+    switch(avatar.data.type){
+      case 'simple':
+        cursor = document.createElement(avatar.data.cursortype);
+        cursor.setAttribute('position',`0 0 ${-.5*avatar.el.head.rxFactor}`);
+        if(avatar.el.head.rxFactor == -1)cursor.setAttribute('rotation','0 180 0');
+        avatar.el.head.appendChild(cursor);
+        break;
+      case 'rigged':
+        cursor = document.createElement(avatar.data.cursortype);
+        if(avatar.camRotXObject.type == 'Bone'){
+          avatar.el.cursor = cursor;
+        }
+        cursor.setAttribute('position',`0 1.6 .5`);
+        cursor.setAttribute('rotation','0 180 0');
+        avatar.el.modelEntity.appendChild(cursor);
+        
+        break;
+        
+        
+        
+    }    
+        
+        
+  },
+  
+  createModel: function (data) {
+    const model = document.createElement('a-gltf-model');
+    model.setAttribute('rotation','0 180 0');
+    model.setAttribute('src', data.url);
+    model.setAttribute('animation-mixer', 'clip:idle');
+    return model;
   }
+  
+  
+  
   
 });
 
@@ -112,7 +144,9 @@ AFRAME.registerComponent('cs1avatar', {
     head: {default: 'box'},
     body: {default: 'box'},
     color: {default: 'red'},
-    outline: {default: 'yellow'}
+    outline: {default: 'yellow'},
+    url: {default: 'https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FChip.glb?v=1594228449668'},
+    animations: {default: []}
 	},
   
   init: function(){
@@ -122,21 +156,49 @@ AFRAME.registerComponent('cs1avatar', {
   update: function () {
     
     switch(this.data.type){
-        case 'simple':
-          this.el.head = this.system.createHead(this.data);
-          this.el.appendChild(this.el.head);
-          this.el.body = this.system.createBody(this.data);
-          this.el.appendChild(this.el.body);
-          if(CS1.device != 'Oculus') this.system.addCursor(this);
-          this.system.addOutline(this);
-          break;
+      case 'simple':
+        this.el.head = this.system.createHead(this.data);
+        this.el.appendChild(this.el.head);
+        this.el.body = this.system.createBody(this.data);
+        this.el.appendChild(this.el.body);
+        if(CS1.device != 'Oculus') this.system.addCursor(this);
+        this.system.addOutline(this);
+        this.camRotXObject = this.el.head.object3D;
+        this.camRotXFactor = this.el.head.rxFactor;
+        this.camRotXOffset = 0;
+        break;
+      case 'rigged':
+        this.el.modelEntity = this.system.createModel(this.data);
+        this.camRotXObject = this.el.modelEntity.object3D;
+        this.camRotXOffset = 0;
+        this.camRotXFactor = -0.8;
+        this.el.modelEntity.addEventListener('model-loaded',e=>{
+          
+          this.el.modelEntity.object3D.traverse(o=>{
+            
+              if(o.type=='Bone' && o.name.includes('Neck')){
+                this.camRotXObject = o;
+                this.camRotXOffset = -Math.PI/2;
+                CS1.log('Model Neck bone detected, will animate with camera rotationX.');
+              }  
+          
+          })
+          
+          if(CS1.device != 'Oculus') this.system.addCursor(this);  
+          
+        });
+        this.el.appendChild(this.el.modelEntity);
+        break;
         
       }
   
   },
 
 	tick: function () {
-		this.el.head.object3D.rotation.x = this.el.head.rxFactor * CS1.cam.object3D.rotation.x;
+		this.camRotXObject.rotation.x = this.camRotXFactor * CS1.cam.object3D.rotation.x + this.camRotXOffset;
+    if(this.camRotXObject.type == 'Bone'  && CS1.device != 'Oculus'){
+      this.el.cursor.object3D.rotation.x = -this.camRotXFactor * CS1.cam.object3D.rotation.x ;
+    }
 	}
   
 });

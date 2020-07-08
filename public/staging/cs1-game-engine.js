@@ -87672,6 +87672,8 @@ AFRAME.registerComponent('oculus', {
     //ATTEMPT THUMBSTICK CONTROLLER  
     CS1.myPlayer.lh.addEventListener('axismove',e=>{
       
+      if(CS1.flags.isSweeping)return;
+      
       if(CS1.rig && CS1.rig.rotateInSteps){
         
         if(  (e.detail.axis[2]>.5) && !CS1.rig.isRotating ){
@@ -87748,7 +87750,7 @@ AFRAME.registerComponent('oculus', {
 //       })
       
       CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{ 
-    
+        if(CS1.flags.isSweeping)return;
         CS1.game.view.toggle();
 
       });  
@@ -88054,7 +88056,7 @@ const thirdPerson = {
     
     
     
-    CS1.cam.matrixSweep = function(pausePlayer=true){
+    CS1.cam.matrixSweep = function(){
       if(CS1.flags.isSweeping)return;
       CS1.flags.isSweeping = true;
       //CS1.cam.components["look-controls"].saveCameraPose();
@@ -88063,7 +88065,8 @@ const thirdPerson = {
       CS1.rig.components.follow.data.yFactor = 0;
       const v3 = CS1.cam.object3D.rotation.toVector3();
       CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
-      if(pausePlayer)CS1.myPlayer.pause();
+      const cachedSpeed = CS1.myPlayer.getSpeed();
+      CS1.myPlayer.setSpeed(0);
       let count = 0;
       const sweep = setInterval(e=>{
       CS1.rig.components.follow.data.strength=1;
@@ -88079,7 +88082,7 @@ const thirdPerson = {
         //CS1.cam.components["look-controls"].restoreCameraPose()
         CS1.flags.isSweeping = false;
         CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
-        if(pausePlayer)CS1.myPlayer.play();
+        CS1.myPlayer.setSpeed(cachedSpeed);
       }
       },0);
     };
@@ -88087,6 +88090,7 @@ const thirdPerson = {
     
     if(CS1.device=='Standard' || CS1.device=='Mobile') 
       CS1.myPlayer.components.player.tick = function(t,dt){
+        if(CS1.flags.isSweeping)return;
         CS1.myPlayer.object3D.rotation.y = CS1.cam.object3D.rotation.y;
       };
 //     if(CS1.device=='Oculus' && CS1.myPlayer.avatar && CS1.myPlayer.avatar.head){
@@ -88106,6 +88110,7 @@ const thirdPerson = {
       document.body.addEventListener('keyup', e=>{
         switch(e.code){
           case 'Digit1':
+            if(CS1.flags.isSweeping)return;
             CS1.game.view.toggle();
             break;
           case 'Digit2':
@@ -88128,7 +88133,7 @@ const thirdPerson = {
       CS1.rig.components.follow.data.yFactor = 1;
       CS1.rig.components.follow.data.strength = 0.1;
       CS1.myPlayer.avatar.object3D.traverse(o=>{
-        if(o.type=='Mesh'){
+        if(o.type=='Mesh' || o.type=='SkinnedMesh'){
          o.material.transparent = true;
          o.material.opacity = 0.05;
         }
@@ -88138,7 +88143,7 @@ const thirdPerson = {
       CS1.rig.components.follow.data.yFactor = 2;
       CS1.rig.components.follow.data.strength = 0.05;
       CS1.myPlayer.avatar.object3D.traverse(o=>{
-        if(o.type=='Mesh'){
+        if(o.type=='Mesh' || o.type=='SkinnedMesh'){
          o.material.transparent = false;
          o.material.opacity = 1.0;
         }
@@ -88308,7 +88313,7 @@ AFRAME.registerComponent('player', {
 	schema: {
 		avatar: {default: {type:'simple',head:'box',body:'box',color:'red',outline:'yellow',cursortype:'cs1-cursor'}},
     me: {default: false},
-    speed: {default: 0.15},
+    speed: {default: 0.3},
     rotSpeed: {default: 0.02}
 	},
   
@@ -88322,6 +88327,21 @@ AFRAME.registerComponent('player', {
     
     if(this.data.me){
        this.el.setAttribute('id','my-player');
+       if(CS1.device=='Oculus'){
+           CS1.myPlayer.setSpeed = speed =>{
+              CS1.rig.set('movement-controls',`speed:${speed}`);
+            };
+           CS1.myPlayer.getSpeed = () =>{
+              return CS1.rig.components['movement-controls'].data.speed;
+            };
+         }else{
+           CS1.myPlayer.setSpeed = speed =>{
+              CS1.myPlayer.set('wasd-controls',`acceleration:${speed*100}`);
+            };
+           CS1.myPlayer.getSpeed = () =>{
+              return CS1.myPlayer.components['wasd-controls'].data.acceleration/100;
+            };
+         }
      }
     this.el.speed = this.data.speed;
     this.el.rotSpeed = this.data.rotSpeed;
@@ -88368,7 +88388,7 @@ AFRAME.registerComponent('cs1cursor', {
 	},
   
   init: function(){
-    this.el.setAttribute('raycaster','showLine:true ; objects: .jukebox,.clickable');
+    this.el.setAttribute('raycaster','showLine:true ; objects: .jukebox,.clickable; far:5');
   },
   
   remove: function(){
@@ -88424,7 +88444,7 @@ AFRAME.registerSystem('cs1rigcam', {
       const rig = document.createElement('a-entity');
       rig.setAttribute('id','cs1-rig');
       rig.appendChild(CS1.cam);
-      rig.set('movement-controls','');
+      rig.set('movement-controls',`speed:${CS1.myPlayer.components.player.data.speed}`);
       CS1.scene.appendChild(rig);
       CS1.rig = rig;
       CS1.rig.rotateInSteps = false;
@@ -88542,11 +88562,43 @@ AFRAME.registerSystem('cs1avatar', {
   },
   
   addCursor: function (avatar) {
-    const cursor = document.createElement(avatar.data.cursortype);
-    cursor.setAttribute('position',`0 0 ${-.5*avatar.el.head.rxFactor}`);
-    if(avatar.el.head.rxFactor == -1)cursor.setAttribute('rotation','0 180 0');
-    avatar.el.head.appendChild(cursor);
+    
+    let cursor;
+    switch(avatar.data.type){
+      case 'simple':
+        cursor = document.createElement(avatar.data.cursortype);
+        cursor.setAttribute('position',`0 0 ${-.5*avatar.el.head.rxFactor}`);
+        if(avatar.el.head.rxFactor == -1)cursor.setAttribute('rotation','0 180 0');
+        avatar.el.head.appendChild(cursor);
+        break;
+      case 'rigged':
+        cursor = document.createElement(avatar.data.cursortype);
+        if(avatar.camRotXObject.type == 'Bone'){
+          avatar.el.cursor = cursor;
+        }
+        cursor.setAttribute('position',`0 1.6 .5`);
+        cursor.setAttribute('rotation','0 180 0');
+        avatar.el.modelEntity.appendChild(cursor);
+        
+        break;
+        
+        
+        
+    }    
+        
+        
+  },
+  
+  createModel: function (data) {
+    const model = document.createElement('a-gltf-model');
+    model.setAttribute('rotation','0 180 0');
+    model.setAttribute('src', data.url);
+    model.setAttribute('animation-mixer', 'clip:idle');
+    return model;
   }
+  
+  
+  
   
 });
 
@@ -88559,7 +88611,9 @@ AFRAME.registerComponent('cs1avatar', {
     head: {default: 'box'},
     body: {default: 'box'},
     color: {default: 'red'},
-    outline: {default: 'yellow'}
+    outline: {default: 'yellow'},
+    url: {default: 'https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FChip.glb?v=1594228449668'},
+    animations: {default: []}
 	},
   
   init: function(){
@@ -88569,21 +88623,49 @@ AFRAME.registerComponent('cs1avatar', {
   update: function () {
     
     switch(this.data.type){
-        case 'simple':
-          this.el.head = this.system.createHead(this.data);
-          this.el.appendChild(this.el.head);
-          this.el.body = this.system.createBody(this.data);
-          this.el.appendChild(this.el.body);
-          if(CS1.device != 'Oculus') this.system.addCursor(this);
-          this.system.addOutline(this);
-          break;
+      case 'simple':
+        this.el.head = this.system.createHead(this.data);
+        this.el.appendChild(this.el.head);
+        this.el.body = this.system.createBody(this.data);
+        this.el.appendChild(this.el.body);
+        if(CS1.device != 'Oculus') this.system.addCursor(this);
+        this.system.addOutline(this);
+        this.camRotXObject = this.el.head.object3D;
+        this.camRotXFactor = this.el.head.rxFactor;
+        this.camRotXOffset = 0;
+        break;
+      case 'rigged':
+        this.el.modelEntity = this.system.createModel(this.data);
+        this.camRotXObject = this.el.modelEntity.object3D;
+        this.camRotXOffset = 0;
+        this.camRotXFactor = -0.8;
+        this.el.modelEntity.addEventListener('model-loaded',e=>{
+          
+          this.el.modelEntity.object3D.traverse(o=>{
+            
+              if(o.type=='Bone' && o.name.includes('Neck')){
+                this.camRotXObject = o;
+                this.camRotXOffset = -Math.PI/2;
+                CS1.log('Model Neck bone detected, will animate with camera rotationX.');
+              }  
+          
+          });
+          
+          if(CS1.device != 'Oculus') this.system.addCursor(this);  
+          
+        });
+        this.el.appendChild(this.el.modelEntity);
+        break;
         
       }
   
   },
 
 	tick: function () {
-		this.el.head.object3D.rotation.x = this.el.head.rxFactor * CS1.cam.object3D.rotation.x;
+		this.camRotXObject.rotation.x = this.camRotXFactor * CS1.cam.object3D.rotation.x + this.camRotXOffset;
+    if(this.camRotXObject.type == 'Bone'  && CS1.device != 'Oculus'){
+      this.el.cursor.object3D.rotation.x = -this.camRotXFactor * CS1.cam.object3D.rotation.x ;
+    }
 	}
   
 });
@@ -88960,14 +89042,14 @@ AFRAME.registerComponent('jump', {
       case 'Oculus':
         if(AFRAME.utils.device.checkHeadsetConnected()){
           CS1.myPlayer.rh.addEventListener('abuttondown',e=>{
-            if(!this.el.isPlaying)return;
+            if(!this.el.isPlaying || CS1.flags.isSweeping)return;
             this.jump();
           });
         }
         break;
       case 'Mobile':
         document.body.addEventListener("touchstart", e => {
-              if(!this.el.isPlaying)return;
+              if(!this.el.isPlaying || CS1.flags.isSweeping)return;
               let now = new Date().getTime();
               let timesince = now - this.lastJumpTap;
 
@@ -88983,7 +89065,7 @@ AFRAME.registerComponent('jump', {
         break;
         default:
         document.addEventListener('keydown', e=>{
-          if(!this.el.isPlaying)return;
+          if(!this.el.isPlaying || CS1.flags.isSweeping)return;
           if(e.code=='Space' && !this.el.isJumping){
             this.jump();
           }
@@ -88995,7 +89077,7 @@ AFRAME.registerComponent('jump', {
   },
   
   tick: function(t,dt){
-    if(this.el.isJumping){
+    if(this.el.isJumping && !CS1.flags.isSweeping){
       this.verticalVelocity+=this.data.g*dt/1000;
       this.el.object3D.position.addScaledVector(this.jumpDirection,this.forwardVelocity*dt/1500);
       this.el.object3D.translateY(this.verticalVelocity*dt/1000);
