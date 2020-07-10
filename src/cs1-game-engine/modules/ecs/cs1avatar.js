@@ -190,28 +190,28 @@ AFRAME.registerSystem('cs1avatar', {
              if(CS1.myPlayer.isJumping)return;
              setTimeout(e=>{
                if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
-             },500)
+             },250)
              break;
            case 'KeyA':
              CS1.myPlayer.isWalking=false;
              if(CS1.myPlayer.isJumping)return;
              setTimeout(e=>{
                if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
-             },500) 
+             },250) 
              break;
            case 'KeyS':
              CS1.myPlayer.isWalking=false;
              if(CS1.myPlayer.isJumping)return;
              setTimeout(e=>{
                if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
-             },500)
+             },250)
              break;
            case 'KeyD':
              CS1.myPlayer.isWalking=false;
              if(CS1.myPlayer.isJumping)return;
              setTimeout(e=>{
                if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
-             },500)
+             },250)
              break;
          }
       });
