@@ -175,7 +175,7 @@ AFRAME.registerComponent('cs1avatar', {
         this.el.modelEntity.addEventListener('model-loaded',e=>{
           
           this.el.modelEntity.object3D.traverse(o=>{
-            
+              o.frustumCulled = false;
               if(o.type=='Bone' && o.name.includes('Neck')){
                 this.camRotXObject = o;
                 this.camRotXOffset = -Math.PI/2;
@@ -183,6 +183,8 @@ AFRAME.registerComponent('cs1avatar', {
               }  
           
           })
+          
+          this.el.modelEntity.object3D.frustumCulled = false;
           
           if(CS1.device != 'Oculus') this.system.addCursor(this);  
           
