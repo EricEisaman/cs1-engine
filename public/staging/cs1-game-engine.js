@@ -87840,24 +87840,6 @@ AFRAME.registerComponent('standard', {
     console.log('device-declared');
     document.body.dispatchEvent( new Event('device-declared'));
     
-//     document.body.addEventListener('view-ready',e=>{
-      
-//       if(CS1.game.view && CS1.game.view.type=='THIRD_PERSON')document.body.addEventListener('keyup', e=>{
-//         switch(e.code){
-//           case 'Digit1':
-//             CS1.game.view.toggle();
-//             break;
-//           case 'Digit2':
-//             break
-//         }
-//       })
-     
-      
-//     })
-    
-    
-    
-   
     
   },
   
@@ -88595,8 +88577,50 @@ AFRAME.registerSystem('cs1avatar', {
     model.setAttribute('src', data.url);
     model.setAttribute('animation-mixer', 'clip:idle');
     return model;
-  }
+  },
   
+  addAnimationControls: function(myAvatar){
+    
+    CS1.myPlayer.setAnimation = e=>{};
+    
+    if(CS1.device=='Standard'){
+      
+    CS1.myPlayer.setAnimation = clipName=>{
+      myAvatar.setAttribute('animation-mixer',`clip:${clipName}`);
+    };  
+      
+    document.body.addEventListener('keydown',e=>{
+         switch(e.code){
+           case 'KeyW':
+             if(!CS1.myPlayer.isWalking){
+               CS1.myPlayer.setAnimation('walk');
+               CS1.myPlayer.isWalking=true;    
+             }
+             break;
+            case 'KeyS':
+             if(!CS1.myPlayer.isWalking){
+               CS1.myPlayer.setAnimation('walk');
+               CS1.myPlayer.isWalking=true;    
+             }
+             break;
+         }
+      });
+      document.body.addEventListener('keyup',e=>{
+         switch(e.code){
+           case 'KeyW':
+             CS1.myPlayer.setAnimation('idle');
+             CS1.myPlayer.isWalking=false;
+             break;
+          case 'KeyS':
+             CS1.myPlayer.setAnimation('idle');
+             CS1.myPlayer.isWalking=false;
+             break;
+         }
+      });
+    }
+  
+    this.animationControlsApplied = true;
+  }
   
   
   
@@ -88657,11 +88681,17 @@ AFRAME.registerComponent('cs1avatar', {
           
         });
         this.el.appendChild(this.el.modelEntity);
+        
+        
+        if(!this.system.animationControlsApplied) this.system.addAnimationControls(this.el.modelEntity);
+        
         break;
         
       }
   
   },
+  
+  
 
 	tick: function () {
 		this.camRotXObject.rotation.x = this.camRotXFactor * CS1.cam.object3D.rotation.x + this.camRotXOffset;
