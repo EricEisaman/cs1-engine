@@ -91,6 +91,8 @@ AFRAME.registerComponent('jump', {
     this.jumpDirection.z /= 2;
     this.verticalVelocity = s?s:this.data.speed;
     this.el.dispatchEvent(this.jumpEvent);
+    if(CS1.myPlayer.animations.jump) CS1.myPlayer.animations.jump.duration=Math.max(6500,this.verticalVelocity*1000);
+    CS1.myPlayer.setAnimation('jump')
   },
   
   land: function(){
@@ -99,6 +101,8 @@ AFRAME.registerComponent('jump', {
     this.el.object3D.position.y = 0;
     this.wasd.data.acceleration = this.cachedAcceleration;
     this.el.dispatchEvent(this.landEvent); 
+    if(CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('run')
+    else CS1.myPlayer.setAnimation('idle')
   },
   
   
