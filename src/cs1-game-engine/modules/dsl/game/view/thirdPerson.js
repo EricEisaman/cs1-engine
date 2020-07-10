@@ -33,6 +33,7 @@ export const thirdPerson = {
     CS1.cam.matrixSweep = function(){
       if(CS1.flags.isSweeping)return;
       CS1.flags.isSweeping = true;
+      if(CS1.myPlayer.isJumping)CS1.myPlayer.pauseAnimation();
       //CS1.cam.components["look-controls"].saveCameraPose();
       CS1.cam.components["look-controls"].data.enabled = false;
       const yFactor = CS1.rig.components.follow.data.yFactor; 
@@ -57,6 +58,7 @@ export const thirdPerson = {
         CS1.flags.isSweeping = false;
         CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0))
         CS1.myPlayer.setSpeed(cachedSpeed);
+        if(CS1.myPlayer.isJumping)CS1.myPlayer.playAnimation();
       }
       },0)
     }
@@ -64,8 +66,8 @@ export const thirdPerson = {
     
     if(CS1.device=='Standard' || CS1.device=='Mobile') 
       CS1.myPlayer.components.player.tick = function(t,dt){
-        if(CS1.flags.isSweeping)return;
-        CS1.myPlayer.object3D.rotation.y = CS1.cam.object3D.rotation.y;
+        if(CS1.flags.isSweeping  || CS1.myPlayer.isJumping)return;
+          CS1.myPlayer.object3D.rotation.y = CS1.cam.object3D.rotation.y;
       }
 //     if(CS1.device=='Oculus' && CS1.myPlayer.avatar && CS1.myPlayer.avatar.head){
       

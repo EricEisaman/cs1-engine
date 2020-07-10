@@ -127,56 +127,103 @@ AFRAME.registerSystem('cs1avatar', {
     model.setAttribute('rotation','0 180 0');
     model.setAttribute('src', data.url);
     model.setAttribute('animation-mixer', 'clip:idle');
+    CS1.myPlayer.currentAnimation = 'idle';
     return model;
   },
   
   addAnimationControls: function(myAvatar){
     
-    CS1.myPlayer.setAnimation = e=>{}
+    CS1.myPlayer.setAnimation = clipName=>{
+      if(CS1.myPlayer.animations  && CS1.myPlayer.animations[clipName] ){
+       myAvatar.setAttribute('animation-mixer',`clip:${clipName}`)
+       CS1.myPlayer.currentAnimation = clipName; 
+      }
+    } 
+    
+    CS1.myPlayer.pauseAnimation = e =>{
+      myAvatar.components['animation-mixer'].pause();
+    }
+    
+    CS1.myPlayer.playAnimation = e =>{
+      myAvatar.components['animation-mixer'].play();
+      if(e)CS1.myPlayer.setAnimation(e);
+    }
     
     if(CS1.device=='Standard'){
-      
-    CS1.myPlayer.setAnimation = clipName=>{
-      myAvatar.setAttribute('animation-mixer',`clip:${clipName}`)
-    }  
       
     document.body.addEventListener('keydown',e=>{
          switch(e.code){
            case 'KeyW':
              if(!CS1.myPlayer.isWalking){
-               CS1.myPlayer.setAnimation('walk')
-               CS1.myPlayer.isWalking=true;    
+               CS1.myPlayer.isWalking=true;  
+               if(CS1.myPlayer.isJumping)return;
+               CS1.myPlayer.setAnimation('run')  
              }
              break;
             case 'KeyS':
              if(!CS1.myPlayer.isWalking){
-               CS1.myPlayer.setAnimation('walk')
-               CS1.myPlayer.isWalking=true;    
+               CS1.myPlayer.isWalking=true;  
+               if(CS1.myPlayer.isJumping)return;
+               CS1.myPlayer.setAnimation('run')   
+             }
+             break;
+            case 'KeyA':
+             if(!CS1.myPlayer.isWalking){
+               CS1.myPlayer.isWalking=true;  
+               if(CS1.myPlayer.isJumping)return;
+               CS1.myPlayer.setAnimation('left_strafe')   
+             }
+             break;
+            case 'KeyD':
+             if(!CS1.myPlayer.isWalking){
+               CS1.myPlayer.isWalking=true;  
+               if(CS1.myPlayer.isJumping)return;
+               CS1.myPlayer.setAnimation('right_strafe')   
              }
              break;
          }
       });
-      document.body.addEventListener('keyup',e=>{
+    document.body.addEventListener('keyup',e=>{
          switch(e.code){
            case 'KeyW':
-             CS1.myPlayer.setAnimation('idle')
              CS1.myPlayer.isWalking=false;
+             if(CS1.myPlayer.isJumping)return;
+             setTimeout(e=>{
+               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
+             },500)
              break;
-          case 'KeyS':
-             CS1.myPlayer.setAnimation('idle')
+           case 'KeyA':
              CS1.myPlayer.isWalking=false;
+             if(CS1.myPlayer.isJumping)return;
+             setTimeout(e=>{
+               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
+             },500) 
+             break;
+           case 'KeyS':
+             CS1.myPlayer.isWalking=false;
+             if(CS1.myPlayer.isJumping)return;
+             setTimeout(e=>{
+               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
+             },500)
+             break;
+           case 'KeyD':
+             CS1.myPlayer.isWalking=false;
+             if(CS1.myPlayer.isJumping)return;
+             setTimeout(e=>{
+               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
+             },500)
              break;
          }
       });
-    }
   
     this.animationControlsApplied = true;
   }
   
   
   
-});
+}
 
+})
 
 AFRAME.registerComponent('cs1avatar', {
 
@@ -187,7 +234,7 @@ AFRAME.registerComponent('cs1avatar', {
     body: {default: 'box'},
     color: {default: 'red'},
     outline: {default: 'yellow'},
-    url: {default: 'https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FChip.glb?v=1594228449668'},
+    url: {default: 'https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FChip210.glb?v=1594416920851'},
     animations: {default: []}
 	},
   
@@ -218,10 +265,17 @@ AFRAME.registerComponent('cs1avatar', {
           
           this.el.modelEntity.object3D.traverse(o=>{
               o.frustumCulled = false;
-              if(o.type=='Bone' && o.name.includes('Neck')){
+              if(o.animations){
+                CS1.myPlayer.animations = {};
+                o.animations.forEach(animation=>{
+                  CS1.myPlayer.animations[animation.name] = animation
+                })
+              }
+              if(o.type=='Bone' &&  ( o.name=='mixamorigHead' || o.name=='Head' )  ){
                 this.camRotXObject = o;
-                this.camRotXOffset = -Math.PI/2;
-                CS1.log('Model Neck bone detected, will animate with camera rotationX.');
+                this.camRotXOffset = 0; //-Math.PI/2;
+                if(CS1.myPlayer.animations.idle) CS1.myPlayer.animations.idle.duration=0
+                CS1.log('Model Head bone detected, will animate with camera rotationX.');
               }  
           
           })
@@ -246,7 +300,7 @@ AFRAME.registerComponent('cs1avatar', {
 
 	tick: function () {
 		this.camRotXObject.rotation.x = this.camRotXFactor * CS1.cam.object3D.rotation.x + this.camRotXOffset;
-    if(this.camRotXObject.type == 'Bone'  && CS1.device != 'Oculus'){
+    if(this.camRotXObject.type == 'Bone'  && CS1.device != 'Oculus' && CS1.myPlayer.currentAnimation =='idle'){
       this.el.cursor.object3D.rotation.x = -this.camRotXFactor * CS1.cam.object3D.rotation.x ;
     }
 	}
