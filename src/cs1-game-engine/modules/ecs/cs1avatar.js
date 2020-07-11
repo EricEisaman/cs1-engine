@@ -219,10 +219,48 @@ AFRAME.registerSystem('cs1avatar', {
          }
       });
   
-    this.animationControlsApplied = true;
+    
   }
   
-  
+    if(CS1.device=='Oculus'){
+      
+      CS1.myPlayer.lh.addEventListener('axismove',e=>{
+        
+        if(  (e.detail.axis[3]>.5) && CS1.myPlayer.currentAnimation != 'run' ){ 
+        
+          CS1.myPlayer.isWalking=true;  
+          if(CS1.myPlayer.isJumping)return;
+          CS1.myPlayer.setAnimation('run')  
+          
+        
+        } 
+        else if(  (e.detail.axis[3]<-.5) && CS1.myPlayer.currentAnimation != 'run' ){ 
+        
+          CS1.myPlayer.isWalking=true;  
+          if(CS1.myPlayer.isJumping)return;
+          CS1.myPlayer.setAnimation('run')  
+          
+        
+        } 
+        else if(  (Math.abs(e.detail.axis[3])<.1) && CS1.myPlayer.currentAnimation == 'run' ) { 
+        
+          CS1.myPlayer.isWalking=false;
+          if(CS1.myPlayer.isJumping)return;
+          setTimeout(e=>{
+            if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
+          },250)
+          
+        
+        } 
+        
+        
+        
+      })
+      
+      
+    }
+    
+    this.animationControlsApplied = true;
   
 }
 
