@@ -6,6 +6,9 @@ AFRAME.registerSystem('cs1avatar', {
   init: function () {
     
     console.log('initializing cs1avatar system, waiting for game-start to proceed')
+    CS1.myPlayer.setAnimation = ()=>{}
+    CS1.myPlayer.pauseAnimation = ()=>{}
+    CS1.myPlayer.playAnimation = ()=>{}
     
     document.body.addEventListener('game-start',e=>{
       CS1.myPlayer.avatar = document.createElement('cs1-avatar')
@@ -244,6 +247,8 @@ AFRAME.registerComponent('cs1avatar', {
   
   update: function () {
     
+    CS1.myPlayer.animations = {};
+    
     switch(this.data.type){
       case 'simple':
         this.el.head = this.system.createHead(this.data);
@@ -266,7 +271,6 @@ AFRAME.registerComponent('cs1avatar', {
           this.el.modelEntity.object3D.traverse(o=>{
               o.frustumCulled = false;
               if(o.animations){
-                CS1.myPlayer.animations = {};
                 o.animations.forEach(animation=>{
                   CS1.myPlayer.animations[animation.name] = animation
                 })
