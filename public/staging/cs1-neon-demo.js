@@ -42,7 +42,7 @@ CS1.myPlayer.setAvatar({type:"rigged"});
 //   CS1.myPlayer.setAttribute('jump','speed:25');
 // }
   
-CS1.myPlayer.setAttribute('jump','speed:25');
+CS1.myPlayer.setAttribute('jump','speed:25 ; landingparticles:dust');
   
 CS1.game.start();
 
