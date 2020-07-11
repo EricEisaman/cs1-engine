@@ -4,7 +4,11 @@ export const jump = (()=>{
 AFRAME.registerComponent('jump', {
   schema: {
     speed: {default: 8},
-    g: {default: -9.8}
+    g: {default: -9.8},
+    jumpingsound: {default:''},
+    landingsound: {default:''},
+    jumpingparticles:{default:''},
+    landingparticles:{default:''}
   },
   
   init: function(){
@@ -25,7 +29,7 @@ AFRAME.registerComponent('jump', {
     
   },
   
-  setup: function(){
+  setup: async function(){
     
     const wasdEl = document.querySelector('[wasd-controls]')
     this.wasd =  (wasdEl) ? wasdEl.components['wasd-controls'] : {data: {acceleration:300}}
@@ -68,6 +72,15 @@ AFRAME.registerComponent('jump', {
     }
     
     
+    if(this.data.landingparticles){
+      switch(this.data.landingparticles){
+        case 'dust':
+        this.landingparticles = await CS1.add('cs1-particles',{preset:'dust' , position:'0 -100 0'})
+      }
+      
+    }
+    
+    
   },
   
   tick: function(t,dt){
@@ -103,6 +116,11 @@ AFRAME.registerComponent('jump', {
     this.el.dispatchEvent(this.landEvent); 
     if(CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('run')
     else CS1.myPlayer.setAnimation('idle')
+    if(this.landingparticles){
+      this.landingparticles.object3D.position.copy(CS1.myPlayer.object3D.position)
+      this.landingparticles.show()
+      setTimeout(e=>{this.landingparticles.hide()},1000)
+    }
   },
   
   
