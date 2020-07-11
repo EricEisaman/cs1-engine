@@ -14,8 +14,12 @@ These promises define the minimum developer contract which will be fullfilled by
   
 - Easy Avatar Management
   - provide Blender templates for custom avatars
-  - custom avatar animations
-  - simple and powerful animation control API
+  - custom avatar animations ✅
+  - simple and powerful animation control API ✅
+  - work effortlessly across devices
+    - Standard ✅
+    - Mobile
+    - Oculus Browser ✅
   
 - Easy Camera Control
   - first person camera
