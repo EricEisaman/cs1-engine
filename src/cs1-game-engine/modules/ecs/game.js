@@ -1,7 +1,7 @@
 //THIS SYSTEM INITIALIZES AFTER SCENE-READY AND BEFORE AFRAME-HYDRATED
 
 //GAME LEVEL DSL
-import {view} from '../dsl/game/view/view';
+import {View} from '../dsl/game/view/View';
 
 export const game = (()=>{
     
@@ -12,21 +12,21 @@ export const game = (()=>{
   init: function () {
     // Called on scene initialization.
     console.log('initializing game system ...');
-    this.templates = {};
-    this.settings = {
+    this.Templates = {};
+    this.Settings = {
       type: 'SINGLE_PLAYER',
       view: 'THIRD_PERSON'
     }
-    CS1.game = this;
-    CS1.game.view = view;
+    CS1.Game = this;
+    CS1.Game.View =View;
   },
   
   start: function(config={}){
-    Object.assign(this.settings,config)
+    Object.assign(this.Settings,config)
     
     
     document.body.addEventListener('my-avatar-ready', e=>{
-      CS1.game.view = CS1.game.view.set(this.settings.view);
+      CS1.Game.View = CS1.Game.View.set(this.Settings.view);
     })
     
     
@@ -34,13 +34,13 @@ export const game = (()=>{
     document.body.dispatchEvent( new Event('game-start'))
     
     
-    switch(this.settings.type){
+    switch(this.Settings.type){
       case 'SINGLE_PLAYER':
-        CS1.scene.clock.start();
-        CS1.scene.play();
+        CS1.Scene.clock.start();
+        CS1.Scene.play();
         break;
       default:
-        CS1.scene.pause();
+        CS1.Scene.pause();
         break;
     }
     
@@ -48,7 +48,7 @@ export const game = (()=>{
   },
   
   addNamedTemplate: function(name,entity){
-    this.templates[name] = entity;
+    this.Templates[name] = entity;
   }
   
 });

@@ -21,13 +21,13 @@ d2 = `./dist/${settings.name}/latest/${settings.name}.min.js`
 
 function version(){
   // echo \"export const version = {version:'$npm_package_version'}\"  > src/cs1-game-engine/modules/version.js
-  exec(`echo \"export const version = {version:'${settings.version}'}\"  > src/${settings.name}/modules/version/version.js` , err=>{
+  exec(`echo \"export const Version = {version:'${settings.version}'}\"  > src/${settings.name}/modules/version/Version.js` , err=>{
     if (err) {
       console.error(err);
       return;
     }
     console.log('Version script executed successfully.');
-    console.log(`Check for your version in src/${settings.name}/modules/version/version.js`);
+    console.log(`Check for your version in src/${settings.name}/modules/version/Version.js`);
     rollup();
   })
   

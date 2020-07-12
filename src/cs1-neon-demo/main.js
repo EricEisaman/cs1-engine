@@ -1,20 +1,20 @@
-import {version} from './modules/version/version';
+import {Version} from './modules/version/Version';
 
 (async ()=>{
 
-console.log('CS1 Neon Demo Version: ', version.version);
+console.log('CS1 Neon Demo Version: ', Version.version);
 
 
-CS1.scene.set('environment',{preset:'starry',lighting: 'none', ground:'flat'})
+CS1.Scene.set('environment',{preset:'starry',lighting: 'none', ground:'flat'})
 CS1.add('a-light',{position:'12 12 -12', type: 'ambient' , intensity: 0.7})
 
   
-await CS1.scene.set('render-order','background foreground')
+await CS1.Scene.set('render-order','background foreground')
    
 const juke = await CS1.add('a-jukebox',{position:'0 2 -1.5', scale:'2 2 2'})    
 juke.set('render-order','background');
   
-CS1.myPlayer.setAttribute('render-order','foreground')
+CS1.MyPlayer.setAttribute('render-order','foreground')
   
 CS1.add('gltf-instances', {count:1000});
   
@@ -30,21 +30,16 @@ const rain = await CS1.add('cs1-particles',{preset:'rain', position:'17 10 -1.5'
 
 const log = document.createElement('a-log')
 log.setAttribute('position','-5  3 -12')
-CS1.scene.appendChild(log)
+CS1.Scene.appendChild(log)
 
 
-//CS1.myPlayer.setAvatar({color:"green"})
-CS1.myPlayer.setAvatar({type:"rigged"})  
+//CS1.MyPlayer.setAvatar({color:"green"})
+CS1.MyPlayer.setAvatar({type:"rigged"})  
   
-// if(CS1.device=='Oculus'){
-//   CS1.rig.setAttribute('jump','speed:25')
-// }else{
-//   CS1.myPlayer.setAttribute('jump','speed:25');
-// }
   
-CS1.myPlayer.setAttribute('jump','speed:25 ; landingparticles:dust')
+CS1.MyPlayer.setAttribute('jump','speed:25 ; landingparticles:dust')
   
-CS1.game.start();
+CS1.Game.start();
 
 
   

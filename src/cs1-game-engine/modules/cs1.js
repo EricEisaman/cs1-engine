@@ -1,18 +1,20 @@
 import aframe from './vendor/aframe-custom-6.01.20';
 import {cs1Script} from './customElements/cs1Script';
 
-import {utils} from './utils/utils';
-import {flags} from './flags/flags';
-import {version} from './version/version';
+import {Utils} from './utils/Utils';
+import {Input} from './input/Input';
+import {Flags} from './flags/Flags';
+import {Version} from './version/Version';
 
 //TOP LEVEL Domain Specific Language (dsl)
 import {add} from './dsl/add';
 
 
 let CS1 = window.CS1 = {
-  version: version.version,
-  utils: utils,
-  flags: flags,
+  VERSION: Version.version,
+  Utils: Utils,
+  Input: Input,
+  Flags: Flags,
   add: add
 }  
 
@@ -61,7 +63,7 @@ document.head.appendChild(hideScripts);
 const txt = `if (location.protocol == "http:") location.protocol = "https:";if ("serviceWorker" in navigator){navigator.serviceWorker.register( "./sw.js" ).then(reg => console.log("Service Worker registered", reg)).catch(err =>console.error("Service Worker **not** registered", err));} else {console.warn("Service Worker not supported in this browser");}
 `
   
-CS1.utils.loadScript(false,txt)
+CS1.Utils.loadScript(false,txt)
   
   
   

@@ -18,7 +18,7 @@ AFRAME.registerComponent('follow', {
   init: function(){
     this._euler = new THREE.Euler( 0, 0, 0, 'XYZ' );
     this.cto = this.data.target.object3D;
-    this.pp= CS1.myPlayer.object3D.position;
+    this.pp= CS1.MyPlayer.object3D.position;
     this.ctdir = new THREE.Vector3();
     this.matrix = new THREE.Matrix4();
   },
@@ -39,7 +39,7 @@ AFRAME.registerComponent('follow', {
     //Adjust pos.y based on cam look up/down angle
     //Third Person Standard and Mobile
     if(this.data.yFactor){
-      const rx = CS1.cam.object3D.rotation.x
+      const rx = CS1.Cam.object3D.rotation.x
       p.y = targetPos.y - this.data.yFactor*Math.sin(rx) 
     }else{ //Third Person VR
       // this.cto.position.copy( CS1.cam.parentEl.object3D.position) 

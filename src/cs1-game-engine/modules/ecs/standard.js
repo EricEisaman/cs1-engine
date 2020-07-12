@@ -11,7 +11,7 @@ AFRAME.registerComponent('standard', {
     
     console.log('Initializing standard device.')
     CS1.device = 'Standard'  
-    CS1.scene.setAttribute("vr-mode-ui", "enabled: false");
+    CS1.Scene.setAttribute("vr-mode-ui", "enabled: false");
     console.log('device-declared')
     document.body.dispatchEvent( new Event('device-declared'))
     

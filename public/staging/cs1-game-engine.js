@@ -77609,9 +77609,9 @@ var proto = Object.create(ANode.prototype, {
                name=='scale'){
                 self.setAttribute(name,config);
                 resolve(self);
-            }else if(Object.keys(CS1.utils.libMap).includes(name)){
+            }else if(Object.keys(CS1.Utils.LibMap).includes(name)){
              
-              CS1.utils.loadScript(CS1.utils.libMap[name])
+              CS1.Utils.loadScript(CS1.Utils.LibMap[name])
               .then(e=>{
                 try{
                     self.setAttribute(name,config);
@@ -77624,7 +77624,7 @@ var proto = Object.create(ANode.prototype, {
                 }); 
             }else{
                 if(!url)return;
-                CS1.utils.loadScript(url)
+                CS1.Utils.loadScript(url)
                 .then(e=>{
                     try{
                       self.setAttribute(name,config);
@@ -87333,7 +87333,7 @@ const setRenderOrder = function(layers='background middleground foreground'){
   
   if(typeof layers == 'string'){
     
-    CS1.scene.setAttribute('render-order',layers);
+    CS1.Scene.setAttribute('render-order',layers);
     console.log(`render-order layers set to: ${layers}`);
     
   } else {
@@ -87378,12 +87378,12 @@ class cs1Script extends HTMLElement {
       {
         scene.addEventListener('loaded', e=>{
             console.log('scene loaded event, cs1-script handler ...');
-            CS1.scene.clock.autoStart = false;
+            CS1.Scene.clock.autoStart = false;
             console.log(`cs1-script wait for : ${self.waitFor.length}`);
-            if(!CS1.flags.isReady){
+            if(!CS1.Flags.isReady){
               console.log('Dispatching cs1-ready event ...');
               document.body.dispatchEvent( new Event('cs1-ready'));
-              CS1.flags.isReady = true;
+              CS1.Flags.isReady = true;
             }
             if(code){
               if(self.waitFor.length){
@@ -87411,14 +87411,14 @@ class cs1Script extends HTMLElement {
         });
       }
       
-      // Add DSL when creating CS1.scene
-      if(scene && !CS1.scene)
+      // Add DSL when creating CS1.Scene
+      if(scene && !CS1.Scene)
       {
         console.log('scene detected ...');
         if(!scene.isPlaying){
-          CS1.scene = scene;
-          CS1.scene.setRenderOrder = setRenderOrder;
-          CS1.scene.setRenderOrder();
+          CS1.Scene = scene;
+          CS1.Scene.setRenderOrder = setRenderOrder;
+          CS1.Scene.setRenderOrder();
           console.log('firing scene-ready and setting load handler');
           document.body.dispatchEvent( new Event('scene-ready'));
           setLoadHandler();
@@ -87430,14 +87430,14 @@ class cs1Script extends HTMLElement {
         document.body.dispatchEvent( new Event('scene-ready'));
         setLoadHandler();
       }
-      else if(!scene && !CS1.scene)
+      else if(!scene && !CS1.Scene)
       {
         console.log('creating scene ...');
         scene = document.createElement('a-scene');
         document.body.appendChild(scene);
-        CS1.scene = scene;
-        CS1.scene.setRenderOrder = setRenderOrder;
-        CS1.scene.setRenderOrder();
+        CS1.Scene = scene;
+        CS1.Scene.setRenderOrder = setRenderOrder;
+        CS1.Scene.setRenderOrder();
         if(!scene.isPlaying){
           console.log('firing scene-ready and setting load handler');
           document.body.dispatchEvent( new Event('scene-ready'));
@@ -87477,7 +87477,7 @@ const loadScript = function (url,txt){
 	})
 };
 
-const libMap = {
+const LibMap = {
   
 "cs1-jukebox": "https://raw.githack.com/EricEisaman/libs/master/lib/cs1-jukebox.js",
 
@@ -87485,7 +87485,7 @@ const libMap = {
     
 "environment": "https://raw.githack.com/EricEisaman/aframe-environment-component/sirfizx/index.js",
   
-"movement-controls": "https://unpkg.com/aframe-extras-custom@0.0.10/latest/aframe-extras-custom.js",
+"movement-controls": "https://unpkg.com/aframe-extras-custom@0.0.12/latest/aframe-extras-custom.js",
   
 "render-order": "https://unpkg.com/cs1-render-order@0.0.11/latest/cs1-render-order.min.js",
   
@@ -87525,98 +87525,103 @@ const isValidURL = str=>{
   
 };
 
-onkeydown = onkeyup = function(e){
-  e = e || event; // to deal with IE
-  if(e.type == 'keydown'){
-    
-    
-      if(KEYS[e.code] && KEYS[e.code].isDown){
-        document.body.dispatchEvent(new CustomEvent("cs1keydown", {
-          detail: {
-            event: e 
-          }
-        }));
-      } else {
-        if(!KEYS[e.code])KEYS[e.code]={isKey:true};
-        KEYS[e.code].isDown = true;
-        document.body.dispatchEvent(new CustomEvent("cs1keydown", {
-          detail: {
-            event: e 
-          }
-        }));
-        document.body.dispatchEvent(new CustomEvent("cs1keydownonce", {
-          detail: {
-            event: e 
-          }
-        }));
-      }
-         
-
-  }else{
-    
-    KEYS[e.code].isDown = false; 
-    document.body.dispatchEvent(new CustomEvent("cs1keyup", {
-        detail: {
-          event: e 
-        }
-      }));
-  }
-   
-};
-
-const KEYS = {};
-
-KEYS.down = function(){
-  
-  let a = [];
-  Object.keys(KEYS).forEach(key => {
-    if(KEYS[key].isKey && KEYS[key].isDown) a.push(key);
-  });
-  return a
-  
-};
-
-KEYS.registerCombo = function(name,keys,callback){
-  
-  /* Not implemented
-     will execute callback then dispatch event with given name
-     will add combo to KEYS.combos
-  
-    COMBO {
-    
-    keys: [],
-    
-    callback: function
-    
-    }
-  
-  */
-  
-};
-
-const utils = {
+const Utils = {
   
   loadScript: loadScript,
   
-  libMap: libMap,
+  LibMap: LibMap,
   
   setProps: setProps,
   
   isValidURL: isValidURL,
 
-  KEYS: KEYS,
+  
+};
+
+onkeydown = onkeyup = function(e){
+    e = e || event; // to deal with IE
+    if(e.type == 'keydown'){
+      
+      
+        if(Keys[e.code] && Keys[e.code].isDown){
+          document.body.dispatchEvent(new CustomEvent("cs1keydown", {
+            detail: {
+              event: e 
+            }
+          }));
+        } else {
+          if(!Keys[e.code])Keys[e.code]={isKey:true};
+          Keys[e.code].isDown = true;
+          document.body.dispatchEvent(new CustomEvent("cs1keydown", {
+            detail: {
+              event: e 
+            }
+          }));
+          document.body.dispatchEvent(new CustomEvent("cs1keydownonce", {
+            detail: {
+              event: e 
+            }
+          }));
+        }
+           
+  
+    }else{
+      
+      Keys[e.code].isDown = false; 
+      document.body.dispatchEvent(new CustomEvent("cs1keyup", {
+          detail: {
+            event: e 
+          }
+        }));
+    }
+     
+  };
+  
+  const Keys = {};
+  
+  Keys.down = function(){
+    
+    let a = [];
+    Object.keys(Keys).forEach(key => {
+      if(Keys[key].isKey && Keys[key].isDown) a.push(key);
+    });
+    return a
+    
+  };
+  
+  Keys.registerCombo = function(name,Keys,callback){
+    
+    /* Not implemented
+       will execute callback then dispatch event with given name
+       will add combo to Keys.combos
+    
+      COMBO {
+      
+      Keys: [],
+      
+      callback: function
+      
+      }
+    
+    */
+    
+  };
+
+const Input = {
+
+  Keys: Keys,
   
   
 };
 
-const flags = {
+const Flags = {
   
   isReady: false
   
   
 };
 
-const version = {version:'0.0.10'};
+const Version = {version:'0.0.10'};
 
 //return true/false for success/fail
 const add = function(entityOrName=false,config={}){
@@ -87627,23 +87632,23 @@ if(typeof entityOrName == 'string'){
   
   if(AFRAME.primitives.primitives[entityOrName]){
     const el = document.createElement(entityOrName);
-    CS1.utils.setProps(el,config);
-    CS1.scene.appendChild(el);
+    CS1.Utils.setProps(el,config);
+    CS1.Scene.appendChild(el);
     resolve(el);
   }
-  else if(CS1.game.templates[entityOrName]){
-    const el = CS1.game.templates[entityOrName].cloneNode();
-    CS1.utils.setProps(el,config);
-    CS1.scene.appendChild(el);
+  else if(CS1.Game.Templates[entityOrName]){
+    const el = CS1.Game.Templates[entityOrName].cloneNode();
+    CS1.Utils.setProps(el,config);
+    CS1.Scene.appendChild(el);
     resolve(el);
   }
-  else if(CS1.utils.libMap[entityOrName]){
-    CS1.utils.loadScript(CS1.utils.libMap[entityOrName])
+  else if(CS1.Utils.LibMap[entityOrName]){
+    CS1.Utils.loadScript(CS1.Utils.LibMap[entityOrName])
     .then(e=>{
       try{
         const el = document.createElement(entityOrName);
-        CS1.utils.setProps(el,config);
-        CS1.scene.appendChild(el);
+        CS1.Utils.setProps(el,config);
+        CS1.Scene.appendChild(el);
         resolve(el);
       } catch(err){
         console.warn(`Failed to create ${entityOrName}!`);
@@ -87658,8 +87663,8 @@ if(typeof entityOrName == 'string'){
   
 }
 else if(entityOrName.isEntity){
-  CS1.utils.setProps(entityOrName,config);
-  CS1.scene.appendChild(entityOrName);
+  CS1.Utils.setProps(entityOrName,config);
+  CS1.Scene.appendChild(entityOrName);
   resolve(entityOrName);
 }
 
@@ -87676,9 +87681,9 @@ AFRAME.registerSystem('device', {
 
   init: function () {
     
-    console.log('initializing device system, checking for CS1.scene');
+    console.log('initializing device system, checking for CS1.Scene');
     
-    if(!CS1.scene){ 
+    if(!CS1.Scene){ 
       document.body.addEventListener('scene-ready', e=>{ this.setup(); });  
     }else{
       this.setup();
@@ -87692,13 +87697,13 @@ AFRAME.registerSystem('device', {
     
     console.log('Checking device type  ...');
     if(AFRAME.utils.device.isOculusBrowser()){
-      CS1.scene.setAttribute('oculus','');
+      CS1.Scene.setAttribute('oculus','');
     } 
     else if(AFRAME.utils.device.isMobile()){
-      CS1.scene.setAttribute('mobile','');
+      CS1.Scene.setAttribute('mobile','');
     } 
     else {
-      CS1.scene.setAttribute('standard','');
+      CS1.Scene.setAttribute('standard','');
     }
     
     
@@ -87735,46 +87740,46 @@ AFRAME.registerComponent('oculus', {
       
     CS1.log('Oculus game-start handler.');
       
-    CS1.myPlayer.lh = document.createElement('a-entity');
-    CS1.myPlayer.lh.setAttribute('laser-controls','hand:left');
-    CS1.myPlayer.lh.setAttribute('raycaster','objects: .jukebox , .clickable; far: 5');
+    CS1.MyPlayer.Lh = document.createElement('a-entity');
+    CS1.MyPlayer.Lh.setAttribute('laser-controls','hand:left');
+    CS1.MyPlayer.Lh.setAttribute('raycaster','objects: .jukebox , .clickable; far: 5');
       
       
     //ATTEMPT THUMBSTICK CONTROLLER  
-    CS1.myPlayer.lh.addEventListener('axismove',e=>{
+    CS1.MyPlayer.Lh.addEventListener('axismove',e=>{
       
-      if(CS1.flags.isSweeping)return;
+      if(CS1.Cam.isSweeping)return;
       
-      if(CS1.rig && CS1.rig.rotateInSteps){
+      if(CS1.Rig && CS1.Rig.rotateInSteps){
         
-        if(  (e.detail.axis[2]>.5) && !CS1.rig.isRotating ){
-          CS1.rig.object3D.rotateY(-CS1.rig.rotateStep);
-          CS1.myPlayer.object3D.rotateY(-CS1.rig.rotateStep);
-          CS1.rig.isRotating = true;
-          setTimeout(e=>{CS1.rig.isRotating=false;},1000);
-        }else if(  (e.detail.axis[2]<-.5) && !CS1.rig.isRotating  ){
-          CS1.rig.object3D.rotateY(CS1.rig.rotateStep);
-          CS1.myPlayer.object3D.rotateY(CS1.rig.rotateStep);
-          CS1.rig.isRotating = true;
-          setTimeout(e=>{CS1.rig.isRotating=false;},1000);
+        if(  (e.detail.axis[2]>.5) && !CS1.Rig.isRotating ){
+          CS1.Rig.object3D.rotateY(-CS1.Rig.rotateStep);
+          CS1.MyPlayer.object3D.rotateY(-CS1.Rig.rotateStep);
+          CS1.Rig.isRotating = true;
+          setTimeout(e=>{CS1.Rig.isRotating=false;},1000);
+        }else if(  (e.detail.axis[2]<-.5) && !CS1.Rig.isRotating  ){
+          CS1.Rig.object3D.rotateY(CS1.Rig.rotateStep);
+          CS1.MyPlayer.object3D.rotateY(CS1.Rig.rotateStep);
+          CS1.Rig.isRotating = true;
+          setTimeout(e=>{CS1.Rig.isRotating=false;},1000);
         } 
         
       }else{
         
         if(  e.detail.axis[2]>.5 ){
-          CS1.rig.object3D.rotateY(-CS1.myPlayer.rotSpeed);
-          CS1.myPlayer.object3D.rotateY(-CS1.myPlayer.rotSpeed);
+          CS1.Rig.object3D.rotateY(-CS1.MyPlayer.rotSpeed);
+          CS1.MyPlayer.object3D.rotateY(-CS1.MyPlayer.rotSpeed);
         }else if(  e.detail.axis[2]<-.5  ){
-          CS1.rig.object3D.rotateY(CS1.myPlayer.rotSpeed);
-          CS1.myPlayer.object3D.rotateY(CS1.myPlayer.rotSpeed);
+          CS1.Rig.object3D.rotateY(CS1.MyPlayer.rotSpeed);
+          CS1.MyPlayer.object3D.rotateY(CS1.MyPlayer.rotSpeed);
         }
        
       }
       
       if( e.detail.axis[3]>.5 ){
-        CS1.myPlayer.object3D.translateZ(CS1.myPlayer.speed);
+        CS1.MyPlayer.object3D.translateZ(CS1.MyPlayer.speed);
       }else if( e.detail.axis[3]<-.5 ){
-        CS1.myPlayer.object3D.translateZ(-CS1.myPlayer.speed);
+        CS1.MyPlayer.object3D.translateZ(-CS1.MyPlayer.speed);
       }
     });
       
@@ -87784,28 +87789,28 @@ AFRAME.registerComponent('oculus', {
     //self.lh.setAttribute('oculus-touch-controls','hand:left');
     //CS1.myPlayer.lh.setAttribute('raycaster',`objects:.rayobject;far:4.0;useWorldCoordinates:false`);
       
-    CS1.myPlayer.rh = document.createElement('a-entity');
-    CS1.myPlayer.rh.setAttribute('laser-controls','hand:right');
+    CS1.MyPlayer.Rh = document.createElement('a-entity');
+    CS1.MyPlayer.Rh.setAttribute('laser-controls','hand:right');
     //self.rh.setAttribute('position','1 0 0');
     //self.rh.setAttribute('oculus-touch-controls','hand:right');
     //CS1.myPlayer.rh.setAttribute('raycaster',`objects:.rayobject;far:4.0;useWorldCoordinates:false`);
-    CS1.myPlayer.rh.setAttribute('raycaster','objects: .jukebox , .clickable; far: 5');
+    CS1.MyPlayer.Rh.setAttribute('raycaster','objects: .jukebox , .clickable; far: 5');
     
     
-    CS1.myPlayer.avatar.appendChild(CS1.myPlayer.lh );
-    CS1.myPlayer.avatar.appendChild(CS1.myPlayer.rh ); 
+    CS1.MyPlayer.Avatar.appendChild(CS1.MyPlayer.Lh );
+    CS1.MyPlayer.Avatar.appendChild(CS1.MyPlayer.Rh ); 
       
     
     
-    if(CS1.game.view.type=='THIRD_PERSON'){
+    if(CS1.Game.View.type=='THIRD_PERSON'){
       
       CS1.log('Customizing Oculus Touch Controls for THIRD PERSON!');
       
 //       const ops = [0,0.05,0.08,0.11,0.14,0.2,0.3,1.0]
 //       let count = 0;
-//       CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{
+//       CS1.MyPlayer.Lh.addEventListener('xbuttondown',e=>{
 //       count++;  
-//       CS1.myPlayer.avatar.object3D.traverse(o=>{
+//       CS1.MyPlayer.Avatar.object3D.traverse(o=>{
 //               if(o.type=='Mesh'){
 //                o.material.transparent = true
 //                o.material.opacity = ops[count%ops.length]
@@ -87815,19 +87820,19 @@ AFRAME.registerComponent('oculus', {
       
 //       const zf = [0,1,2,3,4,5]
 //       let zcount = 0;
-//       CS1.myPlayer.lh.addEventListener('ybuttondown',e=>{
+//       CS1.MyPlayer.Lh.addEventListener('ybuttondown',e=>{
 //         zcount++;  
-//         CS1.myPlayer.components.follow.data.zFactor = zf[zcount%zf.length]
+//         CS1.MyPlayer.components.follow.data.zFactor = zf[zcount%zf.length]
 //       })
       
-      CS1.myPlayer.lh.addEventListener('xbuttondown',e=>{ 
-        if(CS1.flags.isSweeping)return;
-        CS1.game.view.toggle();
+      CS1.MyPlayer.Lh.addEventListener('xbuttondown',e=>{ 
+        if(CS1.Cam.isSweeping)return;
+        CS1.Game.View.toggle();
 
       });  
       
-      CS1.myPlayer.lh.addEventListener('ybuttondown',e=>{ 
-        CS1.cam.matrixSweep();
+      CS1.MyPlayer.Lh.addEventListener('ybuttondown',e=>{ 
+        CS1.Cam.matrixSweep();
       });  
       
     
@@ -87907,7 +87912,7 @@ AFRAME.registerComponent('standard', {
     
     console.log('Initializing standard device.');
     CS1.device = 'Standard';  
-    CS1.scene.setAttribute("vr-mode-ui", "enabled: false");
+    CS1.Scene.setAttribute("vr-mode-ui", "enabled: false");
     console.log('device-declared');
     document.body.dispatchEvent( new Event('device-declared'));
     
@@ -87928,7 +87933,7 @@ AFRAME.registerComponent('standard', {
   
 })();
 
-const firstPerson = {
+const FirstPerson = {
   
   type: 'FIRST_PERSON',
   
@@ -88045,7 +88050,7 @@ AFRAME.registerComponent('follow', {
   init: function(){
     this._euler = new THREE.Euler( 0, 0, 0, 'XYZ' );
     this.cto = this.data.target.object3D;
-    this.pp= CS1.myPlayer.object3D.position;
+    this.pp= CS1.MyPlayer.object3D.position;
     this.ctdir = new THREE.Vector3();
     this.matrix = new THREE.Matrix4();
   },
@@ -88066,7 +88071,7 @@ AFRAME.registerComponent('follow', {
     //Adjust pos.y based on cam look up/down angle
     //Third Person Standard and Mobile
     if(this.data.yFactor){
-      const rx = CS1.cam.object3D.rotation.x;
+      const rx = CS1.Cam.object3D.rotation.x;
       p.y = targetPos.y - this.data.yFactor*Math.sin(rx); 
     }
     
@@ -88082,14 +88087,14 @@ AFRAME.registerComponent('follow', {
 
 //VIEW INITIALIZES ON GAME-START
 
-const thirdPerson = {
+const ThirdPerson = {
   
   type: 'THIRD_PERSON',
   
   init: function(){
     
     console.log('Setting game as THIRD_PERSON.');
-    CS1.myPlayer.setAttribute('wasd-controls','acceleration:30');
+    CS1.MyPlayer.setAttribute('wasd-controls','acceleration:30');
     
     
     const rigTarget = document.createElement('a-entity');
@@ -88097,66 +88102,59 @@ const thirdPerson = {
     rigTarget.setAttribute('id','rig-target');
     const rigTargetSwivel = document.createElement('a-entity');
     rigTargetSwivel.appendChild(rigTarget);
-    CS1.myPlayer.appendChild(rigTargetSwivel);
-    CS1.myPlayer.rigTargetSwivel = rigTargetSwivel;
-    CS1.myPlayer.rigTarget = rigTarget;
+    CS1.MyPlayer.appendChild(rigTargetSwivel);
+    CS1.MyPlayer.RigTargetSwivel = rigTargetSwivel;
+    CS1.MyPlayer.RigTarget = rigTarget;
     //CS1.myPlayer.cam = document.querySelector('[camera]');
-    CS1.rig.setAttribute("follow", "target: #rig-target;");
+    CS1.Rig.setAttribute("follow", "target: #rig-target;");
     
     
     //AFRAME.components["look-controls"].Component.prototype.remove = function(){ }
-    CS1.cam.setAttribute("look-controls", "pointerLockEnabled:true;");
+    CS1.Cam.setAttribute("look-controls", "pointerLockEnabled:true;");
     
     
     
-    CS1.cam.matrixSweep = function(){
-      if(CS1.flags.isSweeping)return;
-      CS1.flags.isSweeping = true;
-      if(CS1.myPlayer.isJumping)CS1.myPlayer.pauseAnimation();
+    CS1.Cam.matrixSweep = function(){
+      if(CS1.Cam.isSweeping)return;
+      CS1.Cam.isSweeping = true;
+      if(CS1.MyPlayer.isJumping)CS1.MyPlayer.pauseAnimation();
       //CS1.cam.components["look-controls"].saveCameraPose();
-      CS1.cam.components["look-controls"].data.enabled = false;
-      const yFactor = CS1.rig.components.follow.data.yFactor; 
-      CS1.rig.components.follow.data.yFactor = 0;
-      const v3 = CS1.cam.object3D.rotation.toVector3();
-      CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
-      const cachedSpeed = CS1.myPlayer.getSpeed();
-      CS1.myPlayer.setSpeed(0);
+      CS1.Cam.components["look-controls"].data.enabled = false;
+      const yFactor = CS1.Rig.components.follow.data.yFactor; 
+      CS1.Rig.components.follow.data.yFactor = 0;
+      const v3 = CS1.Cam.object3D.rotation.toVector3();
+      CS1.Cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
+      const cachedSpeed = CS1.MyPlayer.getSpeed();
+      CS1.MyPlayer.setSpeed(0);
       let count = 0;
       const sweep = setInterval(e=>{
-      CS1.rig.components.follow.data.strength=1;
-      CS1.myPlayer.rigTargetSwivel.object3D.rotateY(0.005);
-      CS1.rig.object3D.rotateY(0.005);
+      CS1.Rig.components.follow.data.strength=1;
+      CS1.MyPlayer.RigTargetSwivel.object3D.rotateY(0.005);
+      CS1.Rig.object3D.rotateY(0.005);
       if(count++ >1256){
         clearInterval(sweep);
-        CS1.rig.components.follow.data.strength = 0.05;
-        CS1.myPlayer.rigTargetSwivel.setAttribute('rotation','0 0 0');
-        //CS1.rig.setAttribute('rotation','0 0 0')
-        CS1.cam.components["look-controls"].data.enabled = true;
-        CS1.rig.components.follow.data.yFactor = yFactor;
-        //CS1.cam.components["look-controls"].restoreCameraPose()
-        CS1.flags.isSweeping = false;
-        CS1.cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
-        CS1.myPlayer.setSpeed(cachedSpeed);
-        if(CS1.myPlayer.isJumping)CS1.myPlayer.playAnimation();
+        CS1.Rig.components.follow.data.strength = 0.05;
+        CS1.MyPlayer.RigTargetSwivel.setAttribute('rotation','0 0 0');
+        //CS1.Rig.setAttribute('rotation','0 0 0')
+        CS1.Cam.components["look-controls"].data.enabled = true;
+        CS1.Rig.components.follow.data.yFactor = yFactor;
+        //CS1.Cam.components["look-controls"].restoreCameraPose()
+        CS1.Cam.isSweeping = false;
+        CS1.Cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
+        CS1.MyPlayer.setSpeed(cachedSpeed);
+        if(CS1.MyPlayer.isJumping)CS1.MyPlayer.playAnimation();
       }
       },0);
     };
     
     
     if(CS1.device=='Standard' || CS1.device=='Mobile') 
-      CS1.myPlayer.components.player.tick = function(t,dt){
-        if(CS1.flags.isSweeping  || CS1.myPlayer.isJumping)return;
-          CS1.myPlayer.object3D.rotation.y = CS1.cam.object3D.rotation.y;
+      CS1.MyPlayer.components.player.tick = function(t,dt){
+        if(CS1.Cam.isSweeping  || CS1.MyPlayer.isJumping)return;
+          CS1.MyPlayer.object3D.rotation.y = CS1.Cam.object3D.rotation.y;
       };
-//     if(CS1.device=='Oculus' && CS1.myPlayer.avatar && CS1.myPlayer.avatar.head){
-      
-//       CS1.myPlayer.components.player.tick = function(t,dt){
-//           CS1.myPlayer.avatar.head.object3D.rotation.y = CS1.cam.object3D.rotation.y;
-//         }  
-        
-//     } 
-      
 
+    
     console.log('view-ready');
     document.body.dispatchEvent( new Event('view-ready'));
     
@@ -88165,11 +88163,11 @@ const thirdPerson = {
       document.body.addEventListener('keyup', e=>{
         switch(e.code){
           case 'Digit1':
-            if(CS1.flags.isSweeping)return;
-            CS1.game.view.toggle();
+            if(CS1.Cam.isSweeping)return;
+            CS1.Game.View.toggle();
             break;
           case 'Digit2':
-            CS1.cam.matrixSweep();
+            CS1.Cam.matrixSweep();
             break
         }
       });
@@ -88182,22 +88180,22 @@ const thirdPerson = {
   },
 
   toggle: function(){
-    if(!CS1.rig.components.follow)return
-    if(CS1.myPlayer.rigTarget.object3D.position.z==3){
-      CS1.myPlayer.rigTarget.object3D.position.set(0,0,1);
-      CS1.rig.components.follow.data.yFactor = 1;
-      CS1.rig.components.follow.data.strength = 0.1;
-      CS1.myPlayer.avatar.object3D.traverse(o=>{
+    if(!CS1.Rig.components.follow)return
+    if(CS1.MyPlayer.RigTarget.object3D.position.z==3){
+      CS1.MyPlayer.RigTarget.object3D.position.set(0,0,1);
+      CS1.Rig.components.follow.data.yFactor = 1;
+      CS1.Rig.components.follow.data.strength = 0.1;
+      CS1.MyPlayer.Avatar.object3D.traverse(o=>{
         if(o.type=='Mesh' || o.type=='SkinnedMesh'){
          o.material.transparent = true;
          o.material.opacity = 0.05;
         }
       });
     }else{
-      CS1.myPlayer.rigTarget.object3D.position.set(0,0.5,3);
-      CS1.rig.components.follow.data.yFactor = 2;
-      CS1.rig.components.follow.data.strength = 0.05;
-      CS1.myPlayer.avatar.object3D.traverse(o=>{
+      CS1.MyPlayer.RigTarget.object3D.position.set(0,0.5,3);
+      CS1.Rig.components.follow.data.yFactor = 2;
+      CS1.Rig.components.follow.data.strength = 0.05;
+      CS1.MyPlayer.Avatar.object3D.traverse(o=>{
         if(o.type=='Mesh' || o.type=='SkinnedMesh'){
          o.material.transparent = false;
          o.material.opacity = 1.0;
@@ -88214,7 +88212,7 @@ const thirdPerson = {
 
 };
 
-const omnicientPerson = {
+const OmnicientPerson = {
   
   type: 'OMNICIENT_PERSON',
   
@@ -88227,22 +88225,22 @@ const omnicientPerson = {
 
 };
 
-const view = {
+const View = {
   
   set: function(viewType){
     console.log('Setting game view.');
     switch(viewType){
       case 'THIRD_PERSON': 
-        thirdPerson.init();
-        return thirdPerson
+        ThirdPerson.init();
+        return ThirdPerson
         break;
       case 'FIRST_PERSON': 
-        firstPerson.init();
-        return firstPerson
+        FirstPerson.init();
+        return FirstPerson
         break;
       case 'OMNICIENT_PERSON': 
-        omnicientPerson.init();
-        return omnicientPerson;
+        OmnicientPerson.init();
+        return OmnicientPerson;
         break;
     }
     
@@ -88262,21 +88260,21 @@ const game = (()=>{
   init: function () {
     // Called on scene initialization.
     console.log('initializing game system ...');
-    this.templates = {};
-    this.settings = {
+    this.Templates = {};
+    this.Settings = {
       type: 'SINGLE_PLAYER',
       view: 'THIRD_PERSON'
     };
-    CS1.game = this;
-    CS1.game.view = view;
+    CS1.Game = this;
+    CS1.Game.View =View;
   },
   
   start: function(config={}){
-    Object.assign(this.settings,config);
+    Object.assign(this.Settings,config);
     
     
     document.body.addEventListener('my-avatar-ready', e=>{
-      CS1.game.view = CS1.game.view.set(this.settings.view);
+      CS1.Game.View = CS1.Game.View.set(this.Settings.view);
     });
     
     
@@ -88284,13 +88282,13 @@ const game = (()=>{
     document.body.dispatchEvent( new Event('game-start'));
     
     
-    switch(this.settings.type){
+    switch(this.Settings.type){
       case 'SINGLE_PLAYER':
-        CS1.scene.clock.start();
-        CS1.scene.play();
+        CS1.Scene.clock.start();
+        CS1.Scene.play();
         break;
       default:
-        CS1.scene.pause();
+        CS1.Scene.pause();
         break;
     }
     
@@ -88298,7 +88296,7 @@ const game = (()=>{
   },
   
   addNamedTemplate: function(name,entity){
-    this.templates[name] = entity;
+    this.Templates[name] = entity;
   }
   
 });
@@ -88310,7 +88308,7 @@ const setAvatar = function(obj){
   
   if(typeof obj == 'object'){
     
-    Object.assign(this.avatarSettings ,obj);
+    Object.assign(this.AvatarSettings ,obj);
     Object.assign(this.components.player.data.avatar ,obj);
     
   } else {
@@ -88348,10 +88346,10 @@ AFRAME.registerSystem('player', {
   setup: function(){
     
     console.log('initializing player system ...');
-    console.log('Creating CS1.myPlayer ....');
-    CS1.myPlayer =  document.createElement("a-player");
-    CS1.myPlayer.setAttribute('me',true);
-    CS1.scene.appendChild(CS1.myPlayer);
+    console.log('Creating CS1.MyPlayer ....');
+    CS1.MyPlayer =  document.createElement("a-player");
+    CS1.MyPlayer.setAttribute('me',true);
+    CS1.Scene.appendChild(CS1.MyPlayer);
     console.log('player-ready');
     document.body.dispatchEvent( new Event('player-ready'));
     
@@ -88383,18 +88381,18 @@ AFRAME.registerComponent('player', {
     if(this.data.me){
        this.el.setAttribute('id','my-player');
        if(CS1.device=='Oculus'){
-           CS1.myPlayer.setSpeed = speed =>{
-              CS1.rig.set('movement-controls',`speed:${speed}`);
+           CS1.MyPlayer.setSpeed = speed =>{
+              CS1.Rig.set('movement-controls',`speed:${speed}`);
             };
-           CS1.myPlayer.getSpeed = () =>{
-              return CS1.rig.components['movement-controls'].data.speed;
+           CS1.MyPlayer.getSpeed = () =>{
+              return CS1.Rig.components['movement-controls'].data.speed;
             };
          }else{
-           CS1.myPlayer.setSpeed = speed =>{
-              CS1.myPlayer.set('wasd-controls',`acceleration:${speed*100}`);
+           CS1.MyPlayer.setSpeed = speed =>{
+              CS1.MyPlayer.set('wasd-controls',`acceleration:${speed*100}`);
             };
-           CS1.myPlayer.getSpeed = () =>{
-              return CS1.myPlayer.components['wasd-controls'].data.acceleration/100;
+           CS1.MyPlayer.getSpeed = () =>{
+              return CS1.MyPlayer.components['wasd-controls'].data.acceleration/100;
             };
          }
      }
@@ -88403,7 +88401,7 @@ AFRAME.registerComponent('player', {
     
     //Add DSL
     this.el.setAvatar = setAvatar;
-    this.el.avatarSettings = this.data.avatar;
+    this.el.AvatarSettings = this.data.avatar;
   
   },
 
@@ -88489,21 +88487,21 @@ AFRAME.registerSystem('cs1rigcam', {
       console.log('CS1Cam system responding to cs1-ready event ....');
       const cam = document.querySelector("[camera]");
       cam.parentNode.removeChild(cam);
-      CS1.cam = document.createElement("a-entity");
-      CS1.cam.setAttribute("camera", "active:true");
-      CS1.cam.setAttribute('id','cs1-cam');
-      CS1.cam.setAttribute('position','0 1.6 0');
-      CS1.cam.setAttribute('look-controls','pointerLockEnabled:true');
+      CS1.Cam = document.createElement("a-entity");
+      CS1.Cam.setAttribute("camera", "active:true");
+      CS1.Cam.setAttribute('id','cs1-cam');
+      CS1.Cam.setAttribute('position','0 1.6 0');
+      CS1.Cam.setAttribute('look-controls','pointerLockEnabled:true');
       
       
       const rig = document.createElement('a-entity');
       rig.setAttribute('id','cs1-rig');
-      rig.appendChild(CS1.cam);
-      rig.set('movement-controls',`speed:${CS1.myPlayer.components.player.data.speed}`);
-      CS1.scene.appendChild(rig);
-      CS1.rig = rig;
-      CS1.rig.rotateInSteps = false;
-      CS1.rig.rotateStep = Math.PI/4;
+      rig.appendChild(CS1.Cam);
+      rig.set('movement-controls','speed:0.3');
+      CS1.Scene.appendChild(rig);
+      CS1.Rig = rig;
+      CS1.Rig.rotateInSteps = false;
+      CS1.Rig.rotateStep = Math.PI/4;
       
     });
 
@@ -88522,354 +88520,360 @@ AFRAME.registerSystem('cs1rigcam', {
 
 const cs1avatar = (()=>{
   
-AFRAME.registerSystem('cs1avatar', {
-  schema: {},  // System schema. Parses into `this.data`.
-
-  init: function () {
+    AFRAME.registerSystem('cs1avatar', {
+      schema: {},  // System schema. Parses into `this.data`.
     
-    console.log('initializing cs1avatar system, waiting for game-start to proceed');
-    CS1.myPlayer.setAnimation = ()=>{};
-    CS1.myPlayer.pauseAnimation = ()=>{};
-    CS1.myPlayer.playAnimation = ()=>{};
+      init: function () {
+        
+        console.log('initializing cs1avatar system, waiting for player-ready and game-start ...');
+        
+         document.body.addEventListener('game-start',e=>{
+           
+           CS1.MyPlayer.setAnimation = ()=>{};
+           CS1.MyPlayer.pauseAnimation = ()=>{};
+           CS1.MyPlayer.playAnimation = ()=>{};
+       
+         });
+        
+        
+        document.body.addEventListener('game-start',e=>{
+          CS1.MyPlayer.Avatar = document.createElement('cs1-avatar');
+          const s = CS1.MyPlayer.AvatarSettings;
+          CS1.MyPlayer.Avatar.setAttribute('type', s.type);
+          CS1.MyPlayer.Avatar.setAttribute('cursortype', s.cursortype);
+          CS1.MyPlayer.Avatar.setAttribute('head', s.head);
+          CS1.MyPlayer.Avatar.setAttribute('body', s.body);
+          CS1.MyPlayer.Avatar.setAttribute('color', s.color);
+          CS1.MyPlayer.Avatar.setAttribute('outline', s.outline);
+          CS1.MyPlayer.appendChild(CS1.MyPlayer.Avatar);
+          CS1.log('my-avatar-ready');
+          document.body.dispatchEvent( new Event('my-avatar-ready'));
+        });
+      },
     
-    document.body.addEventListener('game-start',e=>{
-      CS1.myPlayer.avatar = document.createElement('cs1-avatar');
-      const s = CS1.myPlayer.avatarSettings;
-      CS1.myPlayer.avatar.setAttribute('type', s.type);
-      CS1.myPlayer.avatar.setAttribute('cursortype', s.cursortype);
-      CS1.myPlayer.avatar.setAttribute('head', s.head);
-      CS1.myPlayer.avatar.setAttribute('body', s.body);
-      CS1.myPlayer.avatar.setAttribute('color', s.color);
-      CS1.myPlayer.avatar.setAttribute('outline', s.outline);
-      CS1.myPlayer.appendChild(CS1.myPlayer.avatar);
-      CS1.log('my-avatar-ready');
-      document.body.dispatchEvent( new Event('my-avatar-ready'));
-    });
-  },
-
-  createHead: function (data) {
-    let head;
-    switch(data.head){
-      case 'box':
-        head = document.createElement('a-box');
-        head.setAttribute('color',data.color);
-        head.setAttribute('scale','0.35 0.6 0.37');
-        head.setAttribute('position','0 1.75 0');
-        head.rxFactor = 1;
-        return head;  
-        break;
-      case 'oval':
-        head = document.createElement('a-sphere');
-        head.setAttribute('color',data.color);
-        head.setAttribute('scale','0.28 0.4 0.3');
-        head.setAttribute('position','0 1.75 0');
-        head.rxFactor = 1;
-        return head;
-        break;
-      default:
-        if(CS1.utils.isValidURL(data.head)){
-          const head = document.createElement('a-gltf-model');
-          head.setAttribute('src',data.head);
-          head.setAttribute('position','0 1.75 0');
-          head.setAttribute('rotation','0 180 0');
-          head.rxFactor = -1;
-          return head;
-        }else{
-          console.error('Avatar head data must be either box or a valid model URL.');
+      createHead: function (data) {
+        let head;
+        switch(data.head){
+          case 'box':
+            head = document.createElement('a-box');
+            head.setAttribute('color',data.color);
+            head.setAttribute('scale','0.35 0.6 0.37');
+            head.setAttribute('position','0 1.75 0');
+            head.rxFactor = 1;
+            return head;  
+            break;
+          case 'oval':
+            head = document.createElement('a-sphere');
+            head.setAttribute('color',data.color);
+            head.setAttribute('scale','0.28 0.4 0.3');
+            head.setAttribute('position','0 1.75 0');
+            head.rxFactor = 1;
+            return head;
+            break;
+          default:
+            if(CS1.Utils.isValidURL(data.head)){
+              const head = document.createElement('a-gltf-model');
+              head.setAttribute('src',data.head);
+              head.setAttribute('position','0 1.75 0');
+              head.setAttribute('rotation','0 180 0');
+              head.rxFactor = -1;
+              return head;
+            }else{
+              console.error('Avatar head data must be either box or a valid model URL.');
+            }
         }
-    }
-  },
-  
-  createBody: function (data) {
-    let body;
-    switch(data.body){
-      case 'box':
-        body = document.createElement('a-box');
-        body.setAttribute('color',data.color);
-        body.setAttribute('scale','.6 1 .6');
-        body.setAttribute('position','0 .6 0');
-        return body;
-        break;
-      case 'oval':
-        body = document.createElement('a-sphere');
-        body.setAttribute('color',data.color);
-        body.setAttribute('scale','.4 .6 .4');
-        body.setAttribute('position','0 .6 0');
-        return body;
-        break;
-      default:
-        if(CS1.utils.isValidURL(data.body)){
-          const body = document.createElement('a-gltf-model');
-          body.setAttribute('src',data.body);
-          body.setAttribute('position','0 .6 0');
-          return body;
-        }else{
-          console.error('Avatar body data must be either box or a valid model URL.');
+      },
+      
+      createBody: function (data) {
+        let body;
+        switch(data.body){
+          case 'box':
+            body = document.createElement('a-box');
+            body.setAttribute('color',data.color);
+            body.setAttribute('scale','.6 1 .6');
+            body.setAttribute('position','0 .6 0');
+            return body;
+            break;
+          case 'oval':
+            body = document.createElement('a-sphere');
+            body.setAttribute('color',data.color);
+            body.setAttribute('scale','.4 .6 .4');
+            body.setAttribute('position','0 .6 0');
+            return body;
+            break;
+          default:
+            if(CS1.Utils.isValidURL(data.body)){
+              const body = document.createElement('a-gltf-model');
+              body.setAttribute('src',data.body);
+              body.setAttribute('position','0 .6 0');
+              return body;
+            }else{
+              console.error('Avatar body data must be either box or a valid model URL.');
+            }
         }
-    }
-  },
-  
-  addOutline: function (avatar) {
-    if(avatar.el.head.rxFactor == -1)return
-    avatar.el.head.set('outline',
-        `color:${avatar.data.outline}`,
-        'https://raw.githack.com/EricEisaman/aframe-outline/master/dist/aframe-outline.min.js')
-      .then(o=>{
-          avatar.el.body.set('outline',`color:${avatar.data.outline}`);
-      });
-  },
-  
-  addCursor: function (avatar) {
-    
-    let cursor;
-    switch(avatar.data.type){
-      case 'simple':
-        cursor = document.createElement(avatar.data.cursortype);
-        cursor.setAttribute('position',`0 0 ${-.5*avatar.el.head.rxFactor}`);
-        if(avatar.el.head.rxFactor == -1)cursor.setAttribute('rotation','0 180 0');
-        avatar.el.head.appendChild(cursor);
-        break;
-      case 'rigged':
-        cursor = document.createElement(avatar.data.cursortype);
-        if(avatar.camRotXObject.type == 'Bone'){
-          avatar.el.cursor = cursor;
-        }
-        cursor.setAttribute('position',`0 1.6 .5`);
-        cursor.setAttribute('rotation','0 180 0');
-        avatar.el.modelEntity.appendChild(cursor);
+      },
+      
+      addOutline: function (avatar) {
+        if(avatar.el.head.rxFactor == -1)return
+        avatar.el.head.set('outline',
+            `color:${avatar.data.outline}`,
+            'https://raw.githack.com/EricEisaman/aframe-outline/master/dist/aframe-outline.min.js')
+          .then(o=>{
+              avatar.el.body.set('outline',`color:${avatar.data.outline}`);
+          });
+      },
+      
+      addCursor: function (avatar) {
         
-        break;
+        let cursor;
+        switch(avatar.data.type){
+          case 'simple':
+            cursor = document.createElement(avatar.data.cursortype);
+            cursor.setAttribute('position',`0 0 ${-.5*avatar.el.head.rxFactor}`);
+            if(avatar.el.head.rxFactor == -1)cursor.setAttribute('rotation','0 180 0');
+            avatar.el.head.appendChild(cursor);
+            break;
+          case 'rigged':
+            cursor = document.createElement(avatar.data.cursortype);
+            if(avatar.camRotXObject.type == 'Bone'){
+              avatar.el.cursor = cursor;
+            }
+            cursor.setAttribute('position',`0 1.6 .5`);
+            cursor.setAttribute('rotation','0 180 0');
+            avatar.el.modelEntity.appendChild(cursor);
+            
+            break;
+            
+            
+            
+        }    
+            
+            
+      },
+      
+      createModel: function (data) {
+        const model = document.createElement('a-gltf-model');
+        model.setAttribute('rotation','0 180 0');
+        model.setAttribute('src', data.url);
+        model.setAttribute('animation-mixer', 'clip:Idle');
+        CS1.MyPlayer.currentAnimation = 'Idle';
+        return model;
+      },
+      
+      addAnimationControls: function(myAvatar){
         
+        CS1.MyPlayer.setAnimation = clipName=>{
+          if(CS1.MyPlayer.Animations  && CS1.MyPlayer.Animations[clipName] ){
+           myAvatar.setAttribute('animation-mixer',`clip:${clipName}`);
+           CS1.MyPlayer.currentAnimation = clipName; 
+          }
+        }; 
         
+        CS1.MyPlayer.pauseAnimation = e =>{
+          myAvatar.components['animation-mixer'].pause();
+        };
         
-    }    
+        CS1.MyPlayer.playAnimation = e =>{
+          myAvatar.components['animation-mixer'].play();
+          if(e)CS1.MyPlayer.setAnimation(e);
+        };
         
+        if(CS1.device=='Standard'){
+          
+        document.body.addEventListener('cs1keydownonce',e=>{
+             switch(e.detail.event.code){
+               case 'KeyW':
+                 if(CS1.MyPlayer.currentAnimation != 'Run'){
+                   CS1.MyPlayer.isWalking=true;  
+                   if(CS1.MyPlayer.isJumping)return;
+                   CS1.MyPlayer.setAnimation('Run');  
+                 }
+                 break;
+                case 'KeyS':
+                 if(CS1.MyPlayer.currentAnimation != 'Run'){
+                   CS1.MyPlayer.isWalking=true;  
+                   if(CS1.MyPlayer.isJumping)return;
+                   CS1.MyPlayer.setAnimation('Run');   
+                 }
+                 break;
+                case 'KeyA':
+                 if(CS1.MyPlayer.currentAnimation != 'Left_strafe'){
+                   CS1.MyPlayer.isWalking=true;  
+                   if(CS1.MyPlayer.isJumping)return;
+                   CS1.MyPlayer.setAnimation('Left_strafe');   
+                 }
+                 break;
+                case 'KeyD':
+                 if(CS1.MyPlayer.currentAnimation != 'Right_strafe'){
+                   CS1.MyPlayer.isWalking=true;  
+                   if(CS1.MyPlayer.isJumping)return;
+                   CS1.MyPlayer.setAnimation('Right_strafe');   
+                 }
+                 break;
+             }
+          });
+        document.body.addEventListener('cs1keyup',e=>{
+             if(!CS1.Input.Keys.down().length && 
+               !CS1.MyPlayer.isJumping &&
+               !CS1.Cam.isSweeping){
+               CS1.MyPlayer.setAnimation('Idle');
+               CS1.MyPlayer.isWalking = false;
+             }else if(CS1.Input.Keys.KeyW.isDown && (CS1.MyPlayer.currentAnimation == 'Left_strafe' || CS1.MyPlayer.currentAnimation == 'Right_strafe')  ){
+               CS1.MyPlayer.setAnimation('Run');
+             }
+          });
+      
         
-  },
-  
-  createModel: function (data) {
-    const model = document.createElement('a-gltf-model');
-    model.setAttribute('rotation','0 180 0');
-    model.setAttribute('src', data.url);
-    model.setAttribute('animation-mixer', 'clip:idle');
-    CS1.myPlayer.currentAnimation = 'idle';
-    return model;
-  },
-  
-  addAnimationControls: function(myAvatar){
-    
-    CS1.myPlayer.setAnimation = clipName=>{
-      if(CS1.myPlayer.animations  && CS1.myPlayer.animations[clipName] ){
-       myAvatar.setAttribute('animation-mixer',`clip:${clipName}`);
-       CS1.myPlayer.currentAnimation = clipName; 
       }
-    }; 
-    
-    CS1.myPlayer.pauseAnimation = e =>{
-      myAvatar.components['animation-mixer'].pause();
-    };
-    
-    CS1.myPlayer.playAnimation = e =>{
-      myAvatar.components['animation-mixer'].play();
-      if(e)CS1.myPlayer.setAnimation(e);
-    };
-    
-    if(CS1.device=='Standard'){
       
-    document.body.addEventListener('cs1keydownonce',e=>{
-         switch(e.detail.event.code){
-           case 'KeyW':
-             if(CS1.myPlayer.currentAnimation != 'run'){
-               CS1.myPlayer.isWalking=true;  
-               if(CS1.myPlayer.isJumping)return;
-               CS1.myPlayer.setAnimation('run');  
-             }
-             break;
-            case 'KeyS':
-             if(CS1.myPlayer.currentAnimation != 'run'){
-               CS1.myPlayer.isWalking=true;  
-               if(CS1.myPlayer.isJumping)return;
-               CS1.myPlayer.setAnimation('run');   
-             }
-             break;
-            case 'KeyA':
-             if(CS1.myPlayer.currentAnimation != 'left_strafe'){
-               CS1.myPlayer.isWalking=true;  
-               if(CS1.myPlayer.isJumping)return;
-               CS1.myPlayer.setAnimation('left_strafe');   
-             }
-             break;
-            case 'KeyD':
-             if(CS1.myPlayer.currentAnimation != 'right_strafe'){
-               CS1.myPlayer.isWalking=true;  
-               if(CS1.myPlayer.isJumping)return;
-               CS1.myPlayer.setAnimation('right_strafe');   
-             }
-             break;
-         }
-      });
-    document.body.addEventListener('cs1keyup',e=>{
-         if(!CS1.utils.KEYS.down().length && 
-           !CS1.myPlayer.isJumping &&
-           !CS1.cam.isSweeping){
-           CS1.myPlayer.setAnimation('idle');
-           CS1.myPlayer.isWalking = false;
-         }else if(CS1.utils.KEYS.KeyW.isDown && (CS1.myPlayer.currentAnimation == 'left_strafe' || CS1.myPlayer.currentAnimation == 'right_strafe')  ){
-           CS1.myPlayer.setAnimation('run');
-         }
-      });
-  
-    
-  }
-  
-    if(CS1.device=='Oculus'){
-      
-      CS1.myPlayer.lh.addEventListener('axismove',e=>{
-        
-        if(  (e.detail.axis[3]>.5) && CS1.myPlayer.currentAnimation != 'run' ){ 
-        
-          CS1.myPlayer.isWalking=true;  
-          if(CS1.myPlayer.isJumping)return;
-          CS1.myPlayer.setAnimation('run');  
+        if(CS1.device=='Oculus'){
           
-        
-        } 
-        else if(  (e.detail.axis[3]<-.5) && CS1.myPlayer.currentAnimation != 'run' ){ 
-        
-          CS1.myPlayer.isWalking=true;  
-          if(CS1.myPlayer.isJumping)return;
-          CS1.myPlayer.setAnimation('run');  
-          
-        
-        } 
-        else if(  (Math.abs(e.detail.axis[3])<.1) && CS1.myPlayer.currentAnimation == 'run' ) { 
-        
-          CS1.myPlayer.isWalking=false;
-          if(CS1.myPlayer.isJumping)return;
-          setTimeout(e=>{
-            if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle');
-          },250);
-          
-        
-        } 
-        
-        
-        
-      });
-      
-      
-    }
-    
-    this.animationControlsApplied = true;
-  
-}
-
-});
-
-AFRAME.registerComponent('cs1avatar', {
-
-	schema: {
-		type: {default: 'simple'},
-    cursortype: {default: 'cs1-cursor'},
-    head: {default: 'box'},
-    body: {default: 'box'},
-    color: {default: 'red'},
-    outline: {default: 'yellow'},
-    url: {default: 'https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FChip210.glb?v=1594416920851'},
-    animations: {default: []}
-	},
-  
-  init: function(){
-
-  },
-  
-  update: function () {
-    
-    CS1.myPlayer.animations = {};
-    
-    switch(this.data.type){
-      case 'simple':
-        this.el.head = this.system.createHead(this.data);
-        this.el.appendChild(this.el.head);
-        this.el.body = this.system.createBody(this.data);
-        this.el.appendChild(this.el.body);
-        if(CS1.device != 'Oculus') this.system.addCursor(this);
-        this.system.addOutline(this);
-        this.camRotXObject = this.el.head.object3D;
-        this.camRotXFactor = this.el.head.rxFactor;
-        this.camRotXOffset = 0;
-        break;
-      case 'rigged':
-        this.el.modelEntity = this.system.createModel(this.data);
-        this.camRotXObject = this.el.modelEntity.object3D;
-        this.camRotXOffset = 0;
-        this.camRotXFactor = -0.8;
-        this.el.modelEntity.addEventListener('model-loaded',e=>{
-          
-          this.el.modelEntity.object3D.traverse(o=>{
-              o.frustumCulled = false;
-              if(o.animations){
-                o.animations.forEach(animation=>{
-                  CS1.myPlayer.animations[animation.name] = animation;
-                });
-              }
-              if(o.type=='Bone' &&  ( o.name=='mixamorigHead' || o.name=='Head' )  ){
-                this.camRotXObject = o;
-                this.camRotXOffset = 0; //-Math.PI/2;
-                if(CS1.myPlayer.animations.idle) CS1.myPlayer.animations.idle.duration=0;
-                CS1.log('Model Head bone detected, will animate with camera rotationX.');
-              }  
-          
+          CS1.MyPlayer.Lh.addEventListener('axismove',e=>{
+            
+            if(  (e.detail.axis[3]>.5) && CS1.MyPlayer.currentAnimation != 'Run' ){ 
+            
+              CS1.MyPlayer.isWalking=true;  
+              if(CS1.MyPlayer.isJumping)return;
+              CS1.MyPlayer.setAnimation('Run');  
+              
+            
+            } 
+            else if(  (e.detail.axis[3]<-.5) && CS1.MyPlayer.currentAnimation != 'Run' ){ 
+            
+              CS1.MyPlayer.isWalking=true;  
+              if(CS1.MyPlayer.isJumping)return;
+              CS1.MyPlayer.setAnimation('Run');  
+              
+            
+            } 
+            else if(  (Math.abs(e.detail.axis[3])<.1) && CS1.MyPlayer.currentAnimation == 'Run' ) { 
+            
+              CS1.MyPlayer.isWalking=false;
+              if(CS1.MyPlayer.isJumping)return;
+              setTimeout(e=>{
+                if(!CS1.MyPlayer.isWalking)CS1.MyPlayer.setAnimation('Idle');
+              },250);
+              
+            
+            } 
+            
+            
+            
           });
           
-          this.el.modelEntity.object3D.frustumCulled = false;
           
-          if(CS1.device != 'Oculus') this.system.addCursor(this);  
-          
-        });
-        this.el.appendChild(this.el.modelEntity);
+        }
         
-        
-        if(!this.system.animationControlsApplied) this.system.addAnimationControls(this.el.modelEntity);
-        
-        break;
-        
-      }
-  
-  },
-  
-  
-
-	tick: function () {
-		this.camRotXObject.rotation.x = this.camRotXFactor * CS1.cam.object3D.rotation.x + this.camRotXOffset;
-    if(this.camRotXObject.type == 'Bone'  && CS1.device != 'Oculus' && CS1.myPlayer.currentAnimation =='idle'){
-      this.el.cursor.object3D.rotation.x = -this.camRotXFactor * CS1.cam.object3D.rotation.x ;
+        this.animationControlsApplied = true;
+      
     }
-	}
-  
-});
-  
-  
-AFRAME.registerPrimitive('cs1-avatar', {
-  defaultComponents: {
-    cs1avatar:{}
-  },
-
-  mappings: {
-    type: 'cs1avatar.type',
-    cursortype: 'cs1avatar.cursortype',
-    head: 'cs1avatar.head',
-    body: 'cs1avatar.body',
-    color: 'cs1avatar.color',
-    outline: 'cs1avatar.outline',
-  }
-});
-  
-  
-  
-  
-  
-})();
+    
+    });
+    
+    AFRAME.registerComponent('cs1avatar', {
+    
+        schema: {
+            type: {default: 'simple'},
+        cursortype: {default: 'cs1-cursor'},
+        head: {default: 'box'},
+        body: {default: 'box'},
+        color: {default: 'red'},
+        outline: {default: 'yellow'},
+        url: {default: 'https://cdn.glitch.com/2a250520-164a-4c10-9a9d-c7009d469023%2FChip213.glb?v=1594594311686'},
+        animations: {default: []}
+        },
+      
+      init: function(){
+    
+      },
+      
+      update: function () {
+        
+        CS1.MyPlayer.Animations = {};
+        
+        switch(this.data.type){
+          case 'simple':
+            this.el.head = this.system.createHead(this.data);
+            this.el.appendChild(this.el.head);
+            this.el.body = this.system.createBody(this.data);
+            this.el.appendChild(this.el.body);
+            if(CS1.device != 'Oculus') this.system.addCursor(this);
+            this.system.addOutline(this);
+            this.camRotXObject = this.el.head.object3D;
+            this.camRotXFactor = this.el.head.rxFactor;
+            this.camRotXOffset = 0;
+            break;
+          case 'rigged':
+            this.el.modelEntity = this.system.createModel(this.data);
+            this.camRotXObject = this.el.modelEntity.object3D;
+            this.camRotXOffset = 0;
+            this.camRotXFactor = -0.8;
+            this.el.modelEntity.addEventListener('model-loaded',e=>{
+              
+              this.el.modelEntity.object3D.traverse(o=>{
+                  o.frustumCulled = false;
+                  if(o.animations){
+                    o.animations.forEach(animation=>{
+                      CS1.MyPlayer.Animations[animation.name] = animation;
+                    });
+                  }
+                  if(o.type=='Bone' &&  ( o.name=='mixamorigHead' || o.name=='Head' )  ){
+                    this.camRotXObject = o;
+                    this.camRotXOffset = 0; //-Math.PI/2;
+                    if(CS1.MyPlayer.Animations.Idle) CS1.MyPlayer.Animations.Idle.duration=0;
+                    CS1.log('Model Head bone detected, will animate with camera rotationX.');
+                  }  
+              
+              });
+              
+              this.el.modelEntity.object3D.frustumCulled = false;
+              
+              if(CS1.device != 'Oculus') this.system.addCursor(this);  
+              
+            });
+            this.el.appendChild(this.el.modelEntity);
+            
+            
+            if(!this.system.animationControlsApplied) this.system.addAnimationControls(this.el.modelEntity);
+            
+            break;
+            
+          }
+      
+      },
+      
+      
+    
+        tick: function () {
+            this.camRotXObject.rotation.x = this.camRotXFactor * CS1.Cam.object3D.rotation.x + this.camRotXOffset;
+        if(this.camRotXObject.type == 'Bone'  && CS1.device != 'Oculus' && CS1.MyPlayer.currentAnimation =='Idle'){
+          this.el.cursor.object3D.rotation.x = -this.camRotXFactor * CS1.Cam.object3D.rotation.x ;
+        }
+        }
+      
+    });
+      
+      
+    AFRAME.registerPrimitive('cs1-avatar', {
+      defaultComponents: {
+        cs1avatar:{}
+      },
+    
+      mappings: {
+        type: 'cs1avatar.type',
+        cursortype: 'cs1avatar.cursortype',
+        head: 'cs1avatar.head',
+        body: 'cs1avatar.body',
+        color: 'cs1avatar.color',
+        outline: 'cs1avatar.outline',
+      }
+    });
+      
+      
+      
+      
+      
+    })();
 
 const gltfInstances = (()=>{
 
@@ -89207,7 +89211,7 @@ AFRAME.registerComponent('jump', {
     this.jumpDirection = new THREE.Vector3();
     
     
-    if(CS1.scene && CS1.scene.clock && CS1.scene.clock.running){
+    if(CS1.Scene && CS1.Scene.clock && CS1.Scene.clock.running){
       this.setup();
     }else{
      document.body.addEventListener('game-start',e=>{ this.setup(); });   
@@ -89224,15 +89228,15 @@ AFRAME.registerComponent('jump', {
     switch(CS1.device){
       case 'Oculus':
         if(AFRAME.utils.device.checkHeadsetConnected()){
-          CS1.myPlayer.rh.addEventListener('abuttondown',e=>{
-            if(!this.el.isPlaying || CS1.flags.isSweeping)return;
+          CS1.MyPlayer.rh.addEventListener('abuttondown',e=>{
+            if(!this.el.isPlaying || CS1.Cam.isSweeping)return;
             this.jump();
           });
         }
         break;
       case 'Mobile':
         document.body.addEventListener("touchstart", e => {
-              if(!this.el.isPlaying || CS1.flags.isSweeping)return;
+              if(!this.el.isPlaying || CS1.Cam.isSweeping)return;
               let now = new Date().getTime();
               let timesince = now - this.lastJumpTap;
 
@@ -89248,7 +89252,7 @@ AFRAME.registerComponent('jump', {
         break;
         default:
         document.addEventListener('keydown', e=>{
-          if(!this.el.isPlaying || CS1.flags.isSweeping)return;
+          if(!this.el.isPlaying || CS1.Cam.isSweeping)return;
           if(e.code=='Space' && !this.el.isJumping){
             this.jump();
           }
@@ -89269,7 +89273,7 @@ AFRAME.registerComponent('jump', {
   },
   
   tick: function(t,dt){
-    if(this.el.isJumping && !CS1.flags.isSweeping){
+    if(this.el.isJumping && !CS1.Cam.isSweeping){
       this.verticalVelocity+=this.data.g*dt/1000;
       this.el.object3D.position.addScaledVector(this.jumpDirection,this.forwardVelocity*dt/1500);
       this.el.object3D.translateY(this.verticalVelocity*dt/1000);
@@ -89283,14 +89287,14 @@ AFRAME.registerComponent('jump', {
     this.cachedAcceleration = this.wasd.data.acceleration;
     this.wasd.data.acceleration = 0;
     this.el.isJumping = true;
-    CS1.cam.object3D.getWorldDirection(this.jumpDirection);
+    CS1.Cam.object3D.getWorldDirection(this.jumpDirection);
     this.jumpDirection.y = (this.jumpDirection.y>=0)?-0.02:this.jumpDirection.y;
     this.jumpDirection.x /= 2;
     this.jumpDirection.z /= 2;
     this.verticalVelocity = s?s:this.data.speed;
     this.el.dispatchEvent(this.jumpEvent);
-    if(CS1.myPlayer.animations.jump) CS1.myPlayer.animations.jump.duration=Math.max(6500,this.verticalVelocity*1000);
-    CS1.myPlayer.setAnimation('jump');
+    if(CS1.MyPlayer.Animations.Jump) CS1.MyPlayer.Animations.Jump.duration=Math.max(6500,this.verticalVelocity*1000);
+    CS1.MyPlayer.setAnimation('Jump');
   },
   
   land: function(){
@@ -89299,10 +89303,10 @@ AFRAME.registerComponent('jump', {
     this.el.object3D.position.y = 0;
     this.wasd.data.acceleration = this.cachedAcceleration;
     this.el.dispatchEvent(this.landEvent); 
-    if(CS1.myPlayer.isWalking && CS1.utils.KEYS.down().length)CS1.myPlayer.setAnimation('run');
-    else CS1.myPlayer.setAnimation('idle');
+    if(CS1.MyPlayer.isWalking && CS1.Input.Keys.down().length)CS1.MyPlayer.setAnimation('Run');
+    else CS1.MyPlayer.setAnimation('Idle');
     if(this.landingparticles){
-      this.landingparticles.object3D.position.copy(CS1.myPlayer.object3D.position);
+      this.landingparticles.object3D.position.copy(CS1.MyPlayer.object3D.position);
       this.landingparticles.show();
       setTimeout(e=>{this.landingparticles.hide();},1000);
     }
@@ -89434,9 +89438,10 @@ const log = (()=>{
 })();
 
 let CS1$1 = window.CS1 = {
-  version: version.version,
-  utils: utils,
-  flags: flags,
+  VERSION: Version.version,
+  Utils: Utils,
+  Input: Input,
+  Flags: Flags,
   add: add
 };  
 
@@ -89463,7 +89468,7 @@ document.head.appendChild(hideScripts);
 const txt = `if (location.protocol == "http:") location.protocol = "https:";if ("serviceWorker" in navigator){navigator.serviceWorker.register( "./sw.js" ).then(reg => console.log("Service Worker registered", reg)).catch(err =>console.error("Service Worker **not** registered", err));} else {console.warn("Service Worker not supported in this browser");}
 `;
   
-CS1$1.utils.loadScript(false,txt);
+CS1$1.Utils.loadScript(false,txt);
   
   
   

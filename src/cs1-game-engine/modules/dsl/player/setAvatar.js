@@ -2,7 +2,7 @@ export const setAvatar = function(obj){
   
   if(typeof obj == 'object'){
     
-    Object.assign(this.avatarSettings ,obj);
+    Object.assign(this.AvatarSettings ,obj);
     Object.assign(this.components.player.data.avatar ,obj);
     
   } else {
