@@ -87525,42 +87525,36 @@ const isValidURL = str=>{
   
 };
 
-Array.prototype.remove = function() {
-    var what, a = arguments, L = a.length, ax;
-    while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
-        }
-    }
-    return this;
-};
-
-
 onkeydown = onkeyup = function(e){
   e = e || event; // to deal with IE
   if(e.type == 'keydown'){
-    if(!keysDown.includes(e.code)){
-      keysDown.push(e.code); 
-      document.body.dispatchEvent(new CustomEvent("cs1keydown", {
-        detail: {
-          event: e 
-        }
-      }));
-      document.body.dispatchEvent(new CustomEvent("cs1keydownonce", {
-        detail: {
-          event: e 
-        }
-      }));
-    }else{
-      document.body.dispatchEvent(new CustomEvent("cs1keydown", {
-        detail: {
-          event: e 
-        }
-      }));
-    }   
+    
+    
+      if(KEYS[e.code] && KEYS[e.code].isDown){
+        document.body.dispatchEvent(new CustomEvent("cs1keydown", {
+          detail: {
+            event: e 
+          }
+        }));
+      } else {
+        if(!KEYS[e.code])KEYS[e.code]={isKey:true};
+        KEYS[e.code].isDown = true;
+        document.body.dispatchEvent(new CustomEvent("cs1keydown", {
+          detail: {
+            event: e 
+          }
+        }));
+        document.body.dispatchEvent(new CustomEvent("cs1keydownonce", {
+          detail: {
+            event: e 
+          }
+        }));
+      }
+         
+
   }else{
-    keysDown.remove(e.code); 
+    
+    KEYS[e.code].isDown = false; 
     document.body.dispatchEvent(new CustomEvent("cs1keyup", {
         detail: {
           event: e 
@@ -87570,7 +87564,35 @@ onkeydown = onkeyup = function(e){
    
 };
 
-const keysDown = [];
+const KEYS = {};
+
+KEYS.down = function(){
+  
+  let a = [];
+  Object.keys(KEYS).forEach(key => {
+    if(KEYS[key].isKey && KEYS[key].isDown) a.push(key);
+  });
+  return a
+  
+};
+
+KEYS.registerCombo = function(name,keys,callback){
+  
+  /* Not implemented
+     will execute callback then dispatch event with given name
+     will add combo to KEYS.combos
+  
+    COMBO {
+    
+    keys: [],
+    
+    callback: function
+    
+    }
+  
+  */
+  
+};
 
 const utils = {
   
@@ -87581,8 +87603,8 @@ const utils = {
   setProps: setProps,
   
   isValidURL: isValidURL,
-  
-  keysDown: keysDown,
+
+  KEYS: KEYS,
   
   
 };
@@ -88687,11 +88709,13 @@ AFRAME.registerSystem('cs1avatar', {
          }
       });
     document.body.addEventListener('cs1keyup',e=>{
-         if(!CS1.utils.keysDown.length && 
+         if(!CS1.utils.KEYS.down().length && 
            !CS1.myPlayer.isJumping &&
            !CS1.cam.isSweeping){
            CS1.myPlayer.setAnimation('idle');
            CS1.myPlayer.isWalking = false;
+         }else if(CS1.utils.KEYS.KeyW.isDown && (CS1.myPlayer.currentAnimation == 'left_strafe' || CS1.myPlayer.currentAnimation == 'right_strafe')  ){
+           CS1.myPlayer.setAnimation('run');
          }
       });
   
@@ -89275,7 +89299,7 @@ AFRAME.registerComponent('jump', {
     this.el.object3D.position.y = 0;
     this.wasd.data.acceleration = this.cachedAcceleration;
     this.el.dispatchEvent(this.landEvent); 
-    if(CS1.myPlayer.isWalking && CS1.utils.keysDown.length)CS1.myPlayer.setAnimation('run');
+    if(CS1.myPlayer.isWalking && CS1.utils.KEYS.down().length)CS1.myPlayer.setAnimation('run');
     else CS1.myPlayer.setAnimation('idle');
     if(this.landingparticles){
       this.landingparticles.object3D.position.copy(CS1.myPlayer.object3D.position);
