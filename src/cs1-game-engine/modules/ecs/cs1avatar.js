@@ -154,31 +154,31 @@ AFRAME.registerSystem('cs1avatar', {
     
     if(CS1.device=='Standard'){
       
-    document.body.addEventListener('keydown',e=>{
-         switch(e.code){
+    document.body.addEventListener('cs1keydownonce',e=>{
+         switch(e.detail.event.code){
            case 'KeyW':
-             if(!CS1.myPlayer.isWalking){
+             if(CS1.myPlayer.currentAnimation != 'run'){
                CS1.myPlayer.isWalking=true;  
                if(CS1.myPlayer.isJumping)return;
                CS1.myPlayer.setAnimation('run')  
              }
              break;
             case 'KeyS':
-             if(!CS1.myPlayer.isWalking){
+             if(CS1.myPlayer.currentAnimation != 'run'){
                CS1.myPlayer.isWalking=true;  
                if(CS1.myPlayer.isJumping)return;
                CS1.myPlayer.setAnimation('run')   
              }
              break;
             case 'KeyA':
-             if(!CS1.myPlayer.isWalking){
+             if(CS1.myPlayer.currentAnimation != 'left_strafe'){
                CS1.myPlayer.isWalking=true;  
                if(CS1.myPlayer.isJumping)return;
                CS1.myPlayer.setAnimation('left_strafe')   
              }
              break;
             case 'KeyD':
-             if(!CS1.myPlayer.isWalking){
+             if(CS1.myPlayer.currentAnimation != 'right_strafe'){
                CS1.myPlayer.isWalking=true;  
                if(CS1.myPlayer.isJumping)return;
                CS1.myPlayer.setAnimation('right_strafe')   
@@ -186,36 +186,12 @@ AFRAME.registerSystem('cs1avatar', {
              break;
          }
       });
-    document.body.addEventListener('keyup',e=>{
-         switch(e.code){
-           case 'KeyW':
-             CS1.myPlayer.isWalking=false;
-             if(CS1.myPlayer.isJumping)return;
-             setTimeout(e=>{
-               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
-             },250)
-             break;
-           case 'KeyA':
-             CS1.myPlayer.isWalking=false;
-             if(CS1.myPlayer.isJumping)return;
-             setTimeout(e=>{
-               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
-             },250) 
-             break;
-           case 'KeyS':
-             CS1.myPlayer.isWalking=false;
-             if(CS1.myPlayer.isJumping)return;
-             setTimeout(e=>{
-               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
-             },250)
-             break;
-           case 'KeyD':
-             CS1.myPlayer.isWalking=false;
-             if(CS1.myPlayer.isJumping)return;
-             setTimeout(e=>{
-               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle')
-             },250)
-             break;
+    document.body.addEventListener('cs1keyup',e=>{
+         if(!CS1.utils.keysDown.length && 
+           !CS1.myPlayer.isJumping &&
+           !CS1.cam.isSweeping){
+           CS1.myPlayer.setAnimation('idle')
+           CS1.myPlayer.isWalking = false;
          }
       });
   

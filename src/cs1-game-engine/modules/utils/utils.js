@@ -2,6 +2,7 @@ import {loadScript} from './utilities/loadScript';
 import {libMap} from './utilities/libMap';
 import {setProps} from './utilities/setProps';
 import {isValidURL} from './utilities/isValidURL';
+import {keysDown} from './utilities/keysDown';
 
 export const utils = {
   
@@ -11,7 +12,9 @@ export const utils = {
   
   setProps: setProps,
   
-  isValidURL: isValidURL
+  isValidURL: isValidURL,
+  
+  keysDown: keysDown,
   
   
 }
