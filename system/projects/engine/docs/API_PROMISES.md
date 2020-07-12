@@ -52,10 +52,12 @@ These promises define the minimum developer contract which will be fullfilled by
     - then try to fetch the component from **url** ✅
   
 - Empowering DSL API via CS1 global object. 
-  - CS1.myPlayer✅
-  - CS1.game ✅
+  - CS1.MyPlayer✅
+  - CS1.Game ✅
   - CS1.add ✅
-  - CS1.scene ✅
+  - CS1.Scene ✅
+  - CS1.Utils ✅
+  - CS1.Input ✅
   
 - Anytime access to AFRAME components and THREE.js object3Ds.
   - decouple the developer from the underlying event cascade and setup of the entity-component-system (ECS) and CS1 global. ✅

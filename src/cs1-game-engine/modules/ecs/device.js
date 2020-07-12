@@ -5,9 +5,9 @@ AFRAME.registerSystem('device', {
 
   init: function () {
     
-    console.log('initializing device system, checking for CS1.scene')
+    console.log('initializing device system, checking for CS1.Scene')
     
-    if(!CS1.scene){ 
+    if(!CS1.Scene){ 
       document.body.addEventListener('scene-ready', e=>{ this.setup() })  
     }else{
       this.setup();
@@ -21,13 +21,13 @@ AFRAME.registerSystem('device', {
     
     console.log('Checking device type  ...')
     if(AFRAME.utils.device.isOculusBrowser()){
-      CS1.scene.setAttribute('oculus','');
+      CS1.Scene.setAttribute('oculus','');
     } 
     else if(AFRAME.utils.device.isMobile()){
-      CS1.scene.setAttribute('mobile','');
+      CS1.Scene.setAttribute('mobile','');
     } 
     else {
-      CS1.scene.setAttribute('standard','');
+      CS1.Scene.setAttribute('standard','');
     }
     
     

@@ -34,12 +34,12 @@ class cs1Script extends HTMLElement {
       {
         scene.addEventListener('loaded', e=>{
             console.log('scene loaded event, cs1-script handler ...')
-            CS1.scene.clock.autoStart = false;
+            CS1.Scene.clock.autoStart = false;
             console.log(`cs1-script wait for : ${self.waitFor.length}`);
-            if(!CS1.flags.isReady){
+            if(!CS1.Flags.isReady){
               console.log('Dispatching cs1-ready event ...')
               document.body.dispatchEvent( new Event('cs1-ready'))
-              CS1.flags.isReady = true;
+              CS1.Flags.isReady = true;
             }
             if(code){
               if(self.waitFor.length){
@@ -67,14 +67,14 @@ class cs1Script extends HTMLElement {
         })
       }
       
-      // Add DSL when creating CS1.scene
-      if(scene && !CS1.scene)
+      // Add DSL when creating CS1.Scene
+      if(scene && !CS1.Scene)
       {
         console.log('scene detected ...')
         if(!scene.isPlaying){
-          CS1.scene = scene;
-          CS1.scene.setRenderOrder = setRenderOrder;
-          CS1.scene.setRenderOrder();
+          CS1.Scene = scene;
+          CS1.Scene.setRenderOrder = setRenderOrder;
+          CS1.Scene.setRenderOrder();
           console.log('firing scene-ready and setting load handler')
           document.body.dispatchEvent( new Event('scene-ready'))
           setLoadHandler();
@@ -86,14 +86,14 @@ class cs1Script extends HTMLElement {
         document.body.dispatchEvent( new Event('scene-ready'))
         setLoadHandler();
       }
-      else if(!scene && !CS1.scene)
+      else if(!scene && !CS1.Scene)
       {
         console.log('creating scene ...')
         scene = document.createElement('a-scene');
         document.body.appendChild(scene);
-        CS1.scene = scene;
-        CS1.scene.setRenderOrder = setRenderOrder;
-        CS1.scene.setRenderOrder();
+        CS1.Scene = scene;
+        CS1.Scene.setRenderOrder = setRenderOrder;
+        CS1.Scene.setRenderOrder();
         if(!scene.isPlaying){
           console.log('firing scene-ready and setting load handler')
           document.body.dispatchEvent( new Event('scene-ready'))

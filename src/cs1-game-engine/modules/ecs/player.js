@@ -27,10 +27,10 @@ AFRAME.registerSystem('player', {
   setup: function(){
     
     console.log('initializing player system ...');
-    console.log('Creating CS1.myPlayer ....')
-    CS1.myPlayer =  document.createElement("a-player");
-    CS1.myPlayer.setAttribute('me',true);
-    CS1.scene.appendChild(CS1.myPlayer);
+    console.log('Creating CS1.MyPlayer ....')
+    CS1.MyPlayer =  document.createElement("a-player");
+    CS1.MyPlayer.setAttribute('me',true);
+    CS1.Scene.appendChild(CS1.MyPlayer);
     console.log('player-ready')
     document.body.dispatchEvent( new Event('player-ready'))
     
@@ -62,18 +62,18 @@ AFRAME.registerComponent('player', {
     if(this.data.me){
        this.el.setAttribute('id','my-player');
        if(CS1.device=='Oculus'){
-           CS1.myPlayer.setSpeed = speed =>{
-              CS1.rig.set('movement-controls',`speed:${speed}`)
+           CS1.MyPlayer.setSpeed = speed =>{
+              CS1.Rig.set('movement-controls',`speed:${speed}`)
             }
-           CS1.myPlayer.getSpeed = () =>{
-              return CS1.rig.components['movement-controls'].data.speed;
+           CS1.MyPlayer.getSpeed = () =>{
+              return CS1.Rig.components['movement-controls'].data.speed;
             }
          }else{
-           CS1.myPlayer.setSpeed = speed =>{
-              CS1.myPlayer.set('wasd-controls',`acceleration:${speed*100}`)
+           CS1.MyPlayer.setSpeed = speed =>{
+              CS1.MyPlayer.set('wasd-controls',`acceleration:${speed*100}`)
             }
-           CS1.myPlayer.getSpeed = () =>{
-              return CS1.myPlayer.components['wasd-controls'].data.acceleration/100;
+           CS1.MyPlayer.getSpeed = () =>{
+              return CS1.MyPlayer.components['wasd-controls'].data.acceleration/100;
             }
          }
      }else{
@@ -84,7 +84,7 @@ AFRAME.registerComponent('player', {
     
     //Add DSL
     this.el.setAvatar = setAvatar;
-    this.el.avatarSettings = this.data.avatar;
+    this.el.AvatarSettings = this.data.avatar;
   
   },
 

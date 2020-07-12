@@ -2,7 +2,7 @@ export const setRenderOrder = function(layers='background middleground foregroun
   
   if(typeof layers == 'string'){
     
-    CS1.scene.setAttribute('render-order',layers);
+    CS1.Scene.setAttribute('render-order',layers);
     console.log(`render-order layers set to: ${layers}`)
     
   } else {

@@ -77684,9 +77684,9 @@ var proto = Object.create(ANode.prototype, {
                name=='scale'){
                 self.setAttribute(name,config);
                 resolve(self);
-            }else if(Object.keys(CS1.utils.libMap).includes(name)){
+            }else if(Object.keys(CS1.Utils.LibMap).includes(name)){
              
-              CS1.utils.loadScript(CS1.utils.libMap[name])
+              CS1.Utils.loadScript(CS1.Utils.LibMap[name])
               .then(e=>{
                 try{
                     self.setAttribute(name,config);
@@ -77699,7 +77699,7 @@ var proto = Object.create(ANode.prototype, {
                 }) 
             }else{
                 if(!url)return;
-                CS1.utils.loadScript(url)
+                CS1.Utils.loadScript(url)
                 .then(e=>{
                     try{
                       self.setAttribute(name,config);

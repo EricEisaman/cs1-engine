@@ -27,23 +27,19 @@ if (name == "server") {
     });
   }
 
-  function version() {
-    // echo \"export const version = {version:'$npm_package_version'}\"  > src/cs1-game-engine/modules/version.js
-    exec(
-      `echo \"module.exports = {version:'${settings.version}'}\"  > src/${settings.name}/modules/version/version.js`,
-      err => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        console.log("Version script executed successfully.");
-        console.log(
-          `Check for your version in src/${settings.name}/modules/version/version.js`
-        );
-        serverPub();
-      }
-    );
-  }
+  function version(){
+  // echo \"export const version = {version:'$npm_package_version'}\"  > src/cs1-game-engine/modules/version.js
+  exec(`echo \"export const Version = {version:'${settings.version}'}\"  > src/${settings.name}/modules/version/Version.js` , err=>{
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log('Version script executed successfully.');
+    console.log(`Check for your version in src/${settings.name}/modules/version/Version.js`);
+   
+  })
+  
+}
   
   version();
   
