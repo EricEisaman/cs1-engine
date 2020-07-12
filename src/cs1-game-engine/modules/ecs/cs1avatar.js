@@ -187,11 +187,13 @@ AFRAME.registerSystem('cs1avatar', {
          }
       });
     document.body.addEventListener('cs1keyup',e=>{
-         if(!CS1.utils.keysDown.length && 
+         if(!CS1.utils.KEYS.down().length && 
            !CS1.myPlayer.isJumping &&
            !CS1.cam.isSweeping){
            CS1.myPlayer.setAnimation('idle')
            CS1.myPlayer.isWalking = false;
+         }else if(CS1.utils.KEYS.KeyW.isDown && (CS1.myPlayer.currentAnimation == 'left_strafe' || CS1.myPlayer.currentAnimation == 'right_strafe')  ){
+           CS1.myPlayer.setAnimation('run')
          }
       });
   
