@@ -87525,6 +87525,53 @@ const isValidURL = str=>{
   
 };
 
+Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+
+
+onkeydown = onkeyup = function(e){
+  e = e || event; // to deal with IE
+  if(e.type == 'keydown'){
+    if(!keysDown.includes(e.code)){
+      keysDown.push(e.code); 
+      document.body.dispatchEvent(new CustomEvent("cs1keydown", {
+        detail: {
+          event: e 
+        }
+      }));
+      document.body.dispatchEvent(new CustomEvent("cs1keydownonce", {
+        detail: {
+          event: e 
+        }
+      }));
+    }else{
+      document.body.dispatchEvent(new CustomEvent("cs1keydown", {
+        detail: {
+          event: e 
+        }
+      }));
+    }   
+  }else{
+    keysDown.remove(e.code); 
+    document.body.dispatchEvent(new CustomEvent("cs1keyup", {
+        detail: {
+          event: e 
+        }
+      }));
+  }
+   
+};
+
+const keysDown = [];
+
 const utils = {
   
   loadScript: loadScript,
@@ -87533,7 +87580,9 @@ const utils = {
   
   setProps: setProps,
   
-  isValidURL: isValidURL
+  isValidURL: isValidURL,
+  
+  keysDown: keysDown,
   
   
 };
@@ -88605,31 +88654,31 @@ AFRAME.registerSystem('cs1avatar', {
     
     if(CS1.device=='Standard'){
       
-    document.body.addEventListener('keydown',e=>{
-         switch(e.code){
+    document.body.addEventListener('cs1keydownonce',e=>{
+         switch(e.detail.event.code){
            case 'KeyW':
-             if(!CS1.myPlayer.isWalking){
+             if(CS1.myPlayer.currentAnimation != 'run'){
                CS1.myPlayer.isWalking=true;  
                if(CS1.myPlayer.isJumping)return;
                CS1.myPlayer.setAnimation('run');  
              }
              break;
             case 'KeyS':
-             if(!CS1.myPlayer.isWalking){
+             if(CS1.myPlayer.currentAnimation != 'run'){
                CS1.myPlayer.isWalking=true;  
                if(CS1.myPlayer.isJumping)return;
                CS1.myPlayer.setAnimation('run');   
              }
              break;
             case 'KeyA':
-             if(!CS1.myPlayer.isWalking){
+             if(CS1.myPlayer.currentAnimation != 'left_strafe'){
                CS1.myPlayer.isWalking=true;  
                if(CS1.myPlayer.isJumping)return;
                CS1.myPlayer.setAnimation('left_strafe');   
              }
              break;
             case 'KeyD':
-             if(!CS1.myPlayer.isWalking){
+             if(CS1.myPlayer.currentAnimation != 'right_strafe'){
                CS1.myPlayer.isWalking=true;  
                if(CS1.myPlayer.isJumping)return;
                CS1.myPlayer.setAnimation('right_strafe');   
@@ -88637,36 +88686,12 @@ AFRAME.registerSystem('cs1avatar', {
              break;
          }
       });
-    document.body.addEventListener('keyup',e=>{
-         switch(e.code){
-           case 'KeyW':
-             CS1.myPlayer.isWalking=false;
-             if(CS1.myPlayer.isJumping)return;
-             setTimeout(e=>{
-               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle');
-             },250);
-             break;
-           case 'KeyA':
-             CS1.myPlayer.isWalking=false;
-             if(CS1.myPlayer.isJumping)return;
-             setTimeout(e=>{
-               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle');
-             },250); 
-             break;
-           case 'KeyS':
-             CS1.myPlayer.isWalking=false;
-             if(CS1.myPlayer.isJumping)return;
-             setTimeout(e=>{
-               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle');
-             },250);
-             break;
-           case 'KeyD':
-             CS1.myPlayer.isWalking=false;
-             if(CS1.myPlayer.isJumping)return;
-             setTimeout(e=>{
-               if(!CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('idle');
-             },250);
-             break;
+    document.body.addEventListener('cs1keyup',e=>{
+         if(!CS1.utils.keysDown.length && 
+           !CS1.myPlayer.isJumping &&
+           !CS1.cam.isSweeping){
+           CS1.myPlayer.setAnimation('idle');
+           CS1.myPlayer.isWalking = false;
          }
       });
   
@@ -89250,7 +89275,7 @@ AFRAME.registerComponent('jump', {
     this.el.object3D.position.y = 0;
     this.wasd.data.acceleration = this.cachedAcceleration;
     this.el.dispatchEvent(this.landEvent); 
-    if(CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('run');
+    if(CS1.myPlayer.isWalking && CS1.utils.keysDown.length)CS1.myPlayer.setAnimation('run');
     else CS1.myPlayer.setAnimation('idle');
     if(this.landingparticles){
       this.landingparticles.object3D.position.copy(CS1.myPlayer.object3D.position);

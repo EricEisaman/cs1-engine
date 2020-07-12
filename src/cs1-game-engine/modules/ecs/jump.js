@@ -114,7 +114,7 @@ AFRAME.registerComponent('jump', {
     this.el.object3D.position.y = 0;
     this.wasd.data.acceleration = this.cachedAcceleration;
     this.el.dispatchEvent(this.landEvent); 
-    if(CS1.myPlayer.isWalking)CS1.myPlayer.setAnimation('run')
+    if(CS1.myPlayer.isWalking && CS1.utils.keysDown.length)CS1.myPlayer.setAnimation('run')
     else CS1.myPlayer.setAnimation('idle')
     if(this.landingparticles){
       this.landingparticles.object3D.position.copy(CS1.myPlayer.object3D.position)
