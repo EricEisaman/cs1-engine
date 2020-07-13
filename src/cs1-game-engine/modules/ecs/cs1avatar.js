@@ -198,7 +198,10 @@ export const cs1avatar = (()=>{
                !CS1.Cam.isSweeping){
                CS1.MyPlayer.setAnimation('Idle')
                CS1.MyPlayer.isWalking = false;
-             }else if(CS1.Input.Keys.KeyW.isDown && (CS1.MyPlayer.currentAnimation == 'Left_strafe' || CS1.MyPlayer.currentAnimation == 'Right_strafe')  ){
+             }else if(CS1.Input.Keys.KeyW && 
+                      CS1.Input.Keys.KeyW.isDown && 
+                      (CS1.MyPlayer.currentAnimation == 'Left_strafe' || 
+                       CS1.MyPlayer.currentAnimation == 'Right_strafe')  ){
                CS1.MyPlayer.setAnimation('Run')
              }
           });
