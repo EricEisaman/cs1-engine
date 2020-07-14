@@ -87489,7 +87489,7 @@ const LibMap = {
   
 "render-order": "https://unpkg.com/cs1-render-order@0.0.11/latest/cs1-render-order.min.js",
   
-"cs1-particles": "https://unpkg.com/cs1-particles@0.0.18/latest/cs1-particles.js"  
+"cs1-particles": "https://unpkg.com/cs1-particles@0.0.22/latest/cs1-particles.js"  
 
 };
 
@@ -89202,7 +89202,8 @@ AFRAME.registerComponent('jump', {
     jumpingsound: {default:''},
     landingsound: {default:''},
     jumpingparticles:{default:''},
-    landingparticles:{default:''}
+    landingparticles:{default:''},
+    slipstream:{default:''}
   },
   
   init: function(){
@@ -89272,6 +89273,19 @@ AFRAME.registerComponent('jump', {
       
     }
     
+    if(this.data.slipstream){
+      switch(this.data.slipstream){
+        case 'default':
+        this.slipstream = await CS1.add('cs1-particles',{preset:'slipstream' , position:'0 -100 0', rotation:'90 0 0'});
+        setTimeout(e=>{ 
+          this.slipstream.hide(); 
+          this.slipstream.object3D.position.set(0,0.5,0);
+        },1500);
+        CS1.MyPlayer.Avatar.appendChild(this.slipstream);
+      }
+      
+    }
+    
     
   },
   
@@ -89298,6 +89312,7 @@ AFRAME.registerComponent('jump', {
     this.el.dispatchEvent(this.jumpEvent);
     if(CS1.MyPlayer.Animations.Jump) CS1.MyPlayer.Animations.Jump.duration=Math.max(6500,this.verticalVelocity*1000);
     CS1.MyPlayer.setAnimation('Jump');
+    if(this.slipstream)this.slipstream.show();
   },
   
   land: function(){
@@ -89313,6 +89328,7 @@ AFRAME.registerComponent('jump', {
       this.landingparticles.show();
       setTimeout(e=>{this.landingparticles.hide();},1000);
     }
+    if(this.slipstream)this.slipstream.hide();
   },
   
   
