@@ -28,6 +28,7 @@ const snow = await CS1.add('cs1-particles',{preset:'snow', position:'-17 10 -1.5
 const rain = await CS1.add('cs1-particles',{preset:'rain', position:'17 10 -1.5'});
 
 
+
 const log = document.createElement('a-log');
 log.setAttribute('position','-5  3 -12');
 CS1.Scene.appendChild(log);
@@ -37,7 +38,7 @@ CS1.Scene.appendChild(log);
 CS1.MyPlayer.setAvatar({type:"rigged"});  
   
   
-CS1.MyPlayer.setAttribute('jump','speed:25 ; landingparticles:dust');
+CS1.MyPlayer.setAttribute('jump','speed:25 ; landingparticles:dust ; slipstream:default');
   
 CS1.Game.start();
 

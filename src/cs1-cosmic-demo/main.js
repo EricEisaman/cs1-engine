@@ -21,7 +21,7 @@ CS1.Scene.appendChild(log)
 //CS1.MyPlayer.setAvatar({color:"orange",head:"oval",body:"box"})
 CS1.MyPlayer.setAvatar({type:"rigged"})
 
-CS1.MyPlayer.setAttribute('jump','speed:25 ; landingparticles:dust')
+CS1.MyPlayer.setAttribute('jump','speed:25 ; landingparticles:dust ; slipstream:default')
   
 CS1.Game.start();
 

@@ -10,6 +10,6 @@ export const LibMap = {
   
 "render-order": "https://unpkg.com/cs1-render-order@0.0.11/latest/cs1-render-order.min.js",
   
-"cs1-particles": "https://unpkg.com/cs1-particles@0.0.18/latest/cs1-particles.js"  
+"cs1-particles": "https://unpkg.com/cs1-particles@0.0.22/latest/cs1-particles.js"  
 
 }
