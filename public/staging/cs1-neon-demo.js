@@ -32,7 +32,7 @@ const rain = await CS1.add('cs1-particles',{preset:'rain', position:'17 10 -1.5'
 const log = document.createElement('a-log');
 log.setAttribute('position','-5  3 -12');
 CS1.Scene.appendChild(log);
-
+CS1.Scene.set('stats');
 
 //CS1.MyPlayer.setAvatar({color:"green"})
 CS1.MyPlayer.setAvatar({type:"rigged"});  

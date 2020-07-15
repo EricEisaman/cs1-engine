@@ -38,7 +38,7 @@ AFRAME.registerComponent('jump', {
     switch(CS1.device){
       case 'Oculus':
         if(AFRAME.utils.device.checkHeadsetConnected()){
-          CS1.MyPlayer.rh.addEventListener('abuttondown',e=>{
+          CS1.MyPlayer.Rh.addEventListener('abuttondown',e=>{
             if(!this.el.isPlaying || CS1.Cam.isSweeping)return;
             this.jump();
           })

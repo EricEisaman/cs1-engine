@@ -25,65 +25,29 @@ app.get("/admin", function (request, response) {
 }); 
 app.set('port', (process.env.PORT || 5000));
 
-const default_config = {
-  test: "config testing"
-}
 
-const storeData = (data, path) => {
+const storeJSONData = (data, path) => {
       try {
-        fs.writeFileSync(path, JSON.stringify(data))
+        fs.writeFileSync(path, JSON.stringify(data) )
       } catch (err) {
         console.error(err)
       }
     }
 
-const swstr = `
-const cacheName = 'cs1forest.0.1';
+const storeData = (data, path) => {
+      try {
+        fs.writeFileSync(path, data )
+      } catch (err) {
+        console.error(err)
+      }
+    }
 
-self.addEventListener('install', e => {
- console.log('Service Worker Installed');
-});
 
-self.addEventListener('activate', e => {
- e.waitUntil(
-   caches.keys().then(cacheNames=> {
-      return Promise.all(
-        cacheNames.map(cache=>{
-          if(cache != cacheName){
-            return caches.delete(cache);
-          }
-        })
-      )
-    })
- )
-});
 
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    fetch(e.request)
-      .then(res=>{
-        const resClone = res.clone();
-        caches
-      .open(cacheName)
-      .then(cache=>{        
-       if(e.request.url.includes('socket.io/socket.io'))
-          cache.put(e.request,resClone)
-       else if(!e.request.url.includes('socket.io') && e.request.method!='HEAD'){
-         try{
-           cache.put(e.request,resClone);
-           
-         }catch(err){
-          console.log(e.request);
-         }
-       }
-          
-       });
-       return res;
-     }).catch(err=>caches.match(e.request).then(res=>res))
-  );
-});
+const default_config = {
+  test: "config testing"
+}
 
-`
 
 const CS1Server = {
   
@@ -97,10 +61,6 @@ const CS1Server = {
   start : (config=default_config)=>{
     
     console.log(`cs1-game-server ${version.version}`);
-    
-    console.log(`writing service worker to public/sw.js`);
-    
-    storeData(swstr,'./public/sw.js');
     
     http.listen(app.get('port'), ()=>{
       console.log('GAME SERVER CONFIG:');

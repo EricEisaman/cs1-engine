@@ -87743,7 +87743,7 @@ AFRAME.registerComponent('oculus', {
     CS1.MyPlayer.Lh = document.createElement('a-entity');
     CS1.MyPlayer.Lh.setAttribute('laser-controls','hand:left');
     CS1.MyPlayer.Lh.setAttribute('raycaster','objects: .jukebox , .clickable; far: 5');
-      
+    //CS1.MyPlayer.setSpeed(2)  
       
     //ATTEMPT THUMBSTICK CONTROLLER  
     CS1.MyPlayer.Lh.addEventListener('axismove',e=>{
@@ -89232,7 +89232,7 @@ AFRAME.registerComponent('jump', {
     switch(CS1.device){
       case 'Oculus':
         if(AFRAME.utils.device.checkHeadsetConnected()){
-          CS1.MyPlayer.rh.addEventListener('abuttondown',e=>{
+          CS1.MyPlayer.Rh.addEventListener('abuttondown',e=>{
             if(!this.el.isPlaying || CS1.Cam.isSweeping)return;
             this.jump();
           });
@@ -89457,7 +89457,7 @@ const log = (()=>{
 })();
 
 let CS1$1 = window.CS1 = {
-  VERSION: Version.version,
+  version: Version.version,
   Utils: Utils,
   Input: Input,
   Flags: Flags,

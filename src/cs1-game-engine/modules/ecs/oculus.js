@@ -26,7 +26,7 @@ AFRAME.registerComponent('oculus', {
     CS1.MyPlayer.Lh = document.createElement('a-entity');
     CS1.MyPlayer.Lh.setAttribute('laser-controls','hand:left');
     CS1.MyPlayer.Lh.setAttribute('raycaster','objects: .jukebox , .clickable; far: 5')
-      
+    //CS1.MyPlayer.setSpeed(2)  
       
     //ATTEMPT THUMBSTICK CONTROLLER  
     CS1.MyPlayer.Lh.addEventListener('axismove',e=>{
