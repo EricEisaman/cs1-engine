@@ -22,11 +22,11 @@ These promises define the minimum developer contract which will be fullfilled by
     - Oculus Browser ✅
   
 - Easy Camera Control
-  - first person camera
-  - third person camera
-    - set avatar opacity
-    - set camera offset
-  - transition between camera states
+  - first person camera ✅
+  - third person camera ✅
+    - set avatar opacity 
+    - set camera offset 
+  - transition between camera states ✅
 
 - Multimodal Development
   - combine HTML and JavaScript ✅
@@ -35,7 +35,8 @@ These promises define the minimum developer contract which will be fullfilled by
   - only JavaScript loaded via src ✅
   - mix inline and src loaded JavaScript ✅
   
-- Installs as PWA 
+- PWA Support
+  - supply user with default service worker and manifest files ✅
   - provides potential for offline functionality ✅
   - manages asset caching for increased performance and minimal network load ✅
   

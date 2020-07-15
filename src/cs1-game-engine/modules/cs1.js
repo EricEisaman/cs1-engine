@@ -11,7 +11,7 @@ import {add} from './dsl/add';
 
 
 let CS1 = window.CS1 = {
-  VERSION: Version.version,
+  version: Version.version,
   Utils: Utils,
   Input: Input,
   Flags: Flags,

@@ -1,7 +1,7 @@
 {
   "name": "cs1-game-server",
   "author": "SirFizX",
-  "version": "0.0.17",
+  "version": "0.0.36",
   "description": "The CS1 Game Server provides multiplayer functionality and data persistence on top of the CS1 Game Engine.",
   "homepage": "https://cs1.netlify.app/",
   "repository": {

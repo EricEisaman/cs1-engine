@@ -9,6 +9,7 @@ await CS1.Scene.set('environment',{preset:'osiris', ground:'flat'});
 CS1.add('a-light',{position:'12 12 -12', type: 'ambient' , intensity: 0.3});
 
 await CS1.Scene.set('render-order','background foreground');
+CS1.Scene.set('stats');
    
 const juke = await CS1.add('a-jukebox',{position:'0 2 -1.5', scale:'2 2 2'});    
 juke.set('render-order','background');
