@@ -54,7 +54,7 @@ export const add = function(param=false,config={}){
                     o.animations.forEach(animation=>{
                       el.Animations[animation.name] = animation
                     })
-                    el.setAttribute('animation-mixer',{clip:Object.keys(el.Animations)[0]})
+    
                     el.setAnimation = clipName=>{
                       if(el.Animations  && el.Animations[clipName] ){
                          el.setAttribute('animation-mixer',`clip:${clipName}`)
@@ -70,6 +70,8 @@ export const add = function(param=false,config={}){
                         el.components['animation-mixer'].play();
                         if(e)el.setAnimation(e);
                       }
+                    
+                    el.setAnimation(Object.keys(el.Animations)[0])
                   }
               })         
             });
