@@ -1,1 +1,22 @@
-"\n\n{\n  \"name\": \"CS1\",\n  \"short_name\": \"CS1\",\n  \"description\": \"Introduction to Computer Science through Game Design and Development.\",\n  \"icons\": [\n    {\n      \"sizes\": \"192x192\",\n      \"type\": \"image/png\",\n      \"src\": \"https://cdn.glitch.com/a66c3f5c-9aba-45c0-952e-ccc59d8b0df3%2FCS1_logo_192.png?v=1564891473987\"\n    },\n    {\n      \"sizes\": \"512x512\",\n      \"type\": \"image/png\",\n      \"src\": \"https://cdn.glitch.com/a66c3f5c-9aba-45c0-952e-ccc59d8b0df3%2FCS1_logo_512.png?v=1564891633017\"\n    }\n  ],\n  \"display\": \"fullscreen\",\n  \"orientation\":\"landscape\",\n  \"background_color\": \"white\",\n  \"theme_color\": \"maroon\",\n  \"start_url\": \"/index.html\"\n}\n\n"
+{
+  "name": "CS1 Games",
+  "short_name": "CS1 Games",
+  "description": "A collection of games created with the CS1 Game Engine.",
+  "icons": [
+    {
+      "sizes": "192x192",
+      "type": "image/png",
+      "src": "https://cdn.glitch.com/a66c3f5c-9aba-45c0-952e-ccc59d8b0df3%2FCS1_logo_192.png?v=1564891473987"
+    },
+    {
+      "sizes": "512x512",
+      "type": "image/png",
+      "src": "https://cdn.glitch.com/a66c3f5c-9aba-45c0-952e-ccc59d8b0df3%2FCS1_logo_512.png?v=1564891633017"
+    }
+  ],
+  "display": "fullscreen",
+  "orientation":"landscape",
+  "background_color": "white",
+  "theme_color": "maroon",
+  "start_url": "/index.html"
+}
