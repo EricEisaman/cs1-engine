@@ -1,7 +1,7 @@
 {
-  "name": "CS1 Forest Demo",
-  "short_name": "Forest",
-  "description": "A demo of the fantastic CS1 Game Engine.",
+  "name": "CS1 Games",
+  "short_name": "CS1 Games",
+  "description": "A collection of games created with the CS1 Game Engine.",
   "icons": [
     {
       "sizes": "192x192",
@@ -18,5 +18,5 @@
   "orientation":"landscape",
   "background_color": "white",
   "theme_color": "maroon",
-  "start_url": "/index.html"
+  "start_url": "/staging/index.html"
 }
