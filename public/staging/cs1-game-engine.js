@@ -87675,28 +87675,28 @@ const add = function(param=false,config={}){
       el.addEventListener('model-loaded',e=>{     
               el.object3D.traverse(o=>{
                   if(o.animations){
-                    el.Animations = {};
+                    el.Animation = {Clips:{}};
                     o.animations.forEach(animation=>{
-                      el.Animations[animation.name] = animation;
+                      el.Animation.Clips[animation.name] = animation;
                     });
     
-                    el.setAnimation = clipName=>{
-                      if(el.Animations  && el.Animations[clipName] ){
+                    el.Animation.set = clipName=>{
+                      if(el.Animation  && el.Animation.Clips[clipName] ){
                          el.setAttribute('animation-mixer',`clip:${clipName}`);
-                         el.currentAnimation = clipName; 
+                         el.Animation.current = clipName; 
                         }
                       }; 
 
-                    el.pauseAnimation = e =>{
+                    el.Animation.pause = e =>{
                         el.components['animation-mixer'].pause();
                       };
 
-                    el.playAnimation = e =>{
+                    el.Animation.play = e =>{
                         el.components['animation-mixer'].play();
-                        if(e)el.setAnimation(e);
+                        if(e)el.Animation.set(e);
                       };
                     
-                    el.setAnimation(Object.keys(el.Animations)[0]);
+                    el.Animation.set(Object.keys(el.Animation.Clips)[0]);
                   }
               });         
             });
