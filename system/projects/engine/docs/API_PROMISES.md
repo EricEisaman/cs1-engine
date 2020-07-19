@@ -41,19 +41,19 @@ These promises define the minimum developer contract which will be fullfilled by
   - provides potential for offline functionality ✅
   - manages asset caching for increased performance and minimal network load ✅
   
-- Extensible via THREE.js and AFRAME APIs
+- Extensible via **THREE.js** and **AFRAME APIs**
   - compose custom entities, components, and systems with AFRAME ✅
   - compose and interop with custom lower level object3D, materials, and geometries with THREE.js ✅
   
 - Customized AFRAME
   - All entities have an asynchronous **.set** method which returns a promise and resolves with the modified entity. ✅
-    - the **.set** method will fetch any applied component, listed in the **CS1.utils.libMap**, if not already available.✅
+    - the **.set** method will fetch any applied component, listed in the **CS1.Utils.LibMap**, if not already available.✅
   - entity.set(componentName, configObject, url) ✅
     - first check for componentName in **AFRAME.components** ✅
-    - then check for componentName in **CS1.utils.libMap** ✅
+    - then check for componentName in **CS1.Utils.LibMap** ✅
     - then try to fetch the component from **url** ✅
   
-- Empowering DSL API via CS1 global object. 
+- Empowering **DSL API** via **CS1** global object. 
   - CS1.MyPlayer✅
   - CS1.Game ✅
   - CS1.add ✅
@@ -61,8 +61,8 @@ These promises define the minimum developer contract which will be fullfilled by
   - CS1.Utils ✅
   - CS1.Input ✅
   
-- Anytime access to AFRAME components and THREE.js object3Ds.
-  - decouple the developer from the underlying event cascade and setup of the entity-component-system (ECS) and CS1 global. ✅
+- Anytime access to **AFRAME** components and **THREE.js** object3Ds.
+  - decouple the developer from the underlying event cascade and setup of the entity-component-system (ECS) and **CS1** global. ✅
   - custom **cs1-script** element ✅
   
 - Intuitive P2P System
@@ -89,7 +89,7 @@ ___
 
 These promises define the minimum developer contract which will be fullfilled by one or more of the **CS1 Game Engine** packages by the **2.0.0** release.
   
-- Easy integration with WASM powered libraries
+- Easy integration with **WASM** powered libraries
   - provide wrapper including some common utility functions augmenting the callable WASM internal functions
   - support WASM powered physics engine(s)
   - support WASM powered linear system solver(s)
