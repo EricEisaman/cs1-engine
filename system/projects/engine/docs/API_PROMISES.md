@@ -8,9 +8,10 @@ ___
 These promises define the minimum developer contract which will be fullfilled by one or more of the **CS1 Game Engine** packages by the **1.0.0** release.
 
 - Choice of game type: 
-  - single player
-  - single player with authentication and database
-  - multiplayer with authentication and database.
+  - SINGLE_PLAYER
+  - SINGLE_PLAYER_SERVER
+  - MULTIPLAYER_SERVER
+  - MULTIPLAYER_LAN
   
 - Easy Avatar Management
   - provide Blender templates for custom avatars
@@ -70,6 +71,10 @@ These promises define the minimum developer contract which will be fullfilled by
   - p2p video streaming
   - p2p text
   - p2p file transfer
+  
+- Easy Asset Reuse 
+  - assets are registered once declared and loaded
+  - future access of assets can be done via the registry
   
   
 ___

@@ -1,13 +1,13 @@
 export const collectible = (()=>{
   
 AFRAME.registerSystem('collectible', {
-  schema: {},  // System schema. Parses into `this.data`.
+  schema: {},  
 
   init: function () {
-    // Called on scene initialization.
+    
   },
 
-  // Other handlers and methods.
+  
 });
 
 
@@ -19,13 +19,12 @@ AFRAME.registerComponent('collectible', {
   
   init: function(){
     
-    this.myObject = null;
+    this.defersToServer = (CS1.Game.Settings.type.includes('SERVER'))
     
   },
   
   update: function () {
-    // Do stuff with `this.data`.
-    this.myObject = this.system.createComplexObject(this.data);
+    
   },
 
 	tick: function () {
