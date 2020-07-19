@@ -26,7 +26,7 @@ onkeydown = onkeyup = function(e){
            
   
     }else{
-      
+      if(!Keys[e.code])Keys[e.code]={isKey:true}
       Keys[e.code].isDown = false; 
       document.body.dispatchEvent(new CustomEvent("cs1keyup", {
           detail: {
