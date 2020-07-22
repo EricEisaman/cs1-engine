@@ -118,8 +118,8 @@ AFRAME.registerComponent('jump', {
     this.jumpDirection.z /= 2;
     this.verticalVelocity = s?s:this.data.speed;
     this.el.dispatchEvent(this.jumpEvent);
-    if(CS1.MyPlayer.Animations.Jump) CS1.MyPlayer.Animations.Jump.duration=Math.max(6500,this.verticalVelocity*1000);
-    CS1.MyPlayer.setAnimation('Jump')
+    if(CS1.MyPlayer.Avatar.Animation.Clips.Jump) CS1.MyPlayer.Avatar.Animation.Clips.Jump.duration=Math.max(6500,this.verticalVelocity*1000);
+    CS1.MyPlayer.Avatar.Animation.set('Jump')
     if(this.slipstream)this.slipstream.show()
   },
   
@@ -129,8 +129,8 @@ AFRAME.registerComponent('jump', {
     this.el.object3D.position.y = 0;
     this.wasd.data.acceleration = this.cachedAcceleration;
     this.el.dispatchEvent(this.landEvent); 
-    if(CS1.MyPlayer.isWalking && CS1.Input.Keys.down().length)CS1.MyPlayer.setAnimation('Run')
-    else CS1.MyPlayer.setAnimation('Idle')
+    if(CS1.MyPlayer.isWalking && CS1.Input.Keys.down().length)CS1.MyPlayer.Avatar.Animation.set('Run')
+    else CS1.MyPlayer.Avatar.Animation.set('Idle')
     if(this.landingparticles){
       this.landingparticles.object3D.position.copy(CS1.MyPlayer.object3D.position)
       this.landingparticles.show()
