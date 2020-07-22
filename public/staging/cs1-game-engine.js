@@ -88163,7 +88163,7 @@ const ThirdPerson = {
     CS1.Cam.matrixSweep = function(){
       if(CS1.Cam.isSweeping)return;
       CS1.Cam.isSweeping = true;
-      if(CS1.MyPlayer.isJumping)CS1.MyPlayer.pauseAnimation();
+      if(CS1.MyPlayer.isJumping)CS1.MyPlayer.Avatar.Animation.pause();
       //CS1.cam.components["look-controls"].saveCameraPose();
       CS1.Cam.components["look-controls"].data.enabled = false;
       const yFactor = CS1.Rig.components.follow.data.yFactor; 
@@ -88188,7 +88188,7 @@ const ThirdPerson = {
         CS1.Cam.isSweeping = false;
         CS1.Cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0));
         CS1.MyPlayer.setSpeed(cachedSpeed);
-        if(CS1.MyPlayer.isJumping)CS1.MyPlayer.playAnimation();
+        if(CS1.MyPlayer.isJumping)CS1.MyPlayer.Avatar.Animation.play();
       }
       },0);
     };
@@ -88573,15 +88573,6 @@ const cs1avatar = (()=>{
         
         console.log('initializing cs1avatar system, waiting for player-ready and game-start ...');
         
-         document.body.addEventListener('game-start',e=>{
-           
-           CS1.MyPlayer.setAnimation = ()=>{};
-           CS1.MyPlayer.pauseAnimation = ()=>{};
-           CS1.MyPlayer.playAnimation = ()=>{};
-       
-         });
-        
-        
         document.body.addEventListener('game-start',e=>{
           CS1.MyPlayer.Avatar = document.createElement('cs1-avatar');
           const s = CS1.MyPlayer.AvatarSettings;
@@ -88686,7 +88677,7 @@ const cs1avatar = (()=>{
             }
             cursor.setAttribute('position',`0 1.6 .5`);
             cursor.setAttribute('rotation','0 180 0');
-            avatar.el.modelEntity.appendChild(cursor);
+            avatar.el.ModelEntity.appendChild(cursor);
             
             break;
             
@@ -88702,26 +88693,26 @@ const cs1avatar = (()=>{
         model.setAttribute('rotation','0 180 0');
         model.setAttribute('src', data.url);
         model.setAttribute('animation-mixer', 'clip:Idle');
-        CS1.MyPlayer.currentAnimation = 'Idle';
+        CS1.MyPlayer.Avatar.Animation.current = 'Idle';
         return model;
       },
       
       addAnimationControls: function(myAvatar){
         
-        CS1.MyPlayer.setAnimation = clipName=>{
-          if(CS1.MyPlayer.Animations  && CS1.MyPlayer.Animations[clipName] ){
+        CS1.MyPlayer.Avatar.Animation.set = clipName=>{
+          if(CS1.MyPlayer.Avatar.Animation.Clips  && CS1.MyPlayer.Avatar.Animation.Clips[clipName] ){
            myAvatar.setAttribute('animation-mixer',`clip:${clipName}`);
-           CS1.MyPlayer.currentAnimation = clipName; 
+           CS1.MyPlayer.Avatar.Animation.current = clipName; 
           }
         }; 
         
-        CS1.MyPlayer.pauseAnimation = e =>{
+        CS1.MyPlayer.Avatar.Animation.pause = e =>{
           myAvatar.components['animation-mixer'].pause();
         };
         
-        CS1.MyPlayer.playAnimation = e =>{
+        CS1.MyPlayer.Avatar.Animation.play = e =>{
           myAvatar.components['animation-mixer'].play();
-          if(e)CS1.MyPlayer.setAnimation(e);
+          if(e)CS1.MyPlayer.Avatar.Animation.set(e);
         };
         
         if(CS1.device=='Standard'){
@@ -88729,31 +88720,31 @@ const cs1avatar = (()=>{
         document.body.addEventListener('cs1keydownonce',e=>{
              switch(e.detail.event.code){
                case 'KeyW':
-                 if(CS1.MyPlayer.currentAnimation != 'Run'){
+                 if(CS1.MyPlayer.Avatar.Animation.current != 'Run'){
                    CS1.MyPlayer.isWalking=true;  
                    if(CS1.MyPlayer.isJumping)return;
-                   CS1.MyPlayer.setAnimation('Run');  
+                   CS1.MyPlayer.Avatar.Animation.set('Run');  
                  }
                  break;
                 case 'KeyS':
-                 if(CS1.MyPlayer.currentAnimation != 'Run'){
+                 if(CS1.MyPlayer.Avatar.Animation.current != 'Run'){
                    CS1.MyPlayer.isWalking=true;  
                    if(CS1.MyPlayer.isJumping)return;
-                   CS1.MyPlayer.setAnimation('Run');   
+                   CS1.MyPlayer.Avatar.Animation.set('Run');   
                  }
                  break;
                 case 'KeyA':
-                 if(CS1.MyPlayer.currentAnimation != 'Left_strafe'){
+                 if(CS1.MyPlayer.Avatar.Animation.current != 'Left_strafe'){
                    CS1.MyPlayer.isWalking=true;  
                    if(CS1.MyPlayer.isJumping)return;
-                   CS1.MyPlayer.setAnimation('Left_strafe');   
+                   CS1.MyPlayer.Avatar.Animation.set('Left_strafe');   
                  }
                  break;
                 case 'KeyD':
-                 if(CS1.MyPlayer.currentAnimation != 'Right_strafe'){
+                 if(CS1.MyPlayer.Avatar.Animation.current != 'Right_strafe'){
                    CS1.MyPlayer.isWalking=true;  
                    if(CS1.MyPlayer.isJumping)return;
-                   CS1.MyPlayer.setAnimation('Right_strafe');   
+                   CS1.MyPlayer.Avatar.Animation.set('Right_strafe');   
                  }
                  break;
              }
@@ -88762,13 +88753,13 @@ const cs1avatar = (()=>{
              if(!CS1.Input.Keys.down().length && 
                !CS1.MyPlayer.isJumping &&
                !CS1.Cam.isSweeping){
-               CS1.MyPlayer.setAnimation('Idle');
+               CS1.MyPlayer.Avatar.Animation.set('Idle');
                CS1.MyPlayer.isWalking = false;
              }else if(CS1.Input.Keys.KeyW && 
                       CS1.Input.Keys.KeyW.isDown && 
-                      (CS1.MyPlayer.currentAnimation == 'Left_strafe' || 
-                       CS1.MyPlayer.currentAnimation == 'Right_strafe')  ){
-               CS1.MyPlayer.setAnimation('Run');
+                      (CS1.MyPlayer.Avatar.Animation.current == 'Left_strafe' || 
+                       CS1.MyPlayer.Avatar.Animation.current == 'Right_strafe')  ){
+               CS1.MyPlayer.Avatar.Animation.set('Run');
              }
           });
       
@@ -88779,28 +88770,28 @@ const cs1avatar = (()=>{
           
           CS1.MyPlayer.Lh.addEventListener('axismove',e=>{
             
-            if(  (e.detail.axis[3]>.5) && CS1.MyPlayer.currentAnimation != 'Run' ){ 
+            if(  (e.detail.axis[3]>.5) && CS1.MyPlayer.Avatar.Animation.current != 'Run' ){ 
             
               CS1.MyPlayer.isWalking=true;  
               if(CS1.MyPlayer.isJumping)return;
-              CS1.MyPlayer.setAnimation('Run');  
+              CS1.MyPlayer.Avatar.Animation.set('Run');  
               
             
             } 
-            else if(  (e.detail.axis[3]<-.5) && CS1.MyPlayer.currentAnimation != 'Run' ){ 
+            else if(  (e.detail.axis[3]<-.5) && CS1.MyPlayer.Avatar.Animation.current != 'Run' ){ 
             
               CS1.MyPlayer.isWalking=true;  
               if(CS1.MyPlayer.isJumping)return;
-              CS1.MyPlayer.setAnimation('Run');  
+              CS1.MyPlayer.Avatar.Animation.set('Run');  
               
             
             } 
-            else if(  (Math.abs(e.detail.axis[3])<.1) && CS1.MyPlayer.currentAnimation == 'Run' ) { 
+            else if(  (Math.abs(e.detail.axis[3])<.1) && CS1.MyPlayer.Avatar.Animation.current == 'Run' ) { 
             
               CS1.MyPlayer.isWalking=false;
               if(CS1.MyPlayer.isJumping)return;
               setTimeout(e=>{
-                if(!CS1.MyPlayer.isWalking)CS1.MyPlayer.setAnimation('Idle');
+                if(!CS1.MyPlayer.isWalking)CS1.MyPlayer.Avatar.Animation.set('Idle');
               },250);
               
             
@@ -88838,7 +88829,8 @@ const cs1avatar = (()=>{
       
       update: function () {
         
-        CS1.MyPlayer.Animations = {};
+        this.el.Animation = {};
+        this.el.Animation.Clips = {};
         
         switch(this.data.type){
           case 'simple':
@@ -88853,37 +88845,37 @@ const cs1avatar = (()=>{
             this.camRotXOffset = 0;
             break;
           case 'rigged':
-            this.el.modelEntity = this.system.createModel(this.data);
-            this.camRotXObject = this.el.modelEntity.object3D;
+            this.el.ModelEntity = this.system.createModel(this.data);
+            this.camRotXObject = this.el.ModelEntity.object3D;
             this.camRotXOffset = 0;
             this.camRotXFactor = -0.8;
-            this.el.modelEntity.addEventListener('model-loaded',e=>{
+            this.el.ModelEntity.addEventListener('model-loaded',e=>{
               
-              this.el.modelEntity.object3D.traverse(o=>{
+              this.el.ModelEntity.object3D.traverse(o=>{
                   o.frustumCulled = false;
                   if(o.animations){
                     o.animations.forEach(animation=>{
-                      CS1.MyPlayer.Animations[animation.name] = animation;
+                      this.el.Animation.Clips[animation.name] = animation;
                     });
                   }
                   if(o.type=='Bone' &&  ( o.name=='mixamorigHead' || o.name=='Head' )  ){
                     this.camRotXObject = o;
                     this.camRotXOffset = 0; //-Math.PI/2;
-                    if(CS1.MyPlayer.Animations.Idle) CS1.MyPlayer.Animations.Idle.duration=0;
+                    if(this.el.Animation.Clips.Idle) this.el.Animation.Clips.Idle.duration=0;
                     CS1.log('Model Head bone detected, will animate with camera rotationX.');
                   }  
               
               });
               
-              this.el.modelEntity.object3D.frustumCulled = false;
+              this.el.ModelEntity.object3D.frustumCulled = false;
               
               if(CS1.device != 'Oculus') this.system.addCursor(this);  
               
             });
-            this.el.appendChild(this.el.modelEntity);
+            this.el.appendChild(this.el.ModelEntity);
             
             
-            if(!this.system.animationControlsApplied) this.system.addAnimationControls(this.el.modelEntity);
+            if(!this.system.animationControlsApplied) this.system.addAnimationControls(this.el.ModelEntity);
             
             break;
             
@@ -88895,7 +88887,7 @@ const cs1avatar = (()=>{
     
         tick: function () {
             this.camRotXObject.rotation.x = this.camRotXFactor * CS1.Cam.object3D.rotation.x + this.camRotXOffset;
-        if(this.camRotXObject.type == 'Bone'  && CS1.device != 'Oculus' && CS1.MyPlayer.currentAnimation =='Idle'){
+        if(this.camRotXObject.type == 'Bone'  && CS1.device != 'Oculus' && CS1.MyPlayer.Avatar.Animation.current =='Idle'){
           this.el.cursor.object3D.rotation.x = -this.camRotXFactor * CS1.Cam.object3D.rotation.x ;
         }
         }
@@ -89437,8 +89429,8 @@ AFRAME.registerComponent('jump', {
     this.jumpDirection.z /= 2;
     this.verticalVelocity = s?s:this.data.speed;
     this.el.dispatchEvent(this.jumpEvent);
-    if(CS1.MyPlayer.Animations.Jump) CS1.MyPlayer.Animations.Jump.duration=Math.max(6500,this.verticalVelocity*1000);
-    CS1.MyPlayer.setAnimation('Jump');
+    if(CS1.MyPlayer.Avatar.Animation.Clips.Jump) CS1.MyPlayer.Avatar.Animation.Clips.Jump.duration=Math.max(6500,this.verticalVelocity*1000);
+    CS1.MyPlayer.Avatar.Animation.set('Jump');
     if(this.slipstream)this.slipstream.show();
   },
   
@@ -89448,8 +89440,8 @@ AFRAME.registerComponent('jump', {
     this.el.object3D.position.y = 0;
     this.wasd.data.acceleration = this.cachedAcceleration;
     this.el.dispatchEvent(this.landEvent); 
-    if(CS1.MyPlayer.isWalking && CS1.Input.Keys.down().length)CS1.MyPlayer.setAnimation('Run');
-    else CS1.MyPlayer.setAnimation('Idle');
+    if(CS1.MyPlayer.isWalking && CS1.Input.Keys.down().length)CS1.MyPlayer.Avatar.Animation.set('Run');
+    else CS1.MyPlayer.Avatar.Animation.set('Idle');
     if(this.landingparticles){
       this.landingparticles.object3D.position.copy(CS1.MyPlayer.object3D.position);
       this.landingparticles.show();

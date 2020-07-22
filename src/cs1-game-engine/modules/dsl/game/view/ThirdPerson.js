@@ -33,7 +33,7 @@ export const ThirdPerson = {
     CS1.Cam.matrixSweep = function(){
       if(CS1.Cam.isSweeping)return;
       CS1.Cam.isSweeping = true;
-      if(CS1.MyPlayer.isJumping)CS1.MyPlayer.pauseAnimation();
+      if(CS1.MyPlayer.isJumping)CS1.MyPlayer.Avatar.Animation.pause();
       //CS1.cam.components["look-controls"].saveCameraPose();
       CS1.Cam.components["look-controls"].data.enabled = false;
       const yFactor = CS1.Rig.components.follow.data.yFactor; 
@@ -58,7 +58,7 @@ export const ThirdPerson = {
         CS1.Cam.isSweeping = false;
         CS1.Cam.object3D.rotation.setFromVector3(new THREE.Vector3(0,v3.y,0))
         CS1.MyPlayer.setSpeed(cachedSpeed);
-        if(CS1.MyPlayer.isJumping)CS1.MyPlayer.playAnimation();
+        if(CS1.MyPlayer.isJumping)CS1.MyPlayer.Avatar.Animation.play();
       }
       },0)
     }
