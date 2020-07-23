@@ -264,6 +264,9 @@ export const cs1avatar = (()=>{
       update: function () {
         
         this.el.Animation = {};
+        this.el.Animation.set = 
+        this.el.Animation.play = 
+        this.el.Animation.pause = ()=>{}
         this.el.Animation.Clips = {};
         
         switch(this.data.type){
