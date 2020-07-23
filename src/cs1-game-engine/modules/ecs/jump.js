@@ -118,8 +118,10 @@ AFRAME.registerComponent('jump', {
     this.jumpDirection.z /= 2;
     this.verticalVelocity = s?s:this.data.speed;
     this.el.dispatchEvent(this.jumpEvent);
-    if(CS1.MyPlayer.Avatar.Animation.Clips.Jump) CS1.MyPlayer.Avatar.Animation.Clips.Jump.duration=Math.max(6500,this.verticalVelocity*1000);
-    CS1.MyPlayer.Avatar.Animation.set('Jump')
+    if(CS1.MyPlayer.Avatar.Animation.Clips.Jump){
+     CS1.MyPlayer.Avatar.Animation.Clips.Jump.duration=Math.max(6500,this.verticalVelocity*1000);
+     CS1.MyPlayer.Avatar.Animation.set('Jump')   
+    } 
     if(this.slipstream)this.slipstream.show()
   },
   
