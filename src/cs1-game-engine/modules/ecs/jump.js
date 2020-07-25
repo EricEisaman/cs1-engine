@@ -5,8 +5,8 @@ AFRAME.registerComponent('jump', {
   schema: {
     speed: {default: 8},
     g: {default: -9.8},
-    jumpingsound: {default:''},
-    landingsound: {default:''},
+    jumpsound: {default:''},
+    landsound: {default:''},
     jumpingparticles:{default:''},
     landingparticles:{default:''},
     slipstream:{default:''}
@@ -81,6 +81,34 @@ AFRAME.registerComponent('jump', {
       
     }
     
+    if(this.data.jumpsound){
+      let s;
+      if(this.data.jumpsound.includes('http')){
+        s = document.createElement('cs1-sound');
+        s.setAttribute('url',this.data.jumpsound);
+      }else{
+        s = CS1.Media.Sound.Registry[this.data.jumpsound].el.cloneNode()
+      }
+      this.el.appendChild(s);
+      s.addEventListener('loaded',e=>{
+        this.jumpsound = s.components.cs1sound;
+      })   
+    }
+    
+    if(this.data.landsound){
+      let s;
+      if(this.data.landsound.includes('http')){
+        s = document.createElement('cs1-sound');
+        s.setAttribute('url',this.data.landsound);
+      }else{
+        s = CS1.Media.Sound.Registry[this.data.landsound].el.cloneNode()
+      }
+      this.el.appendChild(s);
+      s.addEventListener('loaded',e=>{
+        this.landsound = s.components.cs1sound;
+      })   
+    }
+    
     if(this.data.slipstream){
       switch(this.data.slipstream){
         case 'default':
@@ -123,6 +151,7 @@ AFRAME.registerComponent('jump', {
      CS1.MyPlayer.Avatar.Animation.set('Jump')   
     } 
     if(this.slipstream)this.slipstream.show()
+    if(this.jumpsound)this.jumpsound.playSound()
   },
   
   land: function(){
@@ -139,6 +168,7 @@ AFRAME.registerComponent('jump', {
       setTimeout(e=>{this.landingparticles.hide()},1000)
     }
     if(this.slipstream)this.slipstream.hide()
+    if(this.landsound)this.landsound.playSound()
   },
   
   

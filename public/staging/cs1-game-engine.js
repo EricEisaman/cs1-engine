@@ -88946,8 +88946,13 @@ AFRAME.registerSystem('cs1sound', {
     CS1.Media.Sound.register = this.register;
   },
   
-  register: function (name , cs1sound ){
-    CS1.Media.Sound.Registry[name] = cs1sound;
+  register: function (name , url ){
+    const s = document.createElement('cs1-sound');
+    s.setAttribute('url',url);
+    CS1.Scene.appendChild(s);
+    s.addEventListener('loaded',e=>{
+      CS1.Media.Sound.Registry[name] = s.components.cs1sound;
+    });
   }
 
   
@@ -88957,15 +88962,28 @@ AFRAME.registerSystem('cs1sound', {
 AFRAME.registerComponent('cs1sound', {
 
 	schema: {
-		effects: {default:[]}
+		effects: {default:[]},
+    url: {default:''}
 	},
   
   init: function(){
     // Will power the cs1-sound wrapper of the sound component
-    // with extra functionality above and beyond a-sound primitive
-    // such as addEffect
-    
-    
+    // with extra functionality above and beyond what the sound component provides
+    // such as effects
+    this.el.setAttribute('sound',`src:${this.data.url}`);
+  },
+  
+  playSoundAt: function(pos){
+    this.el.setAttribute('position',pos);
+    this.el.components.sound.playSound();
+  },
+  
+  playSound: function(){
+    this.el.components.sound.playSound();
+  },
+  
+  pauseSound: function(){
+   this.el.components.sound.pauseSound();
   },
   
   update: function () {
@@ -88990,7 +89008,8 @@ AFRAME.registerPrimitive('cs1-sound', {
   },
 
   mappings: {
-    
+    url:'cs1sound.url',
+    effects:'cs1sound.effects'
   }
 });
   
@@ -89321,8 +89340,8 @@ AFRAME.registerComponent('jump', {
   schema: {
     speed: {default: 8},
     g: {default: -9.8},
-    jumpingsound: {default:''},
-    landingsound: {default:''},
+    jumpsound: {default:''},
+    landsound: {default:''},
     jumpingparticles:{default:''},
     landingparticles:{default:''},
     slipstream:{default:''}
@@ -89395,6 +89414,34 @@ AFRAME.registerComponent('jump', {
       
     }
     
+    if(this.data.jumpsound){
+      let s;
+      if(this.data.jumpsound.includes('http')){
+        s = document.createElement('cs1-sound');
+        s.setAttribute('url',this.data.jumpsound);
+      }else{
+        s = CS1.Media.Sound.Registry[this.data.jumpsound].el.cloneNode();
+      }
+      this.el.appendChild(s);
+      s.addEventListener('loaded',e=>{
+        this.jumpsound = s.components.cs1sound;
+      });   
+    }
+    
+    if(this.data.landsound){
+      let s;
+      if(this.data.landsound.includes('http')){
+        s = document.createElement('cs1-sound');
+        s.setAttribute('url',this.data.landsound);
+      }else{
+        s = CS1.Media.Sound.Registry[this.data.landsound].el.cloneNode();
+      }
+      this.el.appendChild(s);
+      s.addEventListener('loaded',e=>{
+        this.landsound = s.components.cs1sound;
+      });   
+    }
+    
     if(this.data.slipstream){
       switch(this.data.slipstream){
         case 'default':
@@ -89437,6 +89484,7 @@ AFRAME.registerComponent('jump', {
      CS1.MyPlayer.Avatar.Animation.set('Jump');   
     } 
     if(this.slipstream)this.slipstream.show();
+    if(this.jumpsound)this.jumpsound.playSound();
   },
   
   land: function(){
@@ -89453,6 +89501,7 @@ AFRAME.registerComponent('jump', {
       setTimeout(e=>{this.landingparticles.hide();},1000);
     }
     if(this.slipstream)this.slipstream.hide();
+    if(this.landsound)this.landsound.playSound();
   },
   
   
