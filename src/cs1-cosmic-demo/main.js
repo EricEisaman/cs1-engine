@@ -21,8 +21,20 @@ CS1.Scene.appendChild(log)
 
 //CS1.MyPlayer.setAvatar({color:"orange",head:"oval",body:"box"})
 CS1.MyPlayer.setAvatar({type:"rigged"})
+  
+CS1.Media.Sound.register('jump','https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2Fjump_1.mp3?v=1595699203430')
+  
+CS1.Media.Sound.register('land','https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2Fland_in_grass.mp3?v=1595703071856')
 
-CS1.MyPlayer.setAttribute('jump','speed:25 ; landingparticles:dust ; slipstream:default')
+//CS1.MyPlayer.setAttribute('jump','speed:25 ; landingparticles:dust ; slipstream:default ; jumpsound:jump ; landsound:land')
+  
+CS1.MyPlayer.set('jump',{
+  speed:25,
+  landingparticles:'dust',
+  slipstream:'default',
+  jumpsound:'jump',
+  landsound:'land'
+})
   
 CS1.Game.start();
 
