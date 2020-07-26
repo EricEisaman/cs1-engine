@@ -89043,24 +89043,24 @@ const Pastel = {
 
 const Design = {
   
-  Specs : {
+  Themes : {
 
     Pastel : Pastel
     
   },
   
-  setSpec : function(spec){
-    CS1.Design.Spec = spec;
+  setTheme : function(theme){
+    CS1.Design.Theme = theme;
   },
   
-  setSpecByName: function(name){
-    CS1.Design.Spec = CS1.Design.Specs[name];
+  setThemeByName: function(name){
+    CS1.Design.Theme = CS1.Design.Themes[name];
   },
   
-  Spec : Pastel,
+  Theme : Pastel,
   
-  addSpec: function(name,spec){
-    CS1.Design.Specs[name]=spec;
+  addTheme: function(name,theme){
+    CS1.Design.Themes[name]=theme;
   },
   
 };
