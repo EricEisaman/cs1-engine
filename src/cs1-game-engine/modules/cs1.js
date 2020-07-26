@@ -37,6 +37,8 @@ import {cs1avatar} from './ecs/cs1avatar';
 import {media} from './ecs/media';
 import {cs1sound} from './ecs/cs1sound';
 
+import {design} from './ecs/design';
+
 //import {renderOrder} from './ecs/renderOrder';
 import {gltfInstances} from './ecs/gltfInstances';
 import {trail} from './ecs/trail';
