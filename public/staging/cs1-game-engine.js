@@ -89019,6 +89019,67 @@ AFRAME.registerPrimitive('cs1-sound', {
   
 })();
 
+const Pastel = {
+  
+  name: 'Pastel',
+  
+  primary: '#91ADB2',
+  
+  secondary: '#FCF8E3',
+  
+  success: '#9BCF7D',
+  
+  danger: '#F1896B',
+  
+  warning: '#F39B5F',
+  
+  info: '#5FA291',
+  
+  light: '#FFFBE6',
+  
+  dark: '#999999'
+  
+};
+
+const Design = {
+  
+  Specs : {
+
+    Pastel : Pastel
+    
+  },
+  
+  setSpec : function(spec){
+    CS1.Design.Spec = spec;
+  },
+  
+  setSpecByName: function(name){
+    CS1.Design.Spec = CS1.Design.Specs[name];
+  },
+  
+  Spec : Pastel,
+  
+  addSpec: function(name,spec){
+    CS1.Design.Specs[name]=spec;
+  },
+  
+};
+
+// CS1.Design DSL
+
+const design = (()=>{
+  
+AFRAME.registerSystem('design', {
+
+  init: function () {
+    CS1.Design = Design;
+  },
+
+  
+});
+
+})();
+
 const gltfInstances = (()=>{
 
 
