@@ -28,6 +28,13 @@ CS1.Media.Sound.register('land','https://cdn.glitch.com/41a9cdac-916b-45df-bf58-
 
 //CS1.MyPlayer.setAttribute('jump','speed:25 ; landingparticles:dust ; slipstream:default ; jumpsound:jump ; landsound:land')
   
+const cube = await CS1.add('https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FBlender_Design_Materials_Starter.glb?v=1595969375915', '4 0 -2');
+
+setTimeout(e=>{
+  cube.set('design');
+  setTimeout(e=>{CS1.Design.setTheme('Neon');},8000);
+}, 8000);
+  
 CS1.MyPlayer.set('jump',{
   speed:25,
   landingparticles:'dust',

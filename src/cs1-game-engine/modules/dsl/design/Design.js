@@ -1,25 +1,36 @@
 import {Pastel} from './themes/Pastel'
+import {Neon} from './themes/Neon'
 
 export const Design = {
   
   Themes : {
 
-    Pastel : Pastel
+    Pastel : Pastel,
+    Neon : Neon
     
   },
   
   setTheme : function(theme){
-    CS1.Design.Theme = theme;
-  },
-  
-  setThemeByName: function(name){
-    CS1.Design.Theme = CS1.Design.Themes[name]
+    if(typeof theme=='object'){
+     CS1.Design.Theme = theme;
+     CS1.Scene.dispatchEvent(new Event('theme-change'))
+     if(theme.name)CS1.Design.addTheme(theme.name,theme)
+     else {
+       theme.name = Object.keys(CS1.Design.Themes).length
+       CS1.Design.addTheme( theme.name  ,theme) 
+     }
+    }else if(typeof theme=='string' && CS1.Design.Themes[theme]){
+      CS1.Design.Theme = CS1.Design.Themes[theme]
+      CS1.Scene.dispatchEvent(new Event('theme-change'))
+    }
+    
   },
   
   Theme : Pastel,
   
-  addTheme: function(name,theme){
-    CS1.Design.Themes[name]=theme;
+  addTheme: function(theme ,name){
+    if(theme.name)CS1.Design.Themes[theme.name]=theme;
+    else if(name) CS1.Design.Themes[name]=theme;
   },
   
 }

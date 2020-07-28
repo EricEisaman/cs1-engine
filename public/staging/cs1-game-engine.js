@@ -87534,8 +87534,7 @@ const Utils = {
   setProps: setProps,
   
   isValidURL: isValidURL,
-
-  
+ 
 };
 
 onkeydown = onkeyup = function(e){
@@ -89041,26 +89040,58 @@ const Pastel = {
   
 };
 
+const Neon = {
+  
+  name: 'Neon',
+  
+  primary: '#9053FC',
+  
+  secondary: '#414BFB',
+  
+  success: '#76F013',
+  
+  danger: '#FEF737',
+  
+  warning: '#F18530',
+  
+  info: '#ED462F',
+  
+  light: '#ED462F',
+  
+  dark: '#555A75'
+  
+};
+
 const Design = {
   
   Themes : {
 
-    Pastel : Pastel
+    Pastel : Pastel,
+    Neon : Neon
     
   },
   
   setTheme : function(theme){
-    CS1.Design.Theme = theme;
-  },
-  
-  setThemeByName: function(name){
-    CS1.Design.Theme = CS1.Design.Themes[name];
+    if(typeof theme=='object'){
+     CS1.Design.Theme = theme;
+     CS1.Scene.dispatchEvent(new Event('theme-change'));
+     if(theme.name)CS1.Design.addTheme(theme.name,theme);
+     else {
+       theme.name = Object.keys(CS1.Design.Themes).length;
+       CS1.Design.addTheme( theme.name  ,theme); 
+     }
+    }else if(typeof theme=='string' && CS1.Design.Themes[theme]){
+      CS1.Design.Theme = CS1.Design.Themes[theme];
+      CS1.Scene.dispatchEvent(new Event('theme-change'));
+    }
+    
   },
   
   Theme : Pastel,
   
-  addTheme: function(name,theme){
-    CS1.Design.Themes[name]=theme;
+  addTheme: function(theme ,name){
+    if(theme.name)CS1.Design.Themes[theme.name]=theme;
+    else if(name) CS1.Design.Themes[name]=theme;
   },
   
 };
@@ -89073,10 +89104,62 @@ AFRAME.registerSystem('design', {
 
   init: function () {
     CS1.Design = Design;
+    this.comps = [];
+    CS1.Scene.addEventListener('theme-change', e=>{
+      this.updateComps();
+    });
   },
+  
+  register: function(comp){
+    this.comps.push(comp);
+  },
+  
+  deRegister: function(comp){
+    const i = this.comps.indexOf(comp);
+    this.comps.splice(i,1);
+  },
+  
+  updateComps: function(){
+    this.comps.forEach(comp=>{
+      comp.update();
+    });
+  }
 
   
 });
+  
+  
+AFRAME.registerComponent('design', {
+
+	schema: {
+		
+	},
+  
+  init: function(){
+    
+   this.system.register(this);
+    
+  },
+  
+  update: function () {
+    const themeKeys = Object.keys(CS1.Design.Theme);
+    this.el.object3D.traverse(o=>{
+      if(o.type=='Mesh' && themeKeys.includes(o.material.name)){
+        o.material.color.set(CS1.Design.Theme[o.material.name]);
+      }
+    });
+  },
+  
+  remove: function () {
+    this.system.deRegister(this);
+  },
+
+	tick: function () {
+		
+	}
+  
+});  
+  
 
 })();
 

@@ -12,6 +12,5 @@ export const Utils = {
   setProps: setProps,
   
   isValidURL: isValidURL,
-
-  
+ 
 }
