@@ -30,8 +30,11 @@ CS1.Media.Sound.register('land','https://cdn.glitch.com/41a9cdac-916b-45df-bf58-
   
 const cube = await CS1.add('https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FBlender_Design_Materials_Starter.glb?v=1595969375915', '4 0 -2');
 
+const chip = await CS1.add('https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FChip_CS1.Design.Theme.glb?v=1596046555356', '-4 0 -2');
+
 setTimeout(e=>{
   cube.set('design');
+  chip.set('design');
   setTimeout(e=>{CS1.Design.setTheme('Neon');},8000);
 }, 8000);
   

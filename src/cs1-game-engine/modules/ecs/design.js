@@ -47,8 +47,12 @@ AFRAME.registerComponent('design', {
   update: function () {
     const themeKeys = Object.keys(CS1.Design.Theme)
     this.el.object3D.traverse(o=>{
-      if(o.type=='Mesh' && themeKeys.includes(o.material.name)){
+      if(  (o.type=='Mesh' || o.type=='SkinnedMesh')     &&     themeKeys.includes(o.material.name)){
         o.material.color.set(CS1.Design.Theme[o.material.name])
+        if(o.type=='SkinnedMesh'){
+          o.frustumCulled=false
+          o.material.frustumCulled=false
+        }
       }
     })
   },
