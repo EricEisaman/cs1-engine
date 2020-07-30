@@ -14,7 +14,17 @@ AFRAME.registerSystem('design', {
   },
   
   register: function(comp){
-    this.comps.push(comp)
+    // if(comp.el.nodeName=='A-SCENE'){
+    //   const themeKeys = Object.keys(CS1.Design.Theme)
+    //   /*
+    //    traverse CS1.Scene.object3D
+    //    check o.type for Mesh, SkinnedMesh, Line
+    //       check themeKeys.includes(o.material.name)
+    //    check Object.keys(o.el.components).forEach(c=>{o.el.components[c]})
+    //   */
+    // }
+    //else 
+      this.comps.push(comp)
   },
   
   deRegister: function(comp){
@@ -35,7 +45,8 @@ AFRAME.registerSystem('design', {
 AFRAME.registerComponent('design', {
 
 	schema: {
-		
+		color: {default:''},
+    compParams : {default: []} // [ componentName , { param1 : themekey , param2 :themekey }]
 	},
   
   init: function(){
@@ -46,15 +57,32 @@ AFRAME.registerComponent('design', {
   
   update: function () {
     const themeKeys = Object.keys(CS1.Design.Theme)
-    this.el.object3D.traverse(o=>{
-      if(  (o.type=='Mesh' || o.type=='SkinnedMesh')     &&     themeKeys.includes(o.material.name)){
-        o.material.color.set(CS1.Design.Theme[o.material.name])
-        if(o.type=='SkinnedMesh'){
-          o.frustumCulled=false
-          o.material.frustumCulled=false
+    let themeSettings = {}
+    if(this.data.compParams.length==2){
+      Object.keys(this.data.compParams[1]).forEach(key=>{
+        themeSettings[key]=CS1.Design.Theme[this.data.compParams[1][key]]
+      })
+      
+      this.el.set( this.data.compParams[0], themeSettings )
+      
+      CS1.log( this.data.compParams[0]  )
+      CS1.log(themeSettings)
+      
+    }
+    else if(themeKeys.includes(this.data.color)){
+      this.el.setAttribute('color', CS1.Design.Theme[this.data.color])
+    }else{
+      this.el.object3D.traverse(o=>{
+        if(  (o.type=='Mesh' || o.type=='SkinnedMesh')     &&     themeKeys.includes(o.material.name)){
+          o.material.color.set(CS1.Design.Theme[o.material.name])
+          if(o.type=='SkinnedMesh'){
+            o.frustumCulled=false
+            o.material.frustumCulled=false
+          }
         }
-      }
-    })
+      })
+    }
+    
   },
   
   remove: function () {

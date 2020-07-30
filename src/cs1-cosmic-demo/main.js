@@ -10,9 +10,17 @@ CS1.add('a-light',{position:'12 12 -12', type: 'ambient' , intensity: 0.3})
 
 await CS1.Scene.set('render-order','background foreground')
 //CS1.Scene.set('stats')
-   
-const juke = await CS1.add('a-jukebox',{position:'0 2 -1.5', scale:'2 2 2'})    
+  
+const juke = await CS1.add('a-jukebox',{position:'0 2 -1.5', scale:'2 2 2', border:CS1.Design.Theme.info})    
 juke.set('render-order','background');
+  
+juke.set('design',{
+ compParams: ['jukebox', {
+     border : 'info',
+     color: 'warning',
+     heading: 'success'
+  }]
+})
   
 const log = document.createElement('a-log')
 log.setAttribute('position','-5  3 -12')
@@ -31,6 +39,23 @@ CS1.Media.Sound.register('land','https://cdn.glitch.com/41a9cdac-916b-45df-bf58-
 const cube = await CS1.add('https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FBlender_Design_Materials_Starter.glb?v=1595969375915', '4 0 -2')
 
 const chip = await CS1.add('https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FChip_CS1.Design.Theme.glb?v=1596051503961', '-4 0 -2')
+
+const box = await CS1.add('a-box',
+{
+ position:'0 4.5 -1.5'
+})
+
+box.set('design',{
+  color: 'primary'
+})
+  
+box.set('animation',{
+  property: 'rotation',
+  to: '259',
+  from: '0',
+  dir: 'alternate',
+  loop: 'true'
+})
 
 setTimeout(e=>{
   cube.set('design')
