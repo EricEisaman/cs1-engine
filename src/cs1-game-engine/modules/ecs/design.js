@@ -36,7 +36,8 @@ AFRAME.registerComponent('design', {
 
 	schema: {
 		color: {default:''},
-    compParams : {default: []} // [ componentName , { param1 : themekey , param2 :themekey }]
+    compParams : {default: []}, // [ componentName , { param1 : themekey , param2 :themekey }]
+    props: {default: {}}
 	},
   
   init: function(){
@@ -48,6 +49,9 @@ AFRAME.registerComponent('design', {
   update: function () {
     const themeKeys = Object.keys(CS1.Design.Theme)
     let themeSettings = {}
+    Object.keys(this.data.props).forEach(key=>{
+      this.el.setAttribute(key, CS1.Design.Theme[this.data.props[key]] )
+    }) 
     if(this.data.compParams.length==2){
       Object.keys(this.data.compParams[1]).forEach(key=>{
         themeSettings[key]=CS1.Design.Theme[this.data.compParams[1][key]]
