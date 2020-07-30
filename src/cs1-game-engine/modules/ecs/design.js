@@ -14,17 +14,7 @@ AFRAME.registerSystem('design', {
   },
   
   register: function(comp){
-    // if(comp.el.nodeName=='A-SCENE'){
-    //   const themeKeys = Object.keys(CS1.Design.Theme)
-    //   /*
-    //    traverse CS1.Scene.object3D
-    //    check o.type for Mesh, SkinnedMesh, Line
-    //       check themeKeys.includes(o.material.name)
-    //    check Object.keys(o.el.components).forEach(c=>{o.el.components[c]})
-    //   */
-    // }
-    //else 
-      this.comps.push(comp)
+    this.comps.push(comp)
   },
   
   deRegister: function(comp){
@@ -65,8 +55,6 @@ AFRAME.registerComponent('design', {
       
       this.el.set( this.data.compParams[0], themeSettings )
       
-      CS1.log( this.data.compParams[0]  )
-      CS1.log(themeSettings)
       
     }
     else if(themeKeys.includes(this.data.color)){

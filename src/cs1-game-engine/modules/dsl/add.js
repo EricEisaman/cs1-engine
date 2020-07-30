@@ -4,7 +4,7 @@ export const add = function(param=false,config={}){
   
   if(typeof param == 'string'){
     
-    if(AFRAME.primitives.primitives[param]){
+    if(AFRAME.primitives.primitives[param] || (param=='a-entity')    ){
       const el = document.createElement(param);
       if(typeof config == 'string')
         el.setAttribute('position', config)
