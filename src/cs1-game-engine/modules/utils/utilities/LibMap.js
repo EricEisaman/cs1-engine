@@ -1,8 +1,6 @@
 export const LibMap = {
-  
-"cs1-jukebox": "https://raw.githack.com/EricEisaman/libs/master/lib/cs1-jukebox.js",
 
-"a-jukebox": "https://raw.githack.com/EricEisaman/libs/master/lib/cs1-jukebox.js",
+"a-jukebox": "https://raw.githack.com/EricEisaman/libs/master/lib/a-jukebox.js",
     
 "environment": "https://raw.githack.com/EricEisaman/aframe-environment-component/sirfizx/index.js",
   
