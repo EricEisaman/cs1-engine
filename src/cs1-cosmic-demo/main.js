@@ -4,9 +4,17 @@ import {Version} from './modules/version/Version';
 
 console.log('CS1 Cosmic Demo Version: ', Version.version);
 
-
-await CS1.Scene.set('environment',{preset:'osiris', ground:'flat'})
 CS1.add('a-light',{position:'12 12 -12', type: 'ambient' , intensity: 0.3})
+  
+const env = await CS1.add('a-entity',{
+  environment:'preset: default; ground: flat'
+})
+
+env.set('design', {
+  compParams: ['environment' , {
+    groundColor: 'primary'
+  }]
+})
 
 await CS1.Scene.set('render-order','background foreground')
 //CS1.Scene.set('stats')
@@ -38,7 +46,11 @@ CS1.Media.Sound.register('land','https://cdn.glitch.com/41a9cdac-916b-45df-bf58-
   
 const cube = await CS1.add('https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FBlender_Design_Materials_Starter.glb?v=1595969375915', '4 0 -2')
 
+cube.set('design')
+
 const chip = await CS1.add('https://cdn.glitch.com/41a9cdac-916b-45df-bf58-0ba63c04533e%2FChip_CS1.Design.Theme.glb?v=1596051503961', '-4 0 -2')
+
+chip.set('design')
 
 const box = await CS1.add('a-box',
 {
@@ -57,10 +69,12 @@ box.set('animation',{
   loop: 'true'
 })
 
-setTimeout(e=>{
-  cube.set('design')
-  chip.set('design')
-  setTimeout(e=>{CS1.Design.setTheme('Neon')},8000)
+setInterval(e=>{
+  if(CS1.Design.Theme.name=='Pastel'){
+    CS1.Design.setTheme('Neon')
+  }else{
+    CS1.Design.setTheme('Pastel')
+  }
 }, 8000)
   
 CS1.MyPlayer.set('jump',{
