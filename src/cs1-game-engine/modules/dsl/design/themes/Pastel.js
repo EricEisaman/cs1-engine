@@ -16,6 +16,10 @@ export const Pastel = {
   
   light: '#FFFBE6',
   
-  dark: '#999999'
+  dark: '#999999',
+  
+  radius: 0.5,
+  
+  logo: 'https://cdn.glitch.com/a66c3f5c-9aba-45c0-952e-ccc59d8b0df3%2FCS1_logo_64.png?v=1564891473540'
   
 }

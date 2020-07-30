@@ -26,14 +26,15 @@ juke.set('design',{
  compParams: ['jukebox', {
      border : 'info',
      color: 'warning',
-     heading: 'success'
+     heading: 'success',
+     logo: 'logo'
   }]
 })
   
-const log = document.createElement('a-log')
-log.setAttribute('position','-5  3 -12')
-CS1.Scene.appendChild(log)
-
+CS1.add('a-log', {
+  position: '-5 3 -12',
+  max: 15
+})
 
 //CS1.MyPlayer.setAvatar({color:"orange",head:"oval",body:"box"})
 CS1.MyPlayer.setAvatar({type:"rigged"})
@@ -68,6 +69,19 @@ box.set('animation',{
   dir: 'alternate',
   loop: 'true'
 })
+  
+  
+const sphere = await CS1.add('a-sphere' , {
+  position:'0 6.5 -1.5'
+})  
+
+sphere.set('design',{
+  props: {
+    color: 'secondary',
+    radius: 'radius'
+  }
+})
+
 
 setInterval(e=>{
   if(CS1.Design.Theme.name=='Pastel'){
