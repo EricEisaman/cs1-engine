@@ -14,10 +14,10 @@ export const Design = {
     if(typeof theme=='object'){
      CS1.Design.Theme = theme;
      CS1.Scene.dispatchEvent(new Event('theme-change'))
-     if(theme.name)CS1.Design.addTheme(theme.name,theme)
+     if(theme.name)CS1.Design.addTheme(theme)
      else {
        theme.name = Object.keys(CS1.Design.Themes).length
-       CS1.Design.addTheme( theme.name  ,theme) 
+       CS1.Design.addTheme( theme , theme.name ) 
      }
     }else if(typeof theme=='string' && CS1.Design.Themes[theme]){
       CS1.Design.Theme = CS1.Design.Themes[theme]
