@@ -87,11 +87,11 @@ AFRAME.registerComponent('jump', {
         s = document.createElement('cs1-sound');
         s.setAttribute('url',this.data.jumpsound);
       }else{
-        s = CS1.Media.Sound.Registry[this.data.jumpsound].el.cloneNode()
+        s = CS1.Media.Sound.Library[this.data.jumpsound].cloneNode()
       }
       this.el.appendChild(s);
       s.addEventListener('loaded',e=>{
-        this.jumpsound = s.components.cs1sound;
+        this.jumpsound = s;
       })   
     }
     
@@ -101,11 +101,11 @@ AFRAME.registerComponent('jump', {
         s = document.createElement('cs1-sound');
         s.setAttribute('url',this.data.landsound);
       }else{
-        s = CS1.Media.Sound.Registry[this.data.landsound].el.cloneNode()
+        s = CS1.Media.Sound.Library[this.data.landsound].cloneNode()
       }
       this.el.appendChild(s);
       s.addEventListener('loaded',e=>{
-        this.landsound = s.components.cs1sound;
+        this.landsound = s;
       })   
     }
     

@@ -87478,10 +87478,8 @@ const loadScript = function (url,txt){
 };
 
 const LibMap = {
-  
-"cs1-jukebox": "https://raw.githack.com/EricEisaman/libs/master/lib/cs1-jukebox.js",
 
-"a-jukebox": "https://raw.githack.com/EricEisaman/libs/master/lib/cs1-jukebox.js",
+"a-jukebox": "https://raw.githack.com/EricEisaman/libs/master/lib/a-jukebox.js",
     
 "environment": "https://raw.githack.com/EricEisaman/aframe-environment-component/sirfizx/index.js",
   
@@ -87628,7 +87626,7 @@ const add = function(param=false,config={}){
   
   if(typeof param == 'string'){
     
-    if(AFRAME.primitives.primitives[param]){
+    if(AFRAME.primitives.primitives[param] || (param=='a-entity')    ){
       const el = document.createElement(param);
       if(typeof config == 'string')
         el.setAttribute('position', config);
@@ -89036,7 +89034,11 @@ const Pastel = {
   
   light: '#FFFBE6',
   
-  dark: '#999999'
+  dark: '#999999',
+  
+  radius: 0.5,
+  
+  logo: 'https://cdn.glitch.com/a66c3f5c-9aba-45c0-952e-ccc59d8b0df3%2FCS1_logo_64.png?v=1564891473540'
   
 };
 
@@ -89058,7 +89060,11 @@ const Neon = {
   
   light: '#ED462F',
   
-  dark: '#555A75'
+  dark: '#555A75',
+  
+  radius: 1.0,
+  
+  logo: 'https://cdn.glitch.com/a4339379-3ed9-4b49-bced-16d8a59ee858%2Fheart_256.png?v=1576890422254'
   
 };
 
@@ -89075,10 +89081,10 @@ const Design = {
     if(typeof theme=='object'){
      CS1.Design.Theme = theme;
      CS1.Scene.dispatchEvent(new Event('theme-change'));
-     if(theme.name)CS1.Design.addTheme(theme.name,theme);
+     if(theme.name)CS1.Design.addTheme(theme);
      else {
        theme.name = Object.keys(CS1.Design.Themes).length;
-       CS1.Design.addTheme( theme.name  ,theme); 
+       CS1.Design.addTheme( theme , theme.name ); 
      }
     }else if(typeof theme=='string' && CS1.Design.Themes[theme]){
       CS1.Design.Theme = CS1.Design.Themes[theme];
@@ -89132,7 +89138,9 @@ AFRAME.registerSystem('design', {
 AFRAME.registerComponent('design', {
 
 	schema: {
-		
+		color: {default:''},
+    compParams : {default: []}, // [ componentName , { param1 : themekey , param2 :themekey }]
+    props: {default: {}}
 	},
   
   init: function(){
@@ -89143,11 +89151,33 @@ AFRAME.registerComponent('design', {
   
   update: function () {
     const themeKeys = Object.keys(CS1.Design.Theme);
-    this.el.object3D.traverse(o=>{
-      if(o.type=='Mesh' && themeKeys.includes(o.material.name)){
-        o.material.color.set(CS1.Design.Theme[o.material.name]);
-      }
-    });
+    let themeSettings = {};
+    Object.keys(this.data.props).forEach(key=>{
+      this.el.setAttribute(key, CS1.Design.Theme[this.data.props[key]] );
+    }); 
+    if(this.data.compParams.length==2){
+      Object.keys(this.data.compParams[1]).forEach(key=>{
+        themeSettings[key]=CS1.Design.Theme[this.data.compParams[1][key]];
+      });
+      
+      this.el.set( this.data.compParams[0], themeSettings );
+      
+      
+    }
+    else if(themeKeys.includes(this.data.color)){
+      this.el.setAttribute('color', CS1.Design.Theme[this.data.color]);
+    }else{
+      this.el.object3D.traverse(o=>{
+        if(  (o.type=='Mesh' || o.type=='SkinnedMesh')     &&     themeKeys.includes(o.material.name)){
+          o.material.color.set(CS1.Design.Theme[o.material.name]);
+          if(o.type=='SkinnedMesh'){
+            o.frustumCulled=false;
+            o.material.frustumCulled=false;
+          }
+        }
+      });
+    }
+    
   },
   
   remove: function () {
