@@ -1,17 +1,17 @@
-export const component = (()=>{
+export const mission = (()=>{
   
-AFRAME.registerSystem('component', {
+AFRAME.registerSystem('mission', {
   schema: {},  
 
   init: function () {
- 
+   
   },
 
-
+ 
 });
 
 
-AFRAME.registerComponent('component', {
+AFRAME.registerComponent('mission', {
 
 	schema: {
 		
@@ -19,12 +19,12 @@ AFRAME.registerComponent('component', {
   
   init: function(){
     
-  
+   
     
   },
   
   update: function () {
- 
+    
   },
 
 	tick: function () {
@@ -34,17 +34,17 @@ AFRAME.registerComponent('component', {
 });
   
   
-AFRAME.registerPrimitive('a-component', {
+  
+AFRAME.registerPrimitive('a-mission', {
   defaultComponents: {
-    component:{}
+    mission:{}
   },
 
   mappings: {
     
   }
-});
-  
-  
+});  
+
   
   
   
